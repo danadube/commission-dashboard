@@ -1,0 +1,7 @@
+[build]
+  command = "CI=false npm run build"
+  publish = "build"
+
+[build.environment]
+  CI = "false"
+  GENERATE_SOURCEMAP = "false"
