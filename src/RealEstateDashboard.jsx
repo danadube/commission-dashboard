@@ -376,12 +376,14 @@ const RealEstateDashboard = () => {
         {/* Header */}
         <div className="mb-8 flex justify-between items-center flex-wrap gap-4">
           <div className="flex items-center gap-6">
-            {/* Logo Placeholder */}
-            <div className="w-32 h-32 flex-shrink-0 bg-white rounded-lg p-3 shadow-lg">
-              <div className="w-full h-full flex items-center justify-center text-purple-900 font-bold text-3xl">
-                JG
-              </div>
-            </div>
+        {/* Logo */}
+<div className="w-32 h-32 flex-shrink-0 bg-white rounded-lg p-2 shadow-lg">
+  <img 
+    src="/janice-logo.png"
+    alt="Janice Glaab Real Estate" 
+    className="w-full h-full object-contain"
+  />
+</div>
             
             {/* Title */}
             <div>
