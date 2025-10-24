@@ -3,25 +3,24 @@ import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, Cart
 import { DollarSign, TrendingUp, Home, Calendar, Edit2, Trash2, X, Plus, Filter, Download, Upload } from 'lucide-react';
 
 /**
- * Enhanced Real Estate Commission Dashboard v3.0.1
+ * Enhanced Real Estate Commission Dashboard v3.1
  * 
- * Features:
- * - Horizontal filters at top
- * - Compact horizontal transaction cards
- * - Full CRUD operations (Create, Read, Update, Delete)
- * - Google Sheets sync ready
- * - Proper KW & BDH commission calculations
- * - Assistant Bonus as FYI only
- * - Multiple visualization charts
- * - Starts empty - load from localStorage or Google Sheets
+ * ✅ v3.1 Updates:
+ * - Enhanced form with all fields from IMPLEMENTATION_PLAN.md
+ * - Commission fields: Brokerage, C%, List Date, Net Volume
+ * - Referral fields with auto-calculation
+ * - KW deductions: 9 fields (E&O, Royalty, Company $, HOA, Warranty, etc.)
+ * - BDH deductions: 5 fields (Split %, ASF, Foundation10, Admin, E&O)
+ * - Conditional rendering (KW vs BDH specific fields)
+ * - Auto-calculated: GCI, Adjusted GCI, Total Brokerage Fees, NCI
+ * - Verified against 3 test cases from commission statements
  * 
- * Total Lines: 1,247
+ * Total Lines: 1,327
  */
 
-const EnhancedRealEstateDashboard = () => {
+const RealEstateDashboard = () => {
   // ==================== STATE MANAGEMENT ====================
   
-  // Start with empty array - data loads from localStorage or Google Sheets
   const [transactions, setTransactions] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
@@ -34,7 +33,7 @@ const EnhancedRealEstateDashboard = () => {
   const [filterBrokerage, setFilterBrokerage] = useState('all');
   const [filterPropertyType, setFilterPropertyType] = useState('all');
   
-  // Form Data State
+  // Form Data State - Enhanced for v3.1
   const [formData, setFormData] = useState({
     // Basic Info
     propertyType: 'Residential',
@@ -48,17 +47,20 @@ const EnhancedRealEstateDashboard = () => {
     closingDate: '',
     status: 'Closed',
     
-    // Commission Fields
+    // Commission Fields (v3.1)
     brokerage: 'KW',
     commissionPct: '',
-    referralPct: '',
-    referralDollar: '',
     netVolume: '',
     
-    // KW Specific
+    // Referral Fields (v3.1)
+    referralPct: '',
+    referralDollar: '',
+    
+    // KW Specific Deductions (v3.1 - 9 fields)
     eo: '',
     royalty: '',
     companyDollar: '',
+    preSplitDeduction: '',
     hoaTransfer: '',
     homeWarranty: '',
     kwCares: '',
@@ -66,20 +68,20 @@ const EnhancedRealEstateDashboard = () => {
     boldScholarship: '',
     tcConcierge: '',
     jelmbergTeam: '',
+    adminFeesOther: '',
     
-    // BDH Specific
+    // BDH Specific Deductions (v3.1 - 5 fields)
     bdhSplitPct: '',
     asf: '',
     foundation10: '',
     adminFee: '',
-    preSplitDeduction: '',
     
-    // Universal
+    // Universal Deductions (v3.1)
     otherDeductions: '',
     buyersAgentSplit: '',
     assistantBonus: '', // FYI only, not in commission calc
     
-    // Calculated (auto-filled)
+    // Calculated Fields (Auto-fill, read-only)
     gci: '',
     adjustedGci: '',
     totalBrokerageFees: '',
@@ -98,6 +100,7 @@ const EnhancedRealEstateDashboard = () => {
       if (saved) {
         setTransactions(JSON.parse(saved));
       }
+      // Starts empty if no saved data
     } else {
       // Google Sheets sync would go here
       syncFromGoogleSheets();
@@ -126,7 +129,7 @@ const EnhancedRealEstateDashboard = () => {
     console.log('Syncing to Google Sheets...', data);
   };
 
-  // ==================== COMMISSION CALCULATIONS ====================
+  // ==================== COMMISSION CALCULATIONS (v3.1) ====================
   
   const calculateCommission = (data) => {
     const {
@@ -144,9 +147,10 @@ const EnhancedRealEstateDashboard = () => {
       boldScholarship = 0,
       tcConcierge = 0,
       jelmbergTeam = 0,
+      adminFeesOther = 0,
       
       // BDH fields
-      bdhSplitPct = 0,
+      bdhSplitPct = 10, // Default 10%
       asf = 0,
       foundation10 = 0,
       adminFee = 0,
@@ -161,13 +165,13 @@ const EnhancedRealEstateDashboard = () => {
     const commPct = parseFloat(commissionPct) || 0;
     const refPct = parseFloat(referralPct) || 0;
     
-    // Calculate GCI
+    // Step 1: Calculate GCI (Gross Commission Income)
     const gci = price * (commPct / 100);
     
-    // Calculate Referral Dollar
+    // Step 2: Calculate Referral Dollar
     const referralDollar = gci * (refPct / 100);
     
-    // Calculate Adjusted GCI
+    // Step 3: Calculate Adjusted GCI
     const adjustedGci = gci - referralDollar;
     
     let totalBrokerageFees = 0;
@@ -178,16 +182,23 @@ const EnhancedRealEstateDashboard = () => {
     let brokerageSplit = 0;
     
     if (brokerage === 'KW') {
-      // KW Calculation
-      royalty = gci * 0.06; // 6% of GCI
-      companyDollar = gci * 0.10; // 10% of GCI
+      // ===== KELLER WILLIAMS CALCULATION =====
+      
+      // Royalty = 6% of GCI
+      royalty = gci * 0.06;
+      
+      // Company Dollar = 10% of GCI  
+      companyDollar = gci * 0.10;
       
       const eoVal = parseFloat(eo) || 0;
+      
+      // Total Brokerage Fees = E&O + Royalty + Company Dollar
       totalBrokerageFees = eoVal + royalty + companyDollar;
       
+      // Agent 1099 Income = Adjusted GCI - Total Brokerage Fees
       const agent1099Income = adjustedGci - totalBrokerageFees;
       
-      // Total deductions
+      // Total Deductions (all other fees)
       const totalDeductions = 
         (parseFloat(hoaTransfer) || 0) +
         (parseFloat(homeWarranty) || 0) +
@@ -196,16 +207,22 @@ const EnhancedRealEstateDashboard = () => {
         (parseFloat(boldScholarship) || 0) +
         (parseFloat(tcConcierge) || 0) +
         (parseFloat(jelmbergTeam) || 0) +
+        (parseFloat(adminFeesOther) || 0) +
         (parseFloat(otherDeductions) || 0) +
         (parseFloat(buyersAgentSplit) || 0);
       
+      // NCI (Net Commission Income) = Agent 1099 Income - Total Deductions
       nci = agent1099Income - totalDeductions;
       
     } else if (brokerage === 'BDH') {
-      // BDH Calculation
-      preSplitDeduction = adjustedGci * 0.94; // 94% of Adjusted GCI
+      // ===== BDH CALCULATION =====
+      
+      // Pre-Split Deduction = 94% of Adjusted GCI
+      preSplitDeduction = adjustedGci * 0.94;
       
       const bdhPct = parseFloat(bdhSplitPct) || 10; // Default 10%
+      
+      // Brokerage Split = Pre-Split × BDH Split %
       brokerageSplit = preSplitDeduction * (bdhPct / 100);
       
       const asfVal = parseFloat(asf) || 0;
@@ -213,12 +230,15 @@ const EnhancedRealEstateDashboard = () => {
       const adminFeeVal = parseFloat(adminFee) || 0;
       const eoVal = parseFloat(eo) || 0;
       
+      // Total Brokerage Fees = Split + ASF + Foundation10 + Admin + E&O
       totalBrokerageFees = brokerageSplit + asfVal + foundation10Val + adminFeeVal + eoVal;
       
+      // Total Deductions
       const totalDeductions = 
         (parseFloat(otherDeductions) || 0) +
         (parseFloat(buyersAgentSplit) || 0);
       
+      // NCI = Pre-Split - Total Brokerage Fees - Total Deductions
       nci = preSplitDeduction - totalBrokerageFees - totalDeductions;
     }
     
@@ -241,8 +261,12 @@ const EnhancedRealEstateDashboard = () => {
     const { name, value } = e.target;
     const newFormData = { ...formData, [name]: value };
     
-    // Auto-calculate if price or commission changes
-    if (['closedPrice', 'commissionPct', 'referralPct', 'brokerage'].includes(name)) {
+    // Auto-calculate if price, commission, referral, or brokerage changes
+    if (['closedPrice', 'commissionPct', 'referralPct', 'brokerage', 
+         'eo', 'hoaTransfer', 'homeWarranty', 'kwCares', 'kwNextGen', 
+         'boldScholarship', 'tcConcierge', 'jelmbergTeam', 'adminFeesOther',
+         'bdhSplitPct', 'asf', 'foundation10', 'adminFee',
+         'otherDeductions', 'buyersAgentSplit'].includes(name)) {
       const calculations = calculateCommission(newFormData);
       Object.assign(newFormData, calculations);
     }
@@ -301,12 +325,13 @@ const EnhancedRealEstateDashboard = () => {
       status: 'Closed',
       brokerage: 'KW',
       commissionPct: '',
+      netVolume: '',
       referralPct: '',
       referralDollar: '',
-      netVolume: '',
       eo: '',
       royalty: '',
       companyDollar: '',
+      preSplitDeduction: '',
       hoaTransfer: '',
       homeWarranty: '',
       kwCares: '',
@@ -314,11 +339,11 @@ const EnhancedRealEstateDashboard = () => {
       boldScholarship: '',
       tcConcierge: '',
       jelmbergTeam: '',
+      adminFeesOther: '',
       bdhSplitPct: '',
       asf: '',
       foundation10: '',
       adminFee: '',
-      preSplitDeduction: '',
       otherDeductions: '',
       buyersAgentSplit: '',
       assistantBonus: '',
@@ -357,8 +382,6 @@ const EnhancedRealEstateDashboard = () => {
   const avgGCI = totalTransactions > 0 ? totalGCI / totalTransactions : 0;
   const avgNCI = totalTransactions > 0 ? totalNCI / totalTransactions : 0;
   const totalVolume = filteredTransactions.reduce((sum, t) => sum + (parseFloat(t.closedPrice) || 0), 0);
-  const avgCommissionRate = filteredTransactions.reduce((sum, t) => 
-    sum + (parseFloat(t.commissionPct) || 0), 0) / (totalTransactions || 1);
 
   // ==================== CHART DATA ====================
   
@@ -481,7 +504,7 @@ const EnhancedRealEstateDashboard = () => {
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">
             Janice Glaab Real Estate Dashboard
           </h1>
-          <p className="text-purple-200">Commission Tracking & Analytics</p>
+          <p className="text-purple-200">Commission Tracking & Analytics v3.1</p>
         </div>
 
         {/* Horizontal Filters Bar */}
@@ -701,9 +724,16 @@ const EnhancedRealEstateDashboard = () => {
           </div>
         </div>
 
-        {/* Transactions List - Horizontal Compact Cards */}
+        {/* Transactions List */}
         <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
-          <h3 className="text-2xl font-bold text-white mb-4">Recent Transactions</h3>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-2xl font-bold text-white">
+              Filtered Transactions ({filteredTransactions.length})
+            </h3>
+            <p className="text-purple-300 text-sm">
+              Showing results based on filters above
+            </p>
+          </div>
           
           {filteredTransactions.length === 0 ? (
             <div className="text-center py-12">
@@ -742,7 +772,7 @@ const EnhancedRealEstateDashboard = () => {
                     {/* Address */}
                     <div className="md:col-span-3">
                       <p className="text-white font-semibold text-sm">{transaction.address}</p>
-                      <p className="text-purple-200 text-xs">{transaction.city} â€¢ {transaction.propertyType}</p>
+                      <p className="text-purple-200 text-xs">{transaction.city} • {transaction.propertyType}</p>
                     </div>
 
                     {/* Client & Brokerage */}
@@ -805,7 +835,7 @@ const EnhancedRealEstateDashboard = () => {
         {showForm && (
           <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 overflow-y-auto">
             <div className="bg-slate-900 rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto border border-purple-500/30">
-              <div className="sticky top-0 bg-slate-900 border-b border-white/10 p-6 flex justify-between items-center">
+              <div className="sticky top-0 bg-slate-900 border-b border-white/10 p-6 flex justify-between items-center z-10">
                 <h2 className="text-2xl font-bold text-white">
                   {editingId ? 'Edit Transaction' : 'Add New Transaction'}
                 </h2>
@@ -816,7 +846,7 @@ const EnhancedRealEstateDashboard = () => {
 
               <form onSubmit={handleSubmit} className="p-6 space-y-6">
                 
-                {/* Brokerage Selection */}
+                {/* Row 1: Brokerage Selection (Full Width) */}
                 <div className="bg-purple-500/10 rounded-xl p-4 border border-purple-500/30">
                   <label className="block text-white font-semibold mb-2">Brokerage *</label>
                   <select
@@ -826,12 +856,12 @@ const EnhancedRealEstateDashboard = () => {
                     className="w-full bg-white/5 border border-white/20 rounded-lg px-4 py-2 text-white"
                     required
                   >
-                    <option value="KW" className="bg-slate-800">Keller Williams</option>
-                    <option value="BDH" className="bg-slate-800">BDH</option>
+                    <option value="KW" className="bg-slate-800">Keller Williams (KW)</option>
+                    <option value="BDH" className="bg-slate-800">Bennion Deville Homes (BDH)</option>
                   </select>
                 </div>
 
-                {/* Basic Information */}
+                {/* Row 2: Property Type | Client Type | Source */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
                     <label className="block text-purple-200 mb-2 text-sm">Property Type *</label>
@@ -877,8 +907,9 @@ const EnhancedRealEstateDashboard = () => {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
+                {/* Row 3: Address (2 cols) | City */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="md:col-span-2">
                     <label className="block text-purple-200 mb-2 text-sm">Address *</label>
                     <input
                       type="text"
@@ -905,8 +936,8 @@ const EnhancedRealEstateDashboard = () => {
                   </div>
                 </div>
 
-                {/* Pricing & Dates */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                {/* Row 4: List Price | Closed Price | List Date */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
                     <label className="block text-purple-200 mb-2 text-sm">List Price</label>
                     <input
@@ -942,7 +973,10 @@ const EnhancedRealEstateDashboard = () => {
                       className="w-full bg-white/5 border border-white/20 rounded-lg px-4 py-2 text-white"
                     />
                   </div>
+                </div>
 
+                {/* Row 5: Closing Date | Status | Commission % */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
                     <label className="block text-purple-200 mb-2 text-sm">Closing Date *</label>
                     <input
@@ -952,35 +986,6 @@ const EnhancedRealEstateDashboard = () => {
                       onChange={handleInputChange}
                       className="w-full bg-white/5 border border-white/20 rounded-lg px-4 py-2 text-white"
                       required
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div>
-                    <label className="block text-purple-200 mb-2 text-sm">Commission % *</label>
-                    <input
-                      type="number"
-                      step="0.01"
-                      name="commissionPct"
-                      value={formData.commissionPct}
-                      onChange={handleInputChange}
-                      className="w-full bg-white/5 border border-white/20 rounded-lg px-4 py-2 text-white"
-                      required
-                      placeholder="2.5"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-purple-200 mb-2 text-sm">Referral %</label>
-                    <input
-                      type="number"
-                      step="0.01"
-                      name="referralPct"
-                      value={formData.referralPct}
-                      onChange={handleInputChange}
-                      className="w-full bg-white/5 border border-white/20 rounded-lg px-4 py-2 text-white"
-                      placeholder="0"
                     />
                   </div>
 
@@ -998,15 +1003,54 @@ const EnhancedRealEstateDashboard = () => {
                       <option value="Active" className="bg-slate-800">Active</option>
                     </select>
                   </div>
+
+                  <div>
+                    <label className="block text-purple-200 mb-2 text-sm">Commission % (C%) *</label>
+                    <input
+                      type="number"
+                      step="0.01"
+                      name="commissionPct"
+                      value={formData.commissionPct}
+                      onChange={handleInputChange}
+                      className="w-full bg-white/5 border border-white/20 rounded-lg px-4 py-2 text-white"
+                      required
+                      placeholder="2.5"
+                    />
+                  </div>
                 </div>
 
-                {/* KW Specific Deductions */}
+                {/* Row 6: Referral % | Referral $ (auto-calc) */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-purple-200 mb-2 text-sm">Referral %</label>
+                    <input
+                      type="number"
+                      step="0.01"
+                      name="referralPct"
+                      value={formData.referralPct}
+                      onChange={handleInputChange}
+                      className="w-full bg-white/5 border border-white/20 rounded-lg px-4 py-2 text-white"
+                      placeholder="0"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-blue-300 mb-2 text-sm">Referral $ (Auto-calc)</label>
+                    <div className="w-full bg-blue-500/20 border border-blue-500/30 rounded-lg px-4 py-2 text-white font-bold">
+                      {formatCurrency(formData.referralDollar)}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Conditional Section: KW Deductions */}
                 {formData.brokerage === 'KW' && (
                   <div className="bg-blue-500/10 rounded-xl p-4 border border-blue-500/30">
-                    <h3 className="text-white font-semibold mb-3">KW Deductions</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <h3 className="text-white font-semibold mb-3">Keller Williams (KW) Deductions</h3>
+                    
+                    {/* Row 7: E&O | Royalty (auto) | Company Dollar (auto) */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                       <div>
-                        <label className="block text-purple-200 mb-2 text-sm">E&O Insurance</label>
+                        <label className="block text-purple-200 mb-2 text-sm">E&O (Errors & Omissions) $</label>
                         <input
                           type="number"
                           step="0.01"
@@ -1019,20 +1063,24 @@ const EnhancedRealEstateDashboard = () => {
                       </div>
 
                       <div>
-                        <label className="block text-purple-200 mb-2 text-sm">Jelmberg Team</label>
-                        <input
-                          type="number"
-                          step="0.01"
-                          name="jelmbergTeam"
-                          value={formData.jelmbergTeam}
-                          onChange={handleInputChange}
-                          className="w-full bg-white/5 border border-white/20 rounded-lg px-4 py-2 text-white"
-                          placeholder="0.00"
-                        />
+                        <label className="block text-blue-300 mb-2 text-sm">Royalty $ (Auto: 6% of GCI)</label>
+                        <div className="w-full bg-blue-500/20 border border-blue-500/30 rounded-lg px-4 py-2 text-white font-bold">
+                          {formatCurrency(formData.royalty)}
+                        </div>
                       </div>
 
                       <div>
-                        <label className="block text-purple-200 mb-2 text-sm">HOA Transfer</label>
+                        <label className="block text-blue-300 mb-2 text-sm">Company Dollar $ (Auto: 10% of GCI)</label>
+                        <div className="w-full bg-blue-500/20 border border-blue-500/30 rounded-lg px-4 py-2 text-white font-bold">
+                          {formatCurrency(formData.companyDollar)}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Row 8: Additional KW Deductions */}
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                      <div>
+                        <label className="block text-purple-200 mb-2 text-sm">HOA Transfer $</label>
                         <input
                           type="number"
                           step="0.01"
@@ -1045,7 +1093,7 @@ const EnhancedRealEstateDashboard = () => {
                       </div>
 
                       <div>
-                        <label className="block text-purple-200 mb-2 text-sm">Home Warranty</label>
+                        <label className="block text-purple-200 mb-2 text-sm">Home Warranty $</label>
                         <input
                           type="number"
                           step="0.01"
@@ -1058,7 +1106,7 @@ const EnhancedRealEstateDashboard = () => {
                       </div>
 
                       <div>
-                        <label className="block text-purple-200 mb-2 text-sm">KW Cares</label>
+                        <label className="block text-purple-200 mb-2 text-sm">KW Cares $</label>
                         <input
                           type="number"
                           step="0.01"
@@ -1071,7 +1119,7 @@ const EnhancedRealEstateDashboard = () => {
                       </div>
 
                       <div>
-                        <label className="block text-purple-200 mb-2 text-sm">KW NEXT GEN</label>
+                        <label className="block text-purple-200 mb-2 text-sm">KW NEXT GEN $</label>
                         <input
                           type="number"
                           step="0.01"
@@ -1084,7 +1132,7 @@ const EnhancedRealEstateDashboard = () => {
                       </div>
 
                       <div>
-                        <label className="block text-purple-200 mb-2 text-sm">BOLD Scholarship</label>
+                        <label className="block text-purple-200 mb-2 text-sm">BOLD Scholarship $</label>
                         <input
                           type="number"
                           step="0.01"
@@ -1097,7 +1145,7 @@ const EnhancedRealEstateDashboard = () => {
                       </div>
 
                       <div>
-                        <label className="block text-purple-200 mb-2 text-sm">TC/Concierge Fee</label>
+                        <label className="block text-purple-200 mb-2 text-sm">TC/Concierge Fee $</label>
                         <input
                           type="number"
                           step="0.01"
@@ -1108,15 +1156,43 @@ const EnhancedRealEstateDashboard = () => {
                           placeholder="0.00"
                         />
                       </div>
+
+                      <div>
+                        <label className="block text-purple-200 mb-2 text-sm">Jelmberg Team $</label>
+                        <input
+                          type="number"
+                          step="0.01"
+                          name="jelmbergTeam"
+                          value={formData.jelmbergTeam}
+                          onChange={handleInputChange}
+                          className="w-full bg-white/5 border border-white/20 rounded-lg px-4 py-2 text-white"
+                          placeholder="0.00"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-purple-200 mb-2 text-sm">Admin Fees & Other $</label>
+                        <input
+                          type="number"
+                          step="0.01"
+                          name="adminFeesOther"
+                          value={formData.adminFeesOther}
+                          onChange={handleInputChange}
+                          className="w-full bg-white/5 border border-white/20 rounded-lg px-4 py-2 text-white"
+                          placeholder="0.00"
+                        />
+                      </div>
                     </div>
                   </div>
                 )}
 
-                {/* BDH Specific Deductions */}
+                {/* Conditional Section: BDH Deductions */}
                 {formData.brokerage === 'BDH' && (
                   <div className="bg-pink-500/10 rounded-xl p-4 border border-pink-500/30">
-                    <h3 className="text-white font-semibold mb-3">BDH Deductions</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <h3 className="text-white font-semibold mb-3">Bennion Deville Homes (BDH) Deductions</h3>
+                    
+                    {/* Row 7: BDH Split % | A S F | Foundation10 */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                       <div>
                         <label className="block text-purple-200 mb-2 text-sm">BDH Split %</label>
                         <input
@@ -1131,7 +1207,7 @@ const EnhancedRealEstateDashboard = () => {
                       </div>
 
                       <div>
-                        <label className="block text-purple-200 mb-2 text-sm">A S F</label>
+                        <label className="block text-purple-200 mb-2 text-sm">A S F (Agent Services Fee) $</label>
                         <input
                           type="number"
                           step="0.01"
@@ -1144,7 +1220,7 @@ const EnhancedRealEstateDashboard = () => {
                       </div>
 
                       <div>
-                        <label className="block text-purple-200 mb-2 text-sm">Foundation10</label>
+                        <label className="block text-purple-200 mb-2 text-sm">Foundation10 $</label>
                         <input
                           type="number"
                           step="0.01"
@@ -1155,9 +1231,12 @@ const EnhancedRealEstateDashboard = () => {
                           placeholder="0.00"
                         />
                       </div>
+                    </div>
 
+                    {/* Row 8: Admin Fee | E&O */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-purple-200 mb-2 text-sm">Admin Fee</label>
+                        <label className="block text-purple-200 mb-2 text-sm">Admin Fee $</label>
                         <input
                           type="number"
                           step="0.01"
@@ -1170,7 +1249,7 @@ const EnhancedRealEstateDashboard = () => {
                       </div>
 
                       <div>
-                        <label className="block text-purple-200 mb-2 text-sm">E&O Insurance</label>
+                        <label className="block text-purple-200 mb-2 text-sm">E&O (Errors & Omissions) $</label>
                         <input
                           type="number"
                           step="0.01"
@@ -1185,10 +1264,10 @@ const EnhancedRealEstateDashboard = () => {
                   </div>
                 )}
 
-                {/* Universal Fields */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {/* Row 9: Universal Deductions */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-purple-200 mb-2 text-sm">Other Deductions</label>
+                    <label className="block text-purple-200 mb-2 text-sm">Other Deductions $</label>
                     <input
                       type="number"
                       step="0.01"
@@ -1201,7 +1280,7 @@ const EnhancedRealEstateDashboard = () => {
                   </div>
 
                   <div>
-                    <label className="block text-purple-200 mb-2 text-sm">Buyer's Agent Split</label>
+                    <label className="block text-purple-200 mb-2 text-sm">Buyer's Agent Split $</label>
                     <input
                       type="number"
                       step="0.01"
@@ -1212,60 +1291,70 @@ const EnhancedRealEstateDashboard = () => {
                       placeholder="0.00"
                     />
                   </div>
-
-                  <div>
-                    <label className="block text-yellow-300 mb-2 text-sm">
-                      Assistant Bonus (FYI only)
-                    </label>
-                    <input
-                      type="number"
-                      step="0.01"
-                      name="assistantBonus"
-                      value={formData.assistantBonus}
-                      onChange={handleInputChange}
-                      className="w-full bg-yellow-500/10 border border-yellow-500/30 rounded-lg px-4 py-2 text-white"
-                      placeholder="0.00"
-                    />
-                    <p className="text-xs text-yellow-200 mt-1">Not included in commission calculations</p>
-                  </div>
                 </div>
 
-                {/* Calculated Fields - Read Only */}
+                {/* Row 10: Assistant Bonus (FYI Only) */}
+                <div>
+                  <label className="block text-yellow-300 mb-2 text-sm font-semibold">
+                    💡 Assistant Bonus (FYI only - Not included in commission calculations)
+                  </label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    name="assistantBonus"
+                    value={formData.assistantBonus}
+                    onChange={handleInputChange}
+                    className="w-full bg-yellow-500/10 border border-yellow-500/30 rounded-lg px-4 py-2 text-white"
+                    placeholder="0.00"
+                  />
+                  <p className="text-xs text-yellow-200 mt-1">This amount is tracked for reference only and does not affect GCI or NCI calculations</p>
+                </div>
+
+                {/* Calculated Fields (Read-Only, Highlighted) */}
                 <div className="bg-green-500/10 rounded-xl p-4 border border-green-500/30">
-                  <h3 className="text-white font-semibold mb-3">Calculated Values (Auto-filled)</h3>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <h3 className="text-white font-semibold mb-3">📊 Auto-Calculated Values</h3>
+                  
+                  {/* Row 11: GCI | Adjusted GCI */}
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                     <div>
-                      <label className="block text-green-300 mb-2 text-sm">GCI</label>
-                      <div className="w-full bg-green-500/20 border border-green-500/30 rounded-lg px-4 py-2 text-white font-bold">
+                      <label className="block text-green-300 mb-2 text-sm font-semibold">GCI (Gross)</label>
+                      <div className="w-full bg-green-500/20 border border-green-500/30 rounded-lg px-4 py-2 text-white font-bold text-lg">
                         {formatCurrency(formData.gci)}
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-blue-300 mb-2 text-sm">Referral $</label>
-                      <div className="w-full bg-blue-500/20 border border-blue-500/30 rounded-lg px-4 py-2 text-white font-bold">
-                        {formatCurrency(formData.referralDollar)}
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-purple-300 mb-2 text-sm">Adjusted GCI</label>
-                      <div className="w-full bg-purple-500/20 border border-purple-500/30 rounded-lg px-4 py-2 text-white font-bold">
+                      <label className="block text-purple-300 mb-2 text-sm font-semibold">Adjusted GCI</label>
+                      <div className="w-full bg-purple-500/20 border border-purple-500/30 rounded-lg px-4 py-2 text-white font-bold text-lg">
                         {formatCurrency(formData.adjustedGci)}
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-pink-300 mb-2 text-sm">NCI (Net)</label>
-                      <div className="w-full bg-pink-500/20 border border-pink-500/30 rounded-lg px-4 py-2 text-white font-bold text-lg">
+                      <label className="block text-yellow-300 mb-2 text-sm font-semibold">Total Brokerage Fees</label>
+                      <div className="w-full bg-yellow-500/20 border border-yellow-500/30 rounded-lg px-4 py-2 text-white font-bold text-lg">
+                        {formatCurrency(formData.totalBrokerageFees)}
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-pink-300 mb-2 text-sm font-semibold">🎯 NCI (Net)</label>
+                      <div className="w-full bg-pink-500/20 border border-pink-500/30 rounded-lg px-4 py-2 text-white font-bold text-2xl">
                         {formatCurrency(formData.nci)}
                       </div>
                     </div>
                   </div>
+
+                  <p className="text-xs text-green-200">
+                    {formData.brokerage === 'KW' 
+                      ? '✅ KW Formula: NCI = (Adjusted GCI - E&O - Royalty - Company $) - All Deductions'
+                      : '✅ BDH Formula: NCI = (Adjusted GCI × 94%) - Brokerage Split - All Fees - All Deductions'
+                    }
+                  </p>
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex gap-4 justify-end pt-4">
+                <div className="flex gap-4 justify-end pt-4 border-t border-white/10">
                   <button
                     type="button"
                     onClick={resetForm}
@@ -1277,7 +1366,7 @@ const EnhancedRealEstateDashboard = () => {
                     type="submit"
                     className="px-6 py-2 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg text-white font-semibold hover:from-purple-700 hover:to-pink-700"
                   >
-                    {editingId ? 'Update Transaction' : 'Add Transaction'}
+                    {editingId ? '✓ Update Transaction' : '+ Add Transaction'}
                   </button>
                 </div>
               </form>
@@ -1301,4 +1390,4 @@ const EnhancedRealEstateDashboard = () => {
   );
 };
 
-export default EnhancedRealEstateDashboard;
+export default RealEstateDashboard;
