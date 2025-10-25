@@ -1,13 +1,16 @@
 {
-  "name": "janice-glaab-real-estate-dashboard",
-  "version": "1.0.0",
+  "name": "enhanced-real-estate-dashboard",
+  "version": "3.2.0",
+  "description": "Commission tracking dashboard for Janice Glaab Real Estate with KW and BDH brokerage support and Google Sheets integration",
   "private": true,
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "recharts": "^2.10.0",
+    "lucide-react": "^0.294.0",
     "react-scripts": "5.0.1",
-    "recharts": "^2.10.3",
-    "lucide-react": "^0.263.1"
+    "gapi-script": "^1.2.0",
+    "googleapis": "^128.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -31,5 +34,24 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0"
+  },
+  "keywords": [
+    "real-estate",
+    "commission",
+    "tracking",
+    "dashboard",
+    "keller-williams",
+    "bdh",
+    "google-sheets",
+    "cloud-sync"
+  ],
+  "author": "Janice Glaab",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/danadube/janice-dashboard"
   }
 }
