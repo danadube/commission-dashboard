@@ -1,7 +1,7 @@
 {
   "name": "enhanced-real-estate-dashboard",
   "version": "3.2.0",
-  "description": "Commission tracking dashboard for Janice Glaab Real Estate with KW and BDH brokerage support and Google Sheets integration",
+  "description": "Commission tracking dashboard for Janice Glaab Real Estate with KW and BDH brokerage support",
   "private": true,
   "dependencies": {
     "react": "^18.2.0",
@@ -9,8 +9,7 @@
     "recharts": "^2.10.0",
     "lucide-react": "^0.294.0",
     "react-scripts": "5.0.1",
-    "gapi-script": "^1.2.0",
-    "googleapis": "^128.0.0"
+    "gapi-script": "^1.2.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -46,8 +45,7 @@
     "dashboard",
     "keller-williams",
     "bdh",
-    "google-sheets",
-    "cloud-sync"
+    "google-sheets"
   ],
   "author": "Janice Glaab",
   "repository": {
