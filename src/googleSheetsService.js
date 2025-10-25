@@ -424,6 +424,7 @@ async function deleteFromGoogleSheets(rowIndex) {
 // Export all functions
 export {
   initialize,
+  initialize as initializeGoogleSheets, // Export as both names
   signIn,
   signOut,
   hasValidToken,
