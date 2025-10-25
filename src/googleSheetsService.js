@@ -1,6 +1,11 @@
 /**
  * Google Sheets Integration Service
- * Version: 1.3 - Build Fix (No Duplicate Exports)
+ * Version: 1.4 - REDIRECT OAUTH FIX
+ * 
+ * CHANGES IN v1.4:
+ * - Switched from popup-based OAuth to redirect-based OAuth
+ * - Fixes COOP (Cross-Origin-Opener-Policy) blocking issue on Vercel
+ * - No more hanging OAuth popup!
  * 
  * Handles all Google Sheets API interactions for the Real Estate Dashboard
  * Two-way sync: Read from and Write to Google Sheets
@@ -20,6 +25,9 @@ const CONFIG = {
   // Google API Settings
   discoveryDocs: ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
   scopes: 'https://www.googleapis.com/auth/spreadsheets',
+  
+  // OAuth Redirect URL (current page)
+  redirectUri: window.location.origin + window.location.pathname,
 };
 
 // Column mapping (A-W = 23 columns matching Excel structure)
@@ -58,8 +66,14 @@ let tokenClient;
 /**
  * Initialize Google API
  */
-const initGoogleAPI = () => {
+export const initGoogleAPI = () => {
   return new Promise((resolve, reject) => {
+    // Check if already loaded
+    if (window.gapi && gapiInited) {
+      resolve();
+      return;
+    }
+    
     const script = document.createElement('script');
     script.src = 'https://apis.google.com/js/api.js';
     script.onload = () => {
@@ -79,52 +93,147 @@ const initGoogleAPI = () => {
       });
     };
     script.onerror = reject;
-    document.body.appendChild(script);
+    
+    // Only add if not already present
+    if (!document.querySelector('script[src="https://apis.google.com/js/api.js"]')) {
+      document.body.appendChild(script);
+    }
   });
 };
 
 /**
- * Initialize Google Identity Services (OAuth)
+ * Initialize Google Identity Services (OAuth) - REDIRECT MODE
  */
-const initGoogleIdentity = () => {
+export const initGoogleIdentity = () => {
   return new Promise((resolve, reject) => {
+    // Check if already loaded
+    if (window.google?.accounts?.oauth2 && gisInited) {
+      resolve();
+      return;
+    }
+    
     const script = document.createElement('script');
     script.src = 'https://accounts.google.com/gsi/client';
     script.onload = () => {
-      tokenClient = window.google.accounts.oauth2.initTokenClient({
+      // Initialize token client with REDIRECT mode (ux_mode: 'redirect')
+      tokenClient = window.google.accounts.oauth2.initCodeClient({
         client_id: CONFIG.clientId,
         scope: CONFIG.scopes,
-        callback: '', // Will be set when requesting token
+        ux_mode: 'redirect', // ✅ KEY CHANGE: redirect instead of popup
+        redirect_uri: CONFIG.redirectUri,
       });
       gisInited = true;
-      console.log('✅ Google Identity Services initialized');
+      console.log('✅ Google Identity Services initialized (REDIRECT mode)');
       resolve();
     };
     script.onerror = reject;
-    document.body.appendChild(script);
+    
+    // Only add if not already present
+    if (!document.querySelector('script[src="https://accounts.google.com/gsi/client"]')) {
+      document.body.appendChild(script);
+    }
   });
 };
 
 /**
- * Request user authorization
+ * Handle OAuth callback after redirect
+ * Call this on page load to check for OAuth response
  */
-const authorizeUser = () => {
-  return new Promise((resolve, reject) => {
-    tokenClient.callback = async (response) => {
-      if (response.error) {
-        console.error('❌ Authorization error:', response);
-        reject(response);
-      } else {
-        console.log('✅ User authorized');
-        resolve(response);
-      }
-    };
+export const handleOAuthCallback = async () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const code = urlParams.get('code');
+  const error = urlParams.get('error');
+  
+  if (error) {
+    console.error('❌ OAuth error:', error);
+    // Clean URL
+    window.history.replaceState({}, document.title, window.location.pathname);
+    throw new Error(error);
+  }
+  
+  if (code) {
+    console.log('🔄 Processing OAuth callback...');
     
-    // Check if already authorized
-    if (window.gapi.client.getToken() === null) {
-      tokenClient.requestAccessToken({ prompt: 'consent' });
-    } else {
-      tokenClient.requestAccessToken({ prompt: '' });
+    try {
+      // Exchange code for access token
+      const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+          code: code,
+          client_id: CONFIG.clientId,
+          redirect_uri: CONFIG.redirectUri,
+          grant_type: 'authorization_code',
+        }),
+      });
+      
+      const tokens = await tokenResponse.json();
+      
+      if (tokens.access_token) {
+        // Set the access token in gapi
+        window.gapi.client.setToken({
+          access_token: tokens.access_token,
+        });
+        
+        // Store token in sessionStorage for persistence
+        sessionStorage.setItem('google_access_token', tokens.access_token);
+        if (tokens.refresh_token) {
+          sessionStorage.setItem('google_refresh_token', tokens.refresh_token);
+        }
+        
+        console.log('✅ OAuth successful, access token set');
+        
+        // Clean URL
+        window.history.replaceState({}, document.title, window.location.pathname);
+        
+        return true;
+      } else {
+        throw new Error('No access token received');
+      }
+    } catch (error) {
+      console.error('❌ Error exchanging code for token:', error);
+      // Clean URL
+      window.history.replaceState({}, document.title, window.location.pathname);
+      throw error;
+    }
+  }
+  
+  // Check if we have a stored token
+  const storedToken = sessionStorage.getItem('google_access_token');
+  if (storedToken && window.gapi?.client) {
+    window.gapi.client.setToken({
+      access_token: storedToken,
+    });
+    console.log('✅ Restored access token from session');
+    return true;
+  }
+  
+  return false;
+};
+
+/**
+ * Request user authorization - REDIRECT MODE
+ */
+export const authorizeUser = () => {
+  return new Promise((resolve, reject) => {
+    try {
+      console.log('🔐 Starting OAuth redirect flow...');
+      
+      // Save current state before redirect
+      sessionStorage.setItem('oauth_pending', 'true');
+      
+      // Request authorization code (will redirect to Google)
+      tokenClient.requestCode();
+      
+      // Note: User will be redirected away, so this promise won't resolve here
+      // It will resolve when they return via handleOAuthCallback()
+      
+    } catch (error) {
+      console.error('❌ Error starting authorization:', error);
+      sessionStorage.removeItem('oauth_pending');
+      reject(error);
     }
   });
 };
@@ -132,20 +241,46 @@ const authorizeUser = () => {
 /**
  * Check if user is currently authorized
  */
-const isAuthorized = () => {
-  return window.gapi?.client?.getToken() !== null;
+export const isAuthorized = () => {
+  // Check if gapi has a valid token
+  const gapiToken = window.gapi?.client?.getToken();
+  if (gapiToken && gapiToken.access_token) {
+    return true;
+  }
+  
+  // Check sessionStorage
+  const storedToken = sessionStorage.getItem('google_access_token');
+  if (storedToken) {
+    // Restore token to gapi
+    if (window.gapi?.client) {
+      window.gapi.client.setToken({
+        access_token: storedToken,
+      });
+    }
+    return true;
+  }
+  
+  return false;
 };
 
 /**
  * Sign out user
  */
-const signOut = () => {
-  const token = window.gapi.client.getToken();
-  if (token !== null) {
-    window.google.accounts.oauth2.revoke(token.access_token);
+export const signOut = () => {
+  const token = window.gapi?.client?.getToken();
+  if (token && token.access_token) {
+    window.google.accounts.oauth2.revoke(token.access_token, () => {
+      console.log('✅ Token revoked');
+    });
     window.gapi.client.setToken('');
-    console.log('✅ User signed out');
   }
+  
+  // Clear stored tokens
+  sessionStorage.removeItem('google_access_token');
+  sessionStorage.removeItem('google_refresh_token');
+  sessionStorage.removeItem('oauth_pending');
+  
+  console.log('✅ User signed out');
 };
 
 // ==================== DATA TRANSFORMATION ====================
@@ -221,14 +356,14 @@ const transactionToRow = (transaction) => {
 /**
  * Read all transactions from Google Sheets
  */
-const readFromGoogleSheets = async () => {
+export const readFromGoogleSheets = async () => {
   try {
     if (!gapiInited) {
       throw new Error('Google API not initialized');
     }
     
     if (!isAuthorized()) {
-      await authorizeUser();
+      throw new Error('Not authorized - please sign in first');
     }
     
     console.log('📊 Reading from Google Sheets...');
@@ -261,14 +396,14 @@ const readFromGoogleSheets = async () => {
 /**
  * Write all transactions to Google Sheets
  */
-const writeToGoogleSheets = async (transactions) => {
+export const writeToGoogleSheets = async (transactions) => {
   try {
     if (!gapiInited) {
       throw new Error('Google API not initialized');
     }
     
     if (!isAuthorized()) {
-      await authorizeUser();
+      throw new Error('Not authorized - please sign in first');
     }
     
     console.log('📝 Writing to Google Sheets...');
@@ -304,14 +439,14 @@ const writeToGoogleSheets = async (transactions) => {
 /**
  * Append a single transaction to Google Sheets
  */
-const appendTransaction = async (transaction) => {
+export const appendTransaction = async (transaction) => {
   try {
     if (!gapiInited) {
       throw new Error('Google API not initialized');
     }
     
     if (!isAuthorized()) {
-      await authorizeUser();
+      throw new Error('Not authorized - please sign in first');
     }
     
     console.log('➕ Appending transaction to Google Sheets...');
@@ -340,7 +475,7 @@ const appendTransaction = async (transaction) => {
 /**
  * Update spreadsheet configuration
  */
-const updateConfig = (newConfig) => {
+export const updateConfig = (newConfig) => {
   Object.assign(CONFIG, newConfig);
   console.log('⚙️ Configuration updated:', CONFIG);
 };
@@ -348,7 +483,7 @@ const updateConfig = (newConfig) => {
 /**
  * Get current configuration
  */
-const getConfig = () => {
+export const getConfig = () => {
   return { ...CONFIG };
 };
 
@@ -357,14 +492,22 @@ const getConfig = () => {
 /**
  * Initialize everything at once
  */
-const initializeGoogleSheets = async () => {
+export const initializeGoogleSheets = async () => {
   try {
-    console.log('🚀 Initializing Google Sheets integration...');
+    console.log('🚀 Initializing Google Sheets integration (REDIRECT mode)...');
     
     await initGoogleAPI();
     await initGoogleIdentity();
     
-    console.log('✅ Google Sheets integration ready');
+    // Check if we're returning from OAuth redirect
+    const wasAuthorized = await handleOAuthCallback();
+    
+    if (wasAuthorized) {
+      console.log('✅ Google Sheets integration ready (already authorized)');
+    } else {
+      console.log('✅ Google Sheets integration ready (not yet authorized)');
+    }
+    
     return true;
     
   } catch (error) {
@@ -373,27 +516,9 @@ const initializeGoogleSheets = async () => {
   }
 };
 
-// ==================== EXPORTS ====================
-
-// Export everything - both as named exports AND in default object
-export {
-  initializeGoogleSheets,
-  initGoogleAPI,
-  initGoogleIdentity,
-  readFromGoogleSheets,
-  writeToGoogleSheets,
-  appendTransaction,
-  authorizeUser,
-  isAuthorized,
-  signOut,
-  updateConfig,
-  getConfig,
-};
-
 export default {
   initializeGoogleSheets,
-  initGoogleAPI,
-  initGoogleIdentity,
+  handleOAuthCallback,
   readFromGoogleSheets,
   writeToGoogleSheets,
   appendTransaction,
