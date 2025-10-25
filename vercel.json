@@ -1,0 +1,90 @@
+{
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Cross-Origin-Opener-Policy",
+          "value": "same-origin-allow-popups"
+        },
+        {
+          "key": "Cross-Origin-Embedder-Policy",
+          "value": "unsafe-none"
+        }
+      ]
+    }
+  ]
+}
+```
+
+---
+
+### **STEP 5: Commit the File**
+
+At the bottom of the page:
+
+1. **Commit message**: Type `Fix OAuth popup COOP policy`
+
+2. **Select**: "Commit directly to the `main` branch"
+
+3. **Click**: "Commit new file" (green button)
+
+---
+
+### **STEP 6: Wait for Vercel Deployment**
+
+1. **Go to Vercel**: https://vercel.com/danas-projects-3d9348e4/janice-dashboard
+
+2. **Click "Deployments" tab**
+
+3. **Watch for new deployment** (should start automatically)
+   - Will show "Building..." then "Ready"
+   - Takes ~2 minutes
+
+---
+
+### **STEP 7: Test OAuth**
+
+1. **Clear browser cache** (Ctrl+Shift+R or Cmd+Shift+R)
+
+2. **Go to**: https://janice-dashboard.vercel.app
+
+3. **Click "Connect to Google"**
+
+4. **Should work now!** ✅
+
+---
+
+## 🎥 **VISUAL GUIDE**
+
+**What you'll see on GitHub:**
+```
+Step 2: Click "Add file" dropdown
+┌─────────────────────────────────────┐
+│ Add file ▼                          │
+│   ├── Create new file     ← Click  │
+│   └── Upload files                  │
+└─────────────────────────────────────┘
+
+Step 3: Name the file
+┌─────────────────────────────────────┐
+│ Name your file...                   │
+│ vercel.json          ← Type this    │
+└─────────────────────────────────────┘
+
+Step 4: Paste content
+┌─────────────────────────────────────┐
+│ {                                   │
+│   "headers": [                      │
+│     ...                             │
+│   ]                                 │
+│ }                                   │
+└─────────────────────────────────────┘
+
+Step 5: Commit
+┌─────────────────────────────────────┐
+│ Commit message: Fix OAuth popup     │
+│ ○ Commit directly to main branch   │
+│                                     │
+│      [Commit new file]    ← Click  │
+└─────────────────────────────────────┘
