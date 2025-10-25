@@ -1,6 +1,6 @@
 /**
  * Google Sheets Integration Service
- * Version: 1.3 - Build Fix
+ * Version: 1.3 - Build Fix (No Duplicate Exports)
  * 
  * Handles all Google Sheets API interactions for the Real Estate Dashboard
  * Two-way sync: Read from and Write to Google Sheets
@@ -58,7 +58,7 @@ let tokenClient;
 /**
  * Initialize Google API
  */
-export const initGoogleAPI = () => {
+const initGoogleAPI = () => {
   return new Promise((resolve, reject) => {
     const script = document.createElement('script');
     script.src = 'https://apis.google.com/js/api.js';
@@ -86,7 +86,7 @@ export const initGoogleAPI = () => {
 /**
  * Initialize Google Identity Services (OAuth)
  */
-export const initGoogleIdentity = () => {
+const initGoogleIdentity = () => {
   return new Promise((resolve, reject) => {
     const script = document.createElement('script');
     script.src = 'https://accounts.google.com/gsi/client';
@@ -108,7 +108,7 @@ export const initGoogleIdentity = () => {
 /**
  * Request user authorization
  */
-export const authorizeUser = () => {
+const authorizeUser = () => {
   return new Promise((resolve, reject) => {
     tokenClient.callback = async (response) => {
       if (response.error) {
@@ -132,14 +132,14 @@ export const authorizeUser = () => {
 /**
  * Check if user is currently authorized
  */
-export const isAuthorized = () => {
+const isAuthorized = () => {
   return window.gapi?.client?.getToken() !== null;
 };
 
 /**
  * Sign out user
  */
-export const signOut = () => {
+const signOut = () => {
   const token = window.gapi.client.getToken();
   if (token !== null) {
     window.google.accounts.oauth2.revoke(token.access_token);
@@ -221,7 +221,7 @@ const transactionToRow = (transaction) => {
 /**
  * Read all transactions from Google Sheets
  */
-export const readFromGoogleSheets = async () => {
+const readFromGoogleSheets = async () => {
   try {
     if (!gapiInited) {
       throw new Error('Google API not initialized');
@@ -261,7 +261,7 @@ export const readFromGoogleSheets = async () => {
 /**
  * Write all transactions to Google Sheets
  */
-export const writeToGoogleSheets = async (transactions) => {
+const writeToGoogleSheets = async (transactions) => {
   try {
     if (!gapiInited) {
       throw new Error('Google API not initialized');
@@ -304,7 +304,7 @@ export const writeToGoogleSheets = async (transactions) => {
 /**
  * Append a single transaction to Google Sheets
  */
-export const appendTransaction = async (transaction) => {
+const appendTransaction = async (transaction) => {
   try {
     if (!gapiInited) {
       throw new Error('Google API not initialized');
@@ -340,7 +340,7 @@ export const appendTransaction = async (transaction) => {
 /**
  * Update spreadsheet configuration
  */
-export const updateConfig = (newConfig) => {
+const updateConfig = (newConfig) => {
   Object.assign(CONFIG, newConfig);
   console.log('⚙️ Configuration updated:', CONFIG);
 };
@@ -348,7 +348,7 @@ export const updateConfig = (newConfig) => {
 /**
  * Get current configuration
  */
-export const getConfig = () => {
+const getConfig = () => {
   return { ...CONFIG };
 };
 
@@ -357,7 +357,7 @@ export const getConfig = () => {
 /**
  * Initialize everything at once
  */
-export const initializeGoogleSheets = async () => {
+const initializeGoogleSheets = async () => {
   try {
     console.log('🚀 Initializing Google Sheets integration...');
     
@@ -375,7 +375,7 @@ export const initializeGoogleSheets = async () => {
 
 // ==================== EXPORTS ====================
 
-// Named exports
+// Export everything - both as named exports AND in default object
 export {
   initializeGoogleSheets,
   initGoogleAPI,
@@ -390,7 +390,6 @@ export {
   getConfig,
 };
 
-// Default export
 export default {
   initializeGoogleSheets,
   initGoogleAPI,
