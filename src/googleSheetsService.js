@@ -50,7 +50,7 @@ const COLUMN_MAPPING = {
   status: 'T',
   assistantBonus: 'U',
   buyersAgentSplit: 'V',
-  adjustedGci2: 'W' // Duplicate column in Excel
+  adjustedGci2: 'W'
 };
 
 // ==================== STATE ====================
@@ -100,9 +100,9 @@ export const initGoogleIdentity = () => {
       tokenClient = window.google.accounts.oauth2.initTokenClient({
         client_id: CONFIG.clientId,
         scope: CONFIG.scopes,
-        ux_mode: 'redirect', // ⭐ FIX: Use redirect instead of popup
-        redirect_uri: window.location.origin, // Current URL
-        callback: '', // Will be set when requesting token
+        ux_mode: 'redirect',
+        redirect_uri: window.location.origin,
+        callback: '',
       });
       gisInited = true;
       console.log('✅ Google Identity Services initialized (redirect mode)');
@@ -118,7 +118,6 @@ export const initGoogleIdentity = () => {
  */
 export const authorizeUser = () => {
   return new Promise((resolve, reject) => {
-    // Store current location for redirect back
     sessionStorage.setItem('oauth_redirect_origin', window.location.href);
     
     tokenClient.callback = async (response) => {
@@ -127,18 +126,14 @@ export const authorizeUser = () => {
         reject(response);
       } else {
         console.log('✅ User authorized');
-        // Store token
         window.gapi.client.setToken(response);
         resolve(response);
       }
     };
     
-    // Check if already authorized
     if (window.gapi.client.getToken() === null) {
-      // Request access token - will redirect to Google
       tokenClient.requestAccessToken({ prompt: 'consent' });
     } else {
-      // Already authorized, just resolve
       resolve(window.gapi.client.getToken());
     }
   });
@@ -146,26 +141,21 @@ export const authorizeUser = () => {
 
 /**
  * Handle OAuth redirect callback
- * Call this on page load to process returning OAuth redirect
  */
 export const handleOAuthCallback = () => {
   const hash = window.location.hash;
   if (hash.includes('access_token')) {
-    // Parse the access token from URL hash
     const params = new URLSearchParams(hash.substring(1));
     const accessToken = params.get('access_token');
     
     if (accessToken) {
       console.log('✅ OAuth callback received');
-      // Set the token
       window.gapi.client.setToken({
         access_token: accessToken
       });
       
-      // Clean up URL
       window.history.replaceState(null, '', window.location.pathname);
       
-      // Get original location
       const redirectOrigin = sessionStorage.getItem('oauth_redirect_origin');
       if (redirectOrigin) {
         sessionStorage.removeItem('oauth_redirect_origin');
@@ -205,15 +195,14 @@ export const loadTransactions = async () => {
   try {
     const response = await window.gapi.client.sheets.spreadsheets.values.get({
       spreadsheetId: CONFIG.spreadsheetId,
-      range: `${CONFIG.sheetName}!A2:W`, // All data rows (skip header)
+      range: `${CONFIG.sheetName}!A2:W`,
     });
 
     const rows = response.result.values || [];
     console.log(`✅ Loaded ${rows.length} transactions from Google Sheets`);
     
-    // Convert rows to transaction objects
     const transactions = rows.map((row, index) => ({
-      id: `gsheet-${index + 2}`, // Row number as ID (starting from row 2)
+      id: `gsheet-${index + 2}`,
       propertyType: row[0] || '',
       clientType: row[1] || '',
       source: row[2] || '',
@@ -247,11 +236,10 @@ export const loadTransactions = async () => {
 };
 
 /**
- * Save a single transaction to Google Sheets (append new row)
+ * Save a single transaction to Google Sheets
  */
 export const saveTransaction = async (transaction) => {
   try {
-    // Convert transaction object to array (matching column order A-W)
     const row = [
       transaction.propertyType || '',
       transaction.clientType || '',
@@ -280,7 +268,7 @@ export const saveTransaction = async (transaction) => {
 
     const response = await window.gapi.client.sheets.spreadsheets.values.append({
       spreadsheetId: CONFIG.spreadsheetId,
-      range: `${CONFIG.sheetName}!A2:W`, // Append after last row
+      range: `${CONFIG.sheetName}!A2:W`,
       valueInputOption: 'USER_ENTERED',
       resource: {
         values: [row],
@@ -300,7 +288,6 @@ export const saveTransaction = async (transaction) => {
  */
 export const updateTransaction = async (transaction, rowNumber) => {
   try {
-    // Convert transaction object to array
     const row = [
       transaction.propertyType || '',
       transaction.clientType || '',
@@ -349,7 +336,6 @@ export const updateTransaction = async (transaction, rowNumber) => {
  */
 export const deleteTransaction = async (rowNumber) => {
   try {
-    // Clear the row (Google Sheets doesn't have a direct delete row API)
     await window.gapi.client.sheets.spreadsheets.values.clear({
       spreadsheetId: CONFIG.spreadsheetId,
       range: `${CONFIG.sheetName}!A${rowNumber}:W${rowNumber}`,
@@ -364,11 +350,9 @@ export const deleteTransaction = async (rowNumber) => {
 
 /**
  * Sync all transactions from dashboard to Google Sheets
- * Clears existing data and writes all transactions
  */
 export const syncToGoogleSheets = async (transactions) => {
   try {
-    // Convert transactions to rows
     const rows = transactions.map(t => [
       t.propertyType || '',
       t.clientType || '',
@@ -395,13 +379,11 @@ export const syncToGoogleSheets = async (transactions) => {
       t.adjustedGci2 || 0,
     ]);
 
-    // Clear existing data (except header)
     await window.gapi.client.sheets.spreadsheets.values.clear({
       spreadsheetId: CONFIG.spreadsheetId,
       range: `${CONFIG.sheetName}!A2:W`,
     });
 
-    // Write all transactions
     if (rows.length > 0) {
       await window.gapi.client.sheets.spreadsheets.values.update({
         spreadsheetId: CONFIG.spreadsheetId,
@@ -430,7 +412,6 @@ export const initialize = async () => {
     await initGoogleApi();
     await initGoogleIdentity();
     
-    // Check if returning from OAuth redirect
     const hadCallback = handleOAuthCallback();
     if (hadCallback) {
       console.log('✅ Processed OAuth callback');
