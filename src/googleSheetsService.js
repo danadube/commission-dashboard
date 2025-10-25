@@ -1,28 +1,29 @@
 /**
- * Google Sheets Service v1.3
- * Updated: October 25, 2025
+ * Google Sheets Integration Service
+ * Version: 1.3 - Build Fix
  * 
- * CHANGES IN v1.3:
- * - Switched from OAuth popup to Google Identity Services (GIS)
- * - Uses modern "Sign In With Google" button
- * - No COOP/popup blocking issues
- * - Better UX with industry-standard sign-in
- * - More reliable authentication flow
- * 
- * This service handles all Google Sheets operations for the Real Estate Dashboard
+ * Handles all Google Sheets API interactions for the Real Estate Dashboard
+ * Two-way sync: Read from and Write to Google Sheets
  */
 
-// Configuration
-const SPREADSHEET_ID = process.env.REACT_APP_SPREADSHEET_ID || '1JN8qt64Jpy3PIxW9WDVmTNmDVdoHDhY0hJ4ZBVAmTnQ';
-const SHEET_NAME = 'Transactions';
-const API_KEY = process.env.REACT_APP_GOOGLE_API_KEY;
-const CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+// ==================== CONFIGURATION ====================
 
-// Scopes for Google Sheets access
-const SCOPES = 'https://www.googleapis.com/auth/spreadsheets';
+const CONFIG = {
+  // Google API Configuration
+  apiKey: process.env.REACT_APP_GOOGLE_API_KEY || '',
+  clientId: process.env.REACT_APP_GOOGLE_CLIENT_ID || '',
+  
+  // Google Sheets Configuration
+  spreadsheetId: process.env.REACT_APP_SPREADSHEET_ID || '',
+  sheetName: 'Transactions', // Name of the sheet tab
+  
+  // Google API Settings
+  discoveryDocs: ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
+  scopes: 'https://www.googleapis.com/auth/spreadsheets',
+};
 
-// Column mapping (A-W = 23 columns)
-const COLUMNS = {
+// Column mapping (A-W = 23 columns matching Excel structure)
+const COLUMN_MAPPING = {
   propertyType: 'A',
   clientType: 'B',
   source: 'C',
@@ -38,180 +39,127 @@ const COLUMNS = {
   referralPct: 'M',
   referralDollar: 'N',
   adjustedGci: 'O',
-  presplitDeduction: 'P',
+  preSplitDeduction: 'P',
   brokerageSplit: 'Q',
-  adminFeesOtherDeductions: 'R',
+  adminFeesOther: 'R',
   nci: 'S',
   status: 'T',
   assistantBonus: 'U',
   buyersAgentSplit: 'V',
-  brokerage: 'W'
+  adjustedGci2: 'W' // Duplicate column in Excel
 };
 
-// State
-let tokenClient = null;
-let accessToken = null;
+// ==================== GOOGLE API INITIALIZATION ====================
+
 let gapiInited = false;
 let gisInited = false;
+let tokenClient;
 
 /**
- * Initialize Google API client
+ * Initialize Google API
  */
-async function initializeGapi() {
+export const initGoogleAPI = () => {
   return new Promise((resolve, reject) => {
-    if (gapiInited) {
-      resolve();
-      return;
-    }
-
-    try {
+    const script = document.createElement('script');
+    script.src = 'https://apis.google.com/js/api.js';
+    script.onload = () => {
       window.gapi.load('client', async () => {
         try {
           await window.gapi.client.init({
-            apiKey: API_KEY,
-            discoveryDocs: ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
+            apiKey: CONFIG.apiKey,
+            discoveryDocs: CONFIG.discoveryDocs,
           });
           gapiInited = true;
-          console.log('✅ Google API client initialized');
+          console.log('✅ Google API initialized');
           resolve();
         } catch (error) {
-          console.error('❌ Error initializing GAPI client:', error);
+          console.error('❌ Error initializing Google API:', error);
           reject(error);
         }
       });
-    } catch (error) {
-      console.error('❌ Error loading GAPI:', error);
-      reject(error);
-    }
+    };
+    script.onerror = reject;
+    document.body.appendChild(script);
   });
-}
+};
 
 /**
- * Initialize Google Identity Services
+ * Initialize Google Identity Services (OAuth)
  */
-function initializeGis() {
+export const initGoogleIdentity = () => {
   return new Promise((resolve, reject) => {
-    if (gisInited) {
-      resolve();
-      return;
-    }
-
-    try {
+    const script = document.createElement('script');
+    script.src = 'https://accounts.google.com/gsi/client';
+    script.onload = () => {
       tokenClient = window.google.accounts.oauth2.initTokenClient({
-        client_id: CLIENT_ID,
-        scope: SCOPES,
-        callback: '', // Will be set in requestAccessToken
+        client_id: CONFIG.clientId,
+        scope: CONFIG.scopes,
+        callback: '', // Will be set when requesting token
       });
       gisInited = true;
       console.log('✅ Google Identity Services initialized');
       resolve();
-    } catch (error) {
-      console.error('❌ Error initializing GIS:', error);
-      reject(error);
-    }
+    };
+    script.onerror = reject;
+    document.body.appendChild(script);
   });
-}
+};
 
 /**
- * Request access token from user
+ * Request user authorization
  */
-function requestAccessToken(callback) {
-  tokenClient.callback = async (response) => {
-    if (response.error !== undefined) {
-      console.error('❌ OAuth error:', response);
-      callback(null, response.error);
-      return;
-    }
+export const authorizeUser = () => {
+  return new Promise((resolve, reject) => {
+    tokenClient.callback = async (response) => {
+      if (response.error) {
+        console.error('❌ Authorization error:', response);
+        reject(response);
+      } else {
+        console.log('✅ User authorized');
+        resolve(response);
+      }
+    };
     
-    accessToken = response.access_token;
-    console.log('✅ Access token received');
-    callback(accessToken, null);
-  };
-
-  if (accessToken === null) {
-    // Prompt the user to select a Google Account and ask for consent to share their data
-    tokenClient.requestAccessToken({ prompt: 'consent' });
-  } else {
-    // Skip display of account chooser and consent dialog for an existing session
-    tokenClient.requestAccessToken({ prompt: '' });
-  }
-}
-
-/**
- * Check if user has valid access token
- */
-function hasValidToken() {
-  return accessToken !== null;
-}
-
-/**
- * Revoke access token (sign out)
- */
-function revokeToken(callback) {
-  if (accessToken) {
-    window.google.accounts.oauth2.revoke(accessToken, () => {
-      accessToken = null;
-      console.log('✅ Access token revoked');
-      callback();
-    });
-  } else {
-    callback();
-  }
-}
-
-/**
- * Initialize the Google Sheets service
- */
-async function initialize() {
-  try {
-    console.log('🚀 Initializing Google Sheets Service v1.3...');
-    
-    // Wait for both gapi and gis to load
-    await Promise.all([
-      initializeGapi(),
-      initializeGis()
-    ]);
-    
-    console.log('✅ Google Sheets Service ready');
-    return { success: true };
-  } catch (error) {
-    console.error('❌ Initialization error:', error);
-    return { success: false, error: error.message };
-  }
-}
-
-/**
- * Sign in with Google
- */
-function signIn(callback) {
-  requestAccessToken((token, error) => {
-    if (error) {
-      callback({ success: false, error });
+    // Check if already authorized
+    if (window.gapi.client.getToken() === null) {
+      tokenClient.requestAccessToken({ prompt: 'consent' });
     } else {
-      callback({ success: true, token });
+      tokenClient.requestAccessToken({ prompt: '' });
     }
   });
-}
+};
 
 /**
- * Sign out from Google
+ * Check if user is currently authorized
  */
-function signOut(callback) {
-  revokeToken(() => {
-    callback({ success: true });
-  });
-}
+export const isAuthorized = () => {
+  return window.gapi?.client?.getToken() !== null;
+};
 
 /**
- * Convert row data to transaction object
+ * Sign out user
  */
-function rowToTransaction(row, index) {
+export const signOut = () => {
+  const token = window.gapi.client.getToken();
+  if (token !== null) {
+    window.google.accounts.oauth2.revoke(token.access_token);
+    window.gapi.client.setToken('');
+    console.log('✅ User signed out');
+  }
+};
+
+// ==================== DATA TRANSFORMATION ====================
+
+/**
+ * Convert sheet row to transaction object
+ */
+const rowToTransaction = (row, rowIndex) => {
   if (!row || row.length === 0) return null;
   
   return {
-    id: `txn-${index + 1}`,
-    propertyType: row[0] || '',
-    clientType: row[1] || '',
+    id: `sheet-${rowIndex}`,
+    propertyType: row[0] || 'Residential',
+    clientType: row[1] || 'Seller',
     source: row[2] || '',
     address: row[3] || '',
     city: row[4] || '',
@@ -225,21 +173,22 @@ function rowToTransaction(row, index) {
     referralPct: parseFloat(row[12]) || 0,
     referralDollar: parseFloat(row[13]) || 0,
     adjustedGci: parseFloat(row[14]) || 0,
-    presplitDeduction: parseFloat(row[15]) || 0,
+    preSplitDeduction: parseFloat(row[15]) || 0,
     brokerageSplit: parseFloat(row[16]) || 0,
-    adminFeesOtherDeductions: parseFloat(row[17]) || 0,
+    adminFeesOther: parseFloat(row[17]) || 0,
     nci: parseFloat(row[18]) || 0,
-    status: row[19] || '',
+    status: row[19] || 'Closed',
     assistantBonus: parseFloat(row[20]) || 0,
     buyersAgentSplit: parseFloat(row[21]) || 0,
-    brokerage: row[22] || ''
+    // Row 22 is duplicate adjustedGci
+    brokerage: row[1]?.includes('KW') ? 'KW' : 'BDH', // Infer from data
   };
-}
+};
 
 /**
- * Convert transaction object to row data
+ * Convert transaction object to sheet row
  */
-function transactionToRow(transaction) {
+const transactionToRow = (transaction) => {
   return [
     transaction.propertyType || '',
     transaction.clientType || '',
@@ -256,195 +205,202 @@ function transactionToRow(transaction) {
     transaction.referralPct || 0,
     transaction.referralDollar || 0,
     transaction.adjustedGci || 0,
-    transaction.presplitDeduction || 0,
+    transaction.preSplitDeduction || 0,
     transaction.brokerageSplit || 0,
-    transaction.adminFeesOtherDeductions || 0,
+    transaction.adminFeesOther || 0,
     transaction.nci || 0,
-    transaction.status || '',
+    transaction.status || 'Closed',
     transaction.assistantBonus || 0,
     transaction.buyersAgentSplit || 0,
-    transaction.brokerage || ''
+    transaction.adjustedGci || 0, // Duplicate column
   ];
-}
+};
+
+// ==================== GOOGLE SHEETS API OPERATIONS ====================
 
 /**
  * Read all transactions from Google Sheets
  */
-async function readFromGoogleSheets() {
-  if (!hasValidToken()) {
-    return { success: false, error: 'Not authenticated' };
-  }
-
+export const readFromGoogleSheets = async () => {
   try {
+    if (!gapiInited) {
+      throw new Error('Google API not initialized');
+    }
+    
+    if (!isAuthorized()) {
+      await authorizeUser();
+    }
+    
+    console.log('📊 Reading from Google Sheets...');
+    
     const response = await window.gapi.client.sheets.spreadsheets.values.get({
-      spreadsheetId: SPREADSHEET_ID,
-      range: `${SHEET_NAME}!A2:W`,
+      spreadsheetId: CONFIG.spreadsheetId,
+      range: `${CONFIG.sheetName}!A2:W`, // Skip header row
     });
-
-    const rows = response.result.values || [];
+    
+    const rows = response.result.values;
+    
+    if (!rows || rows.length === 0) {
+      console.log('📊 No data found in sheet');
+      return [];
+    }
+    
     const transactions = rows
-      .map((row, index) => rowToTransaction(row, index))
+      .map((row, index) => rowToTransaction(row, index + 2)) // +2 for header and 0-index
       .filter(t => t !== null);
-
-    console.log(`✅ Read ${transactions.length} transactions from Google Sheets`);
-    return { success: true, data: transactions };
+    
+    console.log(`✅ Loaded ${transactions.length} transactions from Google Sheets`);
+    return transactions;
+    
   } catch (error) {
     console.error('❌ Error reading from Google Sheets:', error);
-    return { success: false, error: error.message };
+    throw error;
   }
-}
+};
 
 /**
  * Write all transactions to Google Sheets
  */
-async function writeToGoogleSheets(transactions) {
-  if (!hasValidToken()) {
-    return { success: false, error: 'Not authenticated' };
-  }
-
+export const writeToGoogleSheets = async (transactions) => {
   try {
-    // Clear existing data (keep headers)
-    await window.gapi.client.sheets.spreadsheets.values.clear({
-      spreadsheetId: SPREADSHEET_ID,
-      range: `${SHEET_NAME}!A2:W`,
-    });
-
+    if (!gapiInited) {
+      throw new Error('Google API not initialized');
+    }
+    
+    if (!isAuthorized()) {
+      await authorizeUser();
+    }
+    
+    console.log('📝 Writing to Google Sheets...');
+    
     // Convert transactions to rows
-    const rows = transactions.map(t => transactionToRow(t));
-
+    const rows = transactions.map(transactionToRow);
+    
+    // Clear existing data (except header)
+    await window.gapi.client.sheets.spreadsheets.values.clear({
+      spreadsheetId: CONFIG.spreadsheetId,
+      range: `${CONFIG.sheetName}!A2:W`,
+    });
+    
     // Write new data
     const response = await window.gapi.client.sheets.spreadsheets.values.update({
-      spreadsheetId: SPREADSHEET_ID,
-      range: `${SHEET_NAME}!A2:W`,
-      valueInputOption: 'RAW',
+      spreadsheetId: CONFIG.spreadsheetId,
+      range: `${CONFIG.sheetName}!A2:W`,
+      valueInputOption: 'USER_ENTERED',
       resource: {
         values: rows,
       },
     });
-
-    console.log(`✅ Wrote ${transactions.length} transactions to Google Sheets`);
-    return { success: true, data: response.result };
+    
+    console.log(`✅ Wrote ${rows.length} transactions to Google Sheets`);
+    return response;
+    
   } catch (error) {
     console.error('❌ Error writing to Google Sheets:', error);
-    return { success: false, error: error.message };
+    throw error;
   }
-}
+};
 
 /**
- * Append a new transaction to Google Sheets
+ * Append a single transaction to Google Sheets
  */
-async function appendToGoogleSheets(transaction) {
-  if (!hasValidToken()) {
-    return { success: false, error: 'Not authenticated' };
-  }
-
+export const appendTransaction = async (transaction) => {
   try {
+    if (!gapiInited) {
+      throw new Error('Google API not initialized');
+    }
+    
+    if (!isAuthorized()) {
+      await authorizeUser();
+    }
+    
+    console.log('➕ Appending transaction to Google Sheets...');
+    
     const row = transactionToRow(transaction);
     
     const response = await window.gapi.client.sheets.spreadsheets.values.append({
-      spreadsheetId: SPREADSHEET_ID,
-      range: `${SHEET_NAME}!A2:W`,
-      valueInputOption: 'RAW',
+      spreadsheetId: CONFIG.spreadsheetId,
+      range: `${CONFIG.sheetName}!A:W`,
+      valueInputOption: 'USER_ENTERED',
       insertDataOption: 'INSERT_ROWS',
       resource: {
         values: [row],
       },
     });
-
-    console.log('✅ Appended transaction to Google Sheets');
-    return { success: true, data: response.result };
+    
+    console.log('✅ Transaction appended to Google Sheets');
+    return response;
+    
   } catch (error) {
     console.error('❌ Error appending to Google Sheets:', error);
-    return { success: false, error: error.message };
+    throw error;
   }
-}
-
-/**
- * Update a transaction in Google Sheets
- */
-async function updateInGoogleSheets(transaction, rowIndex) {
-  if (!hasValidToken()) {
-    return { success: false, error: 'Not authenticated' };
-  }
-
-  try {
-    const row = transactionToRow(transaction);
-    const range = `${SHEET_NAME}!A${rowIndex + 2}:W${rowIndex + 2}`;
-    
-    const response = await window.gapi.client.sheets.spreadsheets.values.update({
-      spreadsheetId: SPREADSHEET_ID,
-      range: range,
-      valueInputOption: 'RAW',
-      resource: {
-        values: [row],
-      },
-    });
-
-    console.log('✅ Updated transaction in Google Sheets');
-    return { success: true, data: response.result };
-  } catch (error) {
-    console.error('❌ Error updating in Google Sheets:', error);
-    return { success: false, error: error.message };
-  }
-}
-
-/**
- * Delete a transaction from Google Sheets
- */
-async function deleteFromGoogleSheets(rowIndex) {
-  if (!hasValidToken()) {
-    return { success: false, error: 'Not authenticated' };
-  }
-
-  try {
-    const response = await window.gapi.client.sheets.spreadsheets.batchUpdate({
-      spreadsheetId: SPREADSHEET_ID,
-      resource: {
-        requests: [{
-          deleteDimension: {
-            range: {
-              sheetId: 0,
-              dimension: 'ROWS',
-              startIndex: rowIndex + 1,
-              endIndex: rowIndex + 2,
-            },
-          },
-        }],
-      },
-    });
-
-    console.log('✅ Deleted transaction from Google Sheets');
-    return { success: true, data: response.result };
-  } catch (error) {
-    console.error('❌ Error deleting from Google Sheets:', error);
-    return { success: false, error: error.message };
-  }
-}
-
-// Export all functions
-export {
-  initialize,
-  initialize as initializeGoogleSheets, // Export as both names
-  signIn,
-  signOut,
-  hasValidToken,
-  readFromGoogleSheets,
-  writeToGoogleSheets,
-  appendToGoogleSheets,
-  updateInGoogleSheets,
-  deleteFromGoogleSheets,
 };
 
-// Default export for backwards compatibility
-export default {
-  initialize,
-  initializeGoogleSheets: initialize, // Alias
-  signIn,
-  signOut,
-  hasValidToken,
+/**
+ * Update spreadsheet configuration
+ */
+export const updateConfig = (newConfig) => {
+  Object.assign(CONFIG, newConfig);
+  console.log('⚙️ Configuration updated:', CONFIG);
+};
+
+/**
+ * Get current configuration
+ */
+export const getConfig = () => {
+  return { ...CONFIG };
+};
+
+// ==================== INITIALIZATION HELPER ====================
+
+/**
+ * Initialize everything at once
+ */
+export const initializeGoogleSheets = async () => {
+  try {
+    console.log('🚀 Initializing Google Sheets integration...');
+    
+    await initGoogleAPI();
+    await initGoogleIdentity();
+    
+    console.log('✅ Google Sheets integration ready');
+    return true;
+    
+  } catch (error) {
+    console.error('❌ Failed to initialize Google Sheets:', error);
+    throw error;
+  }
+};
+
+// ==================== EXPORTS ====================
+
+// Named exports
+export {
+  initializeGoogleSheets,
+  initGoogleAPI,
+  initGoogleIdentity,
   readFromGoogleSheets,
   writeToGoogleSheets,
-  appendToGoogleSheets,
-  updateInGoogleSheets,
-  deleteFromGoogleSheets,
+  appendTransaction,
+  authorizeUser,
+  isAuthorized,
+  signOut,
+  updateConfig,
+  getConfig,
+};
+
+// Default export
+export default {
+  initializeGoogleSheets,
+  initGoogleAPI,
+  initGoogleIdentity,
+  readFromGoogleSheets,
+  writeToGoogleSheets,
+  appendTransaction,
+  authorizeUser,
+  isAuthorized,
+  signOut,
+  updateConfig,
+  getConfig,
 };
