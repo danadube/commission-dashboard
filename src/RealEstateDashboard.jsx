@@ -7,7 +7,7 @@ import ThemeToggle from './ThemeToggle';
 /**
  * Janice Glaab Real Estate Commission Dashboard
  * 
- * @version 3.4.1
+ * @version 3.5.0
  * @description Professional dashboard for tracking real estate commissions with Google Sheets integration
  * 
  * ✨ KEY FEATURES:
@@ -142,6 +142,7 @@ const EnhancedRealEstateDashboard = () => {
     // Basic Info
     propertyType: 'Residential',
     clientType: 'Seller',
+    transactionType: 'Sale', // NEW: Sale, Referral Out, Referral In
     source: '',
     address: '',
     city: '',
@@ -150,6 +151,10 @@ const EnhancedRealEstateDashboard = () => {
     listDate: '',
     closingDate: '',
     status: 'Closed',
+    
+    // Referral Fields (NEW)
+    referringAgent: '', // Name of agent you referred to/from
+    referralFeeReceived: '', // For Referral Out - fee you receive
     
     // Commission Fields
     brokerage: 'KW',
@@ -380,9 +385,11 @@ const EnhancedRealEstateDashboard = () => {
   const calculateCommission = (data) => {
     const {
       brokerage,
+      transactionType = 'Sale',
       closedPrice = 0,
       commissionPct = 0,
       referralPct = 0,
+      referralFeeReceived = 0, // NEW: For Referral Out transactions
       
       // KW fields
       eo = 0,
@@ -409,15 +416,27 @@ const EnhancedRealEstateDashboard = () => {
     const price = parseFloat(closedPrice) || 0;
     const commPct = parseFloat(commissionPct) || 0;
     const refPct = parseFloat(referralPct) || 0;
+    const refFeeReceived = parseFloat(referralFeeReceived) || 0;
 
-    // Calculate GCI (Gross Commission Income)
-    const gci = price * (commPct / 100);
+    let gci, referralDollar, adjustedGci;
 
-    // Calculate Referral Dollar if referral percentage is provided
-    const referralDollar = refPct > 0 ? gci * (refPct / 100) : 0;
-
-    // Calculate Adjusted GCI (after referral)
-    const adjustedGci = gci - referralDollar;
+    // REFERRAL OUT: You refer client to another agent, receive referral fee
+    if (transactionType === 'Referral Out') {
+      gci = refFeeReceived; // GCI is the referral fee itself
+      referralDollar = 0; // You're not paying a referral
+      adjustedGci = gci; // No adjustment needed
+    } 
+    // REGULAR SALE or REFERRAL IN: Calculate from property price
+    else {
+      // Calculate GCI (Gross Commission Income)
+      gci = price * (commPct / 100);
+      
+      // Calculate Referral Dollar if referral percentage is provided
+      referralDollar = refPct > 0 ? gci * (refPct / 100) : 0;
+      
+      // Calculate Adjusted GCI (after referral)
+      adjustedGci = gci - referralDollar;
+    }
 
     let totalBrokerageFees = 0;
     let nci = 0;
@@ -519,7 +538,7 @@ const EnhancedRealEstateDashboard = () => {
     }
     
     // Auto-calculate if relevant fields change
-    if (['closedPrice', 'commissionPct', 'referralPct', 'brokerage'].includes(name)) {
+    if (['closedPrice', 'commissionPct', 'referralPct', 'brokerage', 'referralFeeReceived', 'transactionType'].includes(name)) {
       const calculated = calculateCommission(newFormData);
       newFormData.gci = calculated.gci;
       newFormData.referralDollar = calculated.referralDollar;
@@ -625,6 +644,7 @@ const EnhancedRealEstateDashboard = () => {
     setFormData({
       propertyType: 'Residential',
       clientType: 'Seller',
+      transactionType: 'Sale',
       source: '',
       address: '',
       city: '',
@@ -633,6 +653,8 @@ const EnhancedRealEstateDashboard = () => {
       listDate: '',
       closingDate: '',
       status: 'Closed',
+      referringAgent: '',
+      referralFeeReceived: '',
       brokerage: 'KW',
       commissionPct: '',
       referralPct: '',
@@ -1491,7 +1513,7 @@ const EnhancedRealEstateDashboard = () => {
 
         {/* Footer */}
         <div className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
-          Janice Glaab Real Estate Dashboard v3.4.1 • Built with ❤️ by Dana Dube
+          Janice Glaab Real Estate Dashboard v3.5.0 • Built with ❤️ by Dana Dube
         </div>
 
         {/* Transaction Form Modal */}
@@ -1547,6 +1569,26 @@ const EnhancedRealEstateDashboard = () => {
                     </div>
 
                     <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Transaction Type *</label>
+                      <select
+                        name="transactionType"
+                        value={formData.transactionType}
+                        onChange={handleInputChange}
+                        required
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                      >
+                        <option value="Sale">💼 Regular Sale</option>
+                        <option value="Referral Out">🤝 Referral Out (You refer TO another agent)</option>
+                        <option value="Referral In">👥 Referral In (You receive FROM another agent)</option>
+                      </select>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                        {formData.transactionType === 'Sale' && '→ Standard buyer/seller transaction'}
+                        {formData.transactionType === 'Referral Out' && '→ You send client to another agent, receive referral fee'}
+                        {formData.transactionType === 'Referral In' && '→ Another agent sends you a client, you pay referral fee'}
+                      </p>
+                    </div>
+
+                    <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Source</label>
                       <input
                         type="text"
@@ -1557,6 +1599,44 @@ const EnhancedRealEstateDashboard = () => {
                         className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       />
                     </div>
+
+                    {/* Referral-Specific Fields */}
+                    {(formData.transactionType === 'Referral Out' || formData.transactionType === 'Referral In') && (
+                      <>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+                            {formData.transactionType === 'Referral Out' ? 'Referring Agent (Who you sent client to)' : 'Referring Agent (Who sent you the client)'}
+                          </label>
+                          <input
+                            type="text"
+                            name="referringAgent"
+                            value={formData.referringAgent}
+                            onChange={handleInputChange}
+                            placeholder="Agent Name"
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                          />
+                        </div>
+
+                        {formData.transactionType === 'Referral Out' && (
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+                              Referral Fee Received *
+                              <span className="text-xs text-gray-500 dark:text-gray-400 ml-2">(Total fee you receive)</span>
+                            </label>
+                            <input
+                              type="number"
+                              name="referralFeeReceived"
+                              value={formData.referralFeeReceived}
+                              onChange={handleInputChange}
+                              step="0.01"
+                              placeholder="0.00"
+                              required={formData.transactionType === 'Referral Out'}
+                              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                            />
+                          </div>
+                        )}
+                      </>
+                    )}
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Brokerage *</label>
@@ -1598,32 +1678,69 @@ const EnhancedRealEstateDashboard = () => {
                       />
                     </div>
 
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">List Price</label>
-                      <input
-                        type="number"
-                        name="listPrice"
-                        value={formData.listPrice}
-                        onChange={handleInputChange}
-                        step="0.01"
-                        placeholder="0.00"
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                      />
-                    </div>
+                    {/* Only show List/Closed Price for regular sales */}
+                    {formData.transactionType === 'Sale' && (
+                      <>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">List Price</label>
+                          <input
+                            type="number"
+                            name="listPrice"
+                            value={formData.listPrice}
+                            onChange={handleInputChange}
+                            step="0.01"
+                            placeholder="0.00"
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                          />
+                        </div>
 
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Closed Price *</label>
-                      <input
-                        type="number"
-                        name="closedPrice"
-                        value={formData.closedPrice}
-                        onChange={handleInputChange}
-                        required
-                        step="0.01"
-                        placeholder="0.00"
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                      />
-                    </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Closed Price *</label>
+                          <input
+                            type="number"
+                            name="closedPrice"
+                            value={formData.closedPrice}
+                            onChange={handleInputChange}
+                            required
+                            step="0.01"
+                            placeholder="0.00"
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                          />
+                        </div>
+                      </>
+                    )}
+
+                    {/* For Referral In, still show prices since Janice sold the property */}
+                    {formData.transactionType === 'Referral In' && (
+                      <>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">List Price</label>
+                          <input
+                            type="number"
+                            name="listPrice"
+                            value={formData.listPrice}
+                            onChange={handleInputChange}
+                            step="0.01"
+                            placeholder="0.00"
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Closed Price *</label>
+                          <input
+                            type="number"
+                            name="closedPrice"
+                            value={formData.closedPrice}
+                            onChange={handleInputChange}
+                            required
+                            step="0.01"
+                            placeholder="0.00"
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                          />
+                        </div>
+                      </>
+                    )}
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">List Date</label>
