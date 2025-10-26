@@ -94,6 +94,11 @@ const EnhancedRealEstateDashboard = () => {
     return localStorage.getItem('transactionSortOrder') || 'newest';
   });
   
+  // Logo State
+  const [customLogo, setCustomLogo] = useState(() => {
+    return localStorage.getItem('customLogo') || null;
+  });
+  
   // Form Data State
   const [formData, setFormData] = useState({
     // Basic Info
@@ -520,6 +525,41 @@ const EnhancedRealEstateDashboard = () => {
     }
   };
 
+  // ==================== LOGO MANAGEMENT ====================
+  
+  const handleLogoUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      // Check file type
+      if (!file.type.startsWith('image/')) {
+        alert('Please upload an image file');
+        return;
+      }
+      
+      // Check file size (max 2MB)
+      if (file.size > 2 * 1024 * 1024) {
+        alert('Image size should be less than 2MB');
+        return;
+      }
+      
+      // Convert to base64 and save
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const base64Image = e.target.result;
+        setCustomLogo(base64Image);
+        localStorage.setItem('customLogo', base64Image);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+  
+  const handleLogoRemove = () => {
+    if (window.confirm('Remove custom logo?')) {
+      setCustomLogo(null);
+      localStorage.removeItem('customLogo');
+    }
+  };
+
   const resetForm = () => {
     setFormData({
       propertyType: 'Residential',
@@ -786,11 +826,45 @@ const EnhancedRealEstateDashboard = () => {
         {/* Header */}
         <div className="glass-morphism bg-white/70 dark:bg-gray-800/70 rounded-2xl shadow-2xl p-8 mb-8 border border-white/20 dark:border-gray-700/30 backdrop-blur-3xl">
           <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
-            <div>
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 dark:from-purple-400 dark:via-blue-400 dark:to-cyan-400 bg-clip-text text-transparent animate-glow">Real Estate Commission Dashboard</h1>
-              <p className="text-gray-600 dark:text-gray-300 mt-1">Track and analyze your commission income</p>
+            <div className="flex items-center gap-4">
+              {/* Logo */}
+              {customLogo && (
+                <div className="relative group">
+                  <img 
+                    src={customLogo} 
+                    alt="Dashboard Logo" 
+                    className="w-16 h-16 rounded-2xl shadow-lg object-cover border-2 border-white/30 dark:border-gray-700/30"
+                  />
+                  <button
+                    onClick={handleLogoRemove}
+                    className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg hover:bg-red-600"
+                    title="Remove logo"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              )}
+              
+              <div>
+                <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 dark:from-purple-400 dark:via-blue-400 dark:to-cyan-400 bg-clip-text text-transparent animate-glow">Real Estate Commission Dashboard</h1>
+                <p className="text-gray-600 dark:text-gray-300 mt-1">Track and analyze your commission income</p>
+              </div>
             </div>
             <div className="flex items-center gap-3 flex-wrap">
+              {/* Logo Upload */}
+              <label className="cursor-pointer">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleLogoUpload}
+                  className="hidden"
+                />
+                <div className="flex items-center gap-2 px-4 py-2 glass-morphism bg-purple-500/80 hover:bg-purple-600/80 text-white rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl border border-white/20 backdrop-blur-xl">
+                  <Upload className="w-4 h-4" />
+                  <span className="font-medium text-sm">{customLogo ? 'Change Logo' : 'Upload Logo'}</span>
+                </div>
+              </label>
+              
               {/* Theme Toggle */}
               <ThemeToggle />
               
