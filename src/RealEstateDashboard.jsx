@@ -1297,7 +1297,7 @@ const EnhancedRealEstateDashboard = () => {
 
         {/* Footer */}
         <div className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
-          Janice Glaab Real Estate Dashboard v3.3.2 • Built with ❤️ by Dana Dube
+          Janice Glaab Real Estate Dashboard v3.3.3 • Built with ❤️ by Dana Dube
         </div>
 
         {/* Transaction Form Modal */}
