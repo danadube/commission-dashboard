@@ -950,36 +950,47 @@ const EnhancedRealEstateDashboard = () => {
               </p>
             </div>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-4">
               {filteredTransactions.map(transaction => (
                 <div
                   key={transaction.id}
-                  className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:border-gray-300 hover:shadow-md transition-all"
+                  className="flex items-center justify-between p-5 bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 rounded-xl shadow-lg hover:shadow-xl hover:border-blue-400 dark:hover:border-blue-500 transition-all duration-200 transform hover:-translate-y-1"
                 >
                   <div className="flex items-center gap-4 flex-1">
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
-                        <h3 className="font-semibold text-gray-900 truncate">{transaction.address}</h3>
-                        <span className={`px-2 py-1 rounded text-xs font-medium ${
-                          transaction.clientType === 'Buyer' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'
+                      <div className="flex items-center gap-2 mb-2 flex-wrap">
+                        <h3 className="font-bold text-lg text-gray-900 dark:text-white truncate">{transaction.address}</h3>
+                        <span className={`px-3 py-1 rounded-full text-xs font-bold shadow-sm ${
+                          transaction.clientType === 'Buyer' 
+                            ? 'bg-blue-500 text-white dark:bg-blue-600' 
+                            : 'bg-gold-500 text-white dark:bg-gold-600'
                         }`}>
                           {transaction.clientType}
                         </span>
-                        <span className="px-2 py-1 rounded text-xs font-medium bg-gray-100 text-gray-700">
+                        <span className="px-3 py-1 rounded-full text-xs font-bold bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-100 shadow-sm">
                           {transaction.brokerage === 'KW' ? 'Keller Williams' : 'Bennion Deville Homes'}
                         </span>
                       </div>
-                      <div className="flex items-center gap-4 text-sm text-gray-600">
-                        <span>{transaction.city}</span>
-                        <span>•</span>
-                        <span>${parseFloat(transaction.closedPrice || 0).toLocaleString()}</span>
-                        <span>•</span>
-                        <span>{new Date(transaction.closingDate).toLocaleDateString()}</span>
+                      <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-300 font-medium">
+                        <span className="flex items-center gap-1">
+                          <span className="text-gray-400 dark:text-gray-500">📍</span>
+                          {transaction.city}
+                        </span>
+                        <span className="text-gray-400 dark:text-gray-500">•</span>
+                        <span className="flex items-center gap-1">
+                          <span className="text-gray-400 dark:text-gray-500">💰</span>
+                          ${parseFloat(transaction.closedPrice || 0).toLocaleString()}
+                        </span>
+                        <span className="text-gray-400 dark:text-gray-500">•</span>
+                        <span className="flex items-center gap-1">
+                          <span className="text-gray-400 dark:text-gray-500">📅</span>
+                          {new Date(transaction.closingDate).toLocaleDateString()}
+                        </span>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <p className="text-sm text-gray-500">NCI</p>
-                      <p className="text-lg font-bold text-green-600">
+                    <div className="text-right bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900 dark:to-green-800 px-4 py-3 rounded-lg border-2 border-green-200 dark:border-green-700 shadow-sm">
+                      <p className="text-xs text-green-700 dark:text-green-300 font-semibold uppercase tracking-wide">NCI</p>
+                      <p className="text-xl font-bold text-green-700 dark:text-green-200">
                         ${parseFloat(transaction.nci || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </p>
                     </div>
@@ -987,17 +998,17 @@ const EnhancedRealEstateDashboard = () => {
                   <div className="flex items-center gap-2 ml-4">
                     <button
                       onClick={() => handleEdit(transaction)}
-                      className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                      className="p-3 text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-100 dark:hover:bg-blue-900/50 rounded-lg transition-all shadow-sm hover:shadow-md"
                       title="Edit"
                     >
-                      <Edit2 className="w-4 h-4" />
+                      <Edit2 className="w-5 h-5" />
                     </button>
                     <button
                       onClick={() => handleDelete(transaction.id)}
-                      className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                      className="p-3 text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/30 hover:bg-red-100 dark:hover:bg-red-900/50 rounded-lg transition-all shadow-sm hover:shadow-md"
                       title="Delete"
                     >
-                      <Trash2 className="w-4 h-4" />
+                      <Trash2 className="w-5 h-5" />
                     </button>
                   </div>
                 </div>
