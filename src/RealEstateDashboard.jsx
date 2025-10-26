@@ -1222,15 +1222,23 @@ const EnhancedRealEstateDashboard = () => {
                   cy="50%"
                   labelLine={false}
                   label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                  outerRadius={80}
+                  outerRadius={100}
                   fill="#8884d8"
                   dataKey="value"
+                  style={{ fontSize: '14px', fontWeight: 'bold', fill: 'white' }}
                 >
                   {pieData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
                 <Tooltip content={<TahoeTooltip />} />
+                <Legend 
+                  wrapperStyle={{ 
+                    paddingTop: '20px',
+                    fontSize: '14px',
+                    fontWeight: '600'
+                  }}
+                />
               </PieChart>
             </ResponsiveContainer>
           </div>
