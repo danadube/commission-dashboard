@@ -809,7 +809,7 @@ const EnhancedRealEstateDashboard = () => {
   
   const filteredTransactions = useMemo(() => {
     console.log('🔍 Recalculating filteredTransactions with sortOrder:', sortOrder);
-    return transactions.filter(transaction => {
+    const filtered = transactions.filter(transaction => {
       const year = transaction.closingDate ? new Date(transaction.closingDate).getFullYear().toString() : '';
       
       if (filterYear !== 'all' && year !== filterYear) return false;
@@ -847,7 +847,9 @@ const EnhancedRealEstateDashboard = () => {
       }
       
       return true;
-    }).sort((a, b) => {
+    });
+    
+    const sorted = filtered.sort((a, b) => {
       // Sort by closing date
       const dateA = a.closingDate ? new Date(a.closingDate).getTime() : 0;
       const dateB = b.closingDate ? new Date(b.closingDate).getTime() : 0;
@@ -856,6 +858,14 @@ const EnhancedRealEstateDashboard = () => {
       const result = sortOrder === 'newest' ? dateB - dateA : dateA - dateB;
       return result;
     });
+    
+    console.log('📅 After sorting:', sortOrder, '- First 3:', sorted.slice(0, 3).map(t => ({ 
+      address: t.address, 
+      date: t.closingDate,
+      timestamp: t.closingDate ? new Date(t.closingDate).getTime() : 0
+    })));
+    
+    return sorted;
   }, [transactions, filterYear, filterClientType, filterBrokerage, filterPropertyType, filterPriceRange, sortOrder]);
   
   // Toggle sort order function
