@@ -162,7 +162,7 @@ const EnhancedRealEstateDashboard = () => {
     referralFeeReceived: '', // For Referral Out - fee you receive
     
     // Commission Fields
-    brokerage: 'KW',
+    brokerage: 'Keller Williams',
     commissionPct: '',
     referralPct: '',
     referralDollar: '',
@@ -772,7 +772,7 @@ const EnhancedRealEstateDashboard = () => {
       status: 'Closed',
       referringAgent: '',
       referralFeeReceived: '',
-      brokerage: 'KW',
+      brokerage: 'Keller Williams',
       commissionPct: '',
       referralPct: '',
       referralDollar: '',
@@ -811,7 +811,17 @@ const EnhancedRealEstateDashboard = () => {
     
     if (filterYear !== 'all' && year !== filterYear) return false;
     if (filterClientType !== 'all' && transaction.clientType !== filterClientType) return false;
-    if (filterBrokerage !== 'all' && transaction.brokerage !== filterBrokerage) return false;
+    
+    // Handle both full names and abbreviations for brokerage filter
+    if (filterBrokerage !== 'all') {
+      const brokerageName = transaction.brokerage || '';
+      const matchesFilter = 
+        brokerageName === filterBrokerage || 
+        (filterBrokerage === 'KW' && brokerageName === 'Keller Williams') ||
+        (filterBrokerage === 'BDH' && brokerageName === 'Bennion Deville Homes');
+      if (!matchesFilter) return false;
+    }
+    
     if (filterPropertyType !== 'all' && transaction.propertyType !== filterPropertyType) return false;
     
     return true;
@@ -968,16 +978,19 @@ const EnhancedRealEstateDashboard = () => {
   ];
 
   const brokerageData = [
-    { name: 'KW', value: filteredTransactions.filter(t => t.brokerage === 'KW').reduce((sum, t) => sum + (parseFloat(t.nci) || 0), 0) },
-    { name: 'BDH', value: filteredTransactions.filter(t => t.brokerage === 'BDH').reduce((sum, t) => sum + (parseFloat(t.nci) || 0), 0) }
+    { 
+      name: 'KW', 
+      value: filteredTransactions.filter(t => 
+        t.brokerage === 'KW' || t.brokerage === 'Keller Williams'
+      ).reduce((sum, t) => sum + (parseFloat(t.nci) || 0), 0) 
+    },
+    { 
+      name: 'BDH', 
+      value: filteredTransactions.filter(t => 
+        t.brokerage === 'BDH' || t.brokerage === 'Bennion Deville Homes'
+      ).reduce((sum, t) => sum + (parseFloat(t.nci) || 0), 0) 
+    }
   ].filter(item => item.value > 0); // Only show brokerages with data
-  
-  // Debug: Log brokerage data for troubleshooting
-  if (filteredTransactions.length > 0 && brokerageData.length === 0) {
-    console.warn('⚠️ No brokerage data found. Checking transaction brokerages:', 
-      filteredTransactions.map(t => ({ address: t.address, brokerage: t.brokerage, nci: t.nci }))
-    );
-  }
 
   const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444'];
 
@@ -1550,7 +1563,7 @@ const EnhancedRealEstateDashboard = () => {
                             ? 'bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-100 border-blue-300 dark:border-blue-600'
                             : 'bg-amber-100 dark:bg-yellow-800 text-amber-800 dark:text-yellow-100 border-amber-300 dark:border-yellow-600'
                         }`}>
-                          {transaction.brokerage === 'KW' ? 'Keller Williams' : 'Bennion Deville Homes'}
+                          {transaction.brokerage === 'KW' || transaction.brokerage === 'Keller Williams' ? 'Keller Williams' : 'Bennion Deville Homes'}
                         </span>
                       </div>
                       <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-300 font-medium">
@@ -1795,8 +1808,8 @@ const EnhancedRealEstateDashboard = () => {
                         required
                         className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       >
-                        <option value="KW">Keller Williams (KW)</option>
-                        <option value="BDH">Bennion Deville Homes (BDH)</option>
+                        <option value="Keller Williams">Keller Williams (KW)</option>
+                        <option value="Bennion Deville Homes">Bennion Deville Homes (BDH)</option>
                       </select>
                     </div>
 
@@ -1991,7 +2004,7 @@ const EnhancedRealEstateDashboard = () => {
                 </div>
 
                 {/* Brokerage-Specific Fields */}
-                {formData.brokerage === 'KW' && (
+                {(formData.brokerage === 'KW' || formData.brokerage === 'Keller Williams') && (
                   <div className="mb-6">
                     <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Keller Williams Deductions</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -2122,7 +2135,7 @@ const EnhancedRealEstateDashboard = () => {
                   </div>
                 )}
 
-                {formData.brokerage === 'BDH' && (
+                {(formData.brokerage === 'BDH' || formData.brokerage === 'Bennion Deville Homes') && (
                   <div className="mb-6">
                     <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Bennion Deville Homes Deductions</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -2415,7 +2428,7 @@ const EnhancedRealEstateDashboard = () => {
                     <div>
                       <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Brokerage</label>
                       <p className="text-gray-900 dark:text-white font-medium">
-                        {viewingTransaction.brokerage === 'KW' ? 'Keller Williams (KW)' : 'Bennion Deville Homes (BDH)'}
+                        {viewingTransaction.brokerage === 'KW' || viewingTransaction.brokerage === 'Keller Williams' ? 'Keller Williams (KW)' : 'Bennion Deville Homes (BDH)'}
                       </p>
                     </div>
                   </div>
