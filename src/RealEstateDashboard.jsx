@@ -875,9 +875,15 @@ const EnhancedRealEstateDashboard = () => {
   // Toggle sort order function
   const toggleSortOrder = () => {
     const newOrder = sortOrder === 'newest' ? 'oldest' : 'newest';
+    
+    // Force a hard state update by batching
     setSortOrder(newOrder);
-    setSortVersion(v => v + 1);
     localStorage.setItem('transactionSortOrder', newOrder);
+    
+    // Use setTimeout to ensure state is committed before incrementing version
+    setTimeout(() => {
+      setSortVersion(v => v + 1);
+    }, 0);
   };
 
   // ==================== METRICS ====================
@@ -1549,7 +1555,7 @@ const EnhancedRealEstateDashboard = () => {
               Filtered Transactions
               {filteredTransactions.length > 0 && (
                 <span className="text-gray-500 dark:text-gray-400 font-normal ml-2">
-                  ({filteredTransactions.length} total)
+                  ({filteredTransactions.length} total) [v{sortVersion}] [First: {filteredTransactions[0]?.address?.substring(0, 15)}]
                 </span>
               )}
             </h2>
