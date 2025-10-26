@@ -811,6 +811,7 @@ const EnhancedRealEstateDashboard = () => {
   // ==================== FILTERING & SORTING ====================
   
   const filteredTransactions = useMemo(() => {
+    console.log('🔧 useMemo RUNNING with sortOrder:', sortOrder, 'sortVersion:', sortVersion);
     const filtered = transactions.filter(transaction => {
       const year = transaction.closingDate ? new Date(transaction.closingDate).getFullYear().toString() : '';
       
@@ -864,6 +865,11 @@ const EnhancedRealEstateDashboard = () => {
       // Newest first (descending) or oldest first (ascending)
       return sortOrder === 'newest' ? timeB - timeA : timeA - timeB;
     });
+    
+    console.log('🔧 useMemo RESULT - first 3:', sorted.slice(0, 3).map(t => ({ 
+      address: t.address?.substring(0, 15), 
+      date: t.closingDate 
+    })));
     
     return sorted;
   }, [transactions, filterYear, filterClientType, filterBrokerage, filterPropertyType, filterPriceRange, sortOrder, sortVersion]);
