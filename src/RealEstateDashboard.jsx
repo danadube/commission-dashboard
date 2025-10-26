@@ -872,66 +872,87 @@ const EnhancedRealEstateDashboard = () => {
 
         {/* Metrics Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-          <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg shadow-lg p-6 text-white">
+          {/* Gross Commission Income */}
+          <div className="bg-gradient-to-br from-purple-500 via-purple-600 to-indigo-600 rounded-xl shadow-xl hover:shadow-2xl p-6 text-white transform hover:-translate-y-1 transition-all duration-300 border-2 border-purple-400/30">
             <div className="flex items-center justify-between">
-              <div>
-                <p className="text-purple-100 text-sm font-medium">Gross Commission Income</p>
-                <p className="text-3xl font-bold mt-2">${metrics.totalGCI.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                <p className="text-purple-200 text-xs mt-1">Total earned before fees</p>
+              <div className="flex-1">
+                <p className="text-purple-100 text-sm font-semibold uppercase tracking-wide">💰 Gross Commission</p>
+                <p className="text-4xl font-bold mt-2 mb-1">${metrics.totalGCI.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                <p className="text-purple-200 text-xs font-medium">Total earned before fees</p>
               </div>
-              <DollarSign className="w-12 h-12 text-purple-200" />
+              <div className="bg-white/20 p-4 rounded-full backdrop-blur-sm">
+                <DollarSign className="w-8 h-8 text-white" />
+              </div>
             </div>
           </div>
 
-          <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-lg shadow-lg p-6 text-white">
+          {/* Net Commission Income */}
+          <div className="bg-gradient-to-br from-green-500 via-green-600 to-emerald-600 rounded-xl shadow-xl hover:shadow-2xl p-6 text-white transform hover:-translate-y-1 transition-all duration-300 border-2 border-green-400/30">
             <div className="flex items-center justify-between">
-              <div>
-                <p className="text-green-100 text-sm font-medium">Net Commission Income</p>
-                <p className="text-3xl font-bold mt-2">${metrics.totalNCI.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                <p className="text-green-200 text-xs mt-1">Your take-home pay</p>
+              <div className="flex-1">
+                <p className="text-green-100 text-sm font-semibold uppercase tracking-wide">✅ Net Commission</p>
+                <p className="text-4xl font-bold mt-2 mb-1">${metrics.totalNCI.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                <p className="text-green-200 text-xs font-medium">Your take-home pay</p>
               </div>
-              <TrendingUp className="w-12 h-12 text-green-200" />
+              <div className="bg-white/20 p-4 rounded-full backdrop-blur-sm">
+                <TrendingUp className="w-8 h-8 text-white" />
+              </div>
             </div>
           </div>
 
-          <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg shadow-lg p-6 text-white">
+          {/* Total Sales Volume */}
+          <div className="bg-gradient-to-br from-blue-500 via-blue-600 to-cyan-600 rounded-xl shadow-xl hover:shadow-2xl p-6 text-white transform hover:-translate-y-1 transition-all duration-300 border-2 border-blue-400/30">
             <div className="flex items-center justify-between">
-              <div>
-                <p className="text-blue-100 text-sm font-medium">Total Sales Volume</p>
-                <p className="text-3xl font-bold mt-2">${metrics.totalVolume.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                <p className="text-blue-200 text-xs mt-1">Combined property value</p>
+              <div className="flex-1">
+                <p className="text-blue-100 text-sm font-semibold uppercase tracking-wide">🏘️ Total Sales Volume</p>
+                <p className="text-4xl font-bold mt-2 mb-1">${metrics.totalVolume.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                <p className="text-blue-200 text-xs font-medium">Combined property value</p>
               </div>
-              <Home className="w-12 h-12 text-blue-200" />
+              <div className="bg-white/20 p-4 rounded-full backdrop-blur-sm">
+                <Home className="w-8 h-8 text-white" />
+              </div>
             </div>
           </div>
 
-          <div className="bg-gradient-to-br from-pink-500 to-pink-600 rounded-lg shadow-lg p-6 text-white">
+          {/* Average Commission */}
+          <div className="bg-gradient-to-br from-pink-500 via-pink-600 to-rose-600 rounded-xl shadow-xl hover:shadow-2xl p-6 text-white transform hover:-translate-y-1 transition-all duration-300 border-2 border-pink-400/30">
             <div className="flex items-center justify-between">
-              <div>
-                <p className="text-pink-100 text-sm font-medium">Avg Commission</p>
-                <p className="text-3xl font-bold mt-2">${metrics.avgCommission.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+              <div className="flex-1">
+                <p className="text-pink-100 text-sm font-semibold uppercase tracking-wide">📊 Average Per Deal</p>
+                <p className="text-4xl font-bold mt-2 mb-1">${metrics.avgCommission.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                <p className="text-pink-200 text-xs font-medium">Average commission earned</p>
               </div>
-              <TrendingUp className="w-12 h-12 text-pink-200" />
+              <div className="bg-white/20 p-4 rounded-full backdrop-blur-sm">
+                <TrendingUp className="w-8 h-8 text-white" />
+              </div>
             </div>
           </div>
 
-          <div className="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-lg shadow-lg p-6 text-white">
+          {/* Total Transactions */}
+          <div className="bg-gradient-to-br from-amber-500 via-orange-500 to-yellow-500 rounded-xl shadow-xl hover:shadow-2xl p-6 text-white transform hover:-translate-y-1 transition-all duration-300 border-2 border-amber-400/30">
             <div className="flex items-center justify-between">
-              <div>
-                <p className="text-yellow-100 text-sm font-medium">Total Transactions</p>
-                <p className="text-3xl font-bold mt-2">{metrics.totalTransactions}</p>
+              <div className="flex-1">
+                <p className="text-amber-100 text-sm font-semibold uppercase tracking-wide">🎯 Total Transactions</p>
+                <p className="text-4xl font-bold mt-2 mb-1">{metrics.totalTransactions}</p>
+                <p className="text-amber-200 text-xs font-medium">Deals closed successfully</p>
               </div>
-              <Calendar className="w-12 h-12 text-yellow-200" />
+              <div className="bg-white/20 p-4 rounded-full backdrop-blur-sm">
+                <Calendar className="w-8 h-8 text-white" />
+              </div>
             </div>
           </div>
 
-          <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg shadow-lg p-6 text-white">
+          {/* Referral Fees */}
+          <div className="bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 rounded-xl shadow-xl hover:shadow-2xl p-6 text-white transform hover:-translate-y-1 transition-all duration-300 border-2 border-orange-400/30">
             <div className="flex items-center justify-between">
-              <div>
-                <p className="text-orange-100 text-sm font-medium">Referral Fees Paid</p>
-                <p className="text-3xl font-bold mt-2">${metrics.totalReferralFees.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+              <div className="flex-1">
+                <p className="text-orange-100 text-sm font-semibold uppercase tracking-wide">🤝 Referral Fees</p>
+                <p className="text-4xl font-bold mt-2 mb-1">${metrics.totalReferralFees.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                <p className="text-orange-200 text-xs font-medium">Paid to referral partners</p>
               </div>
-              <DollarSign className="w-12 h-12 text-orange-200" />
+              <div className="bg-white/20 p-4 rounded-full backdrop-blur-sm">
+                <DollarSign className="w-8 h-8 text-white" />
+              </div>
             </div>
           </div>
         </div>
