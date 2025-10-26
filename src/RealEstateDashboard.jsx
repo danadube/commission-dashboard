@@ -866,6 +866,9 @@ const EnhancedRealEstateDashboard = () => {
       return sortOrder === 'newest' ? timeB - timeA : timeA - timeB;
     });
     
+    console.log('✅ FINAL RESULT - sortOrder:', sortOrder, 'sortVersion:', sortVersion, 'First 3:', 
+      sorted.slice(0, 3).map(t => ({ addr: t.address?.substring(0, 15), date: t.closingDate })));
+    
     return sorted;
   }, [transactions, filterYear, filterClientType, filterBrokerage, filterPropertyType, filterPriceRange, sortOrder, sortVersion]);
   
