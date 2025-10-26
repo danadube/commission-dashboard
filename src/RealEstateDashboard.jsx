@@ -1187,13 +1187,13 @@ const EnhancedRealEstateDashboard = () => {
             <h3 className="text-lg font-semibold mb-4 dark:text-white">Monthly Income Trend</h3>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="month" tick={{ fontSize: 12 }} />
-                <YAxis tick={{ fontSize: 12 }} />
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+                <XAxis dataKey="month" tick={{ fontSize: 12, fill: '#9CA3AF' }} stroke="#9CA3AF" />
+                <YAxis tick={{ fontSize: 12, fill: '#9CA3AF' }} stroke="#9CA3AF" />
                 <Tooltip content={<TahoeTooltip />} />
                 <Legend />
-                <Line type="monotone" dataKey="gci" stroke="#d4af37" strokeWidth={2} name="GCI" />
-                <Line type="monotone" dataKey="nci" stroke="#10b981" strokeWidth={2} name="NCI" />
+                <Line type="monotone" dataKey="gci" stroke="#f59e0b" strokeWidth={2} name="Gross Commission" />
+                <Line type="monotone" dataKey="nci" stroke="#10b981" strokeWidth={2} name="Net Commission" />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -1202,12 +1202,12 @@ const EnhancedRealEstateDashboard = () => {
             <h3 className="text-lg font-semibold mb-4 dark:text-white">Transactions by Month</h3>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="month" tick={{ fontSize: 12 }} />
-                <YAxis tick={{ fontSize: 12 }} />
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+                <XAxis dataKey="month" tick={{ fontSize: 12, fill: '#9CA3AF' }} stroke="#9CA3AF" />
+                <YAxis tick={{ fontSize: 12, fill: '#9CA3AF' }} stroke="#9CA3AF" />
                 <Tooltip content={<TahoeTooltip />} />
                 <Legend />
-                <Bar dataKey="transactions" fill="#3b82f6" name="Transactions" />
+                <Bar dataKey="transactions" fill="#3b82f6" name="Transactions" radius={[8, 8, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -1221,18 +1221,7 @@ const EnhancedRealEstateDashboard = () => {
                   cx="50%"
                   cy="50%"
                   labelLine={false}
-                  label={(entry) => {
-                    const { name, percent } = entry;
-                    return {
-                      value: `${name}: ${(percent * 100).toFixed(0)}%`,
-                      style: { 
-                        fontSize: '14px', 
-                        fontWeight: 'bold', 
-                        fill: 'white',
-                        textShadow: '1px 1px 2px rgba(0,0,0,0.8)'
-                      }
-                    };
-                  }}
+                  label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
                   outerRadius={100}
                   dataKey="value"
                 >
@@ -1256,11 +1245,20 @@ const EnhancedRealEstateDashboard = () => {
             <h3 className="text-lg font-semibold mb-4 dark:text-white">Income by Brokerage</h3>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={brokerageData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" tick={{ fontSize: 12 }} />
-                <YAxis tick={{ fontSize: 12 }} />
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+                <XAxis 
+                  dataKey="name" 
+                  tick={{ fontSize: 14, fill: '#9CA3AF' }} 
+                  stroke="#9CA3AF"
+                />
+                <YAxis 
+                  tick={{ fontSize: 12, fill: '#9CA3AF' }} 
+                  stroke="#9CA3AF"
+                  tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`}
+                />
                 <Tooltip content={<TahoeTooltip />} />
-                <Bar dataKey="value" fill="#d4af37" name="NCI" />
+                <Legend />
+                <Bar dataKey="value" fill="#10b981" name="Net Commission Income" radius={[8, 8, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
