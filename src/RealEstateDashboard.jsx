@@ -34,6 +34,7 @@ const EnhancedRealEstateDashboard = () => {
   const [transactions, setTransactions] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
+  const [viewingTransaction, setViewingTransaction] = useState(null);
   
   // Google Sheets State
   const [isGoogleSheetsEnabled, setIsGoogleSheetsEnabled] = useState(false);
@@ -126,10 +127,20 @@ const EnhancedRealEstateDashboard = () => {
       }
     };
     
+    // Handle ESC key to close modals
+    const handleEscKey = (e) => {
+      if (e.key === 'Escape') {
+        closeViewModal();
+        resetForm();
+      }
+    };
+    
     window.addEventListener('googleAuthSuccess', handleOAuthSuccess);
+    window.addEventListener('keydown', handleEscKey);
     
     return () => {
       window.removeEventListener('googleAuthSuccess', handleOAuthSuccess);
+      window.removeEventListener('keydown', handleEscKey);
     };
   }, []);
 
@@ -447,10 +458,19 @@ const EnhancedRealEstateDashboard = () => {
     resetForm();
   };
 
+  const handleView = (transaction) => {
+    setViewingTransaction(transaction);
+  };
+
+  const closeViewModal = () => {
+    setViewingTransaction(null);
+  };
+
   const handleEdit = (transaction) => {
     setFormData(transaction);
     setEditingId(transaction.id);
     setShowForm(true);
+    setViewingTransaction(null); // Close view modal if open
   };
 
   const handleDelete = async (id) => {
@@ -985,7 +1005,8 @@ const EnhancedRealEstateDashboard = () => {
               {filteredTransactions.map(transaction => (
                 <div
                   key={transaction.id}
-                  className="flex items-center justify-between p-5 bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 rounded-xl shadow-lg hover:shadow-xl hover:border-blue-400 dark:hover:border-blue-500 transition-all duration-200 transform hover:-translate-y-1"
+                  onClick={() => handleView(transaction)}
+                  className="flex items-center justify-between p-5 bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 rounded-xl shadow-lg hover:shadow-xl hover:border-blue-400 dark:hover:border-blue-500 transition-all duration-200 transform hover:-translate-y-1 cursor-pointer"
                 >
                   <div className="flex items-center gap-4 flex-1">
                     <div className="flex-1 min-w-0">
@@ -1026,7 +1047,7 @@ const EnhancedRealEstateDashboard = () => {
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2 ml-4">
+                  <div className="flex items-center gap-2 ml-4" onClick={(e) => e.stopPropagation()}>
                     <button
                       onClick={() => handleEdit(transaction)}
                       className="p-3 text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-100 dark:hover:bg-blue-900/50 rounded-lg transition-all shadow-sm hover:shadow-md"
@@ -1551,6 +1572,221 @@ const EnhancedRealEstateDashboard = () => {
                   </button>
                 </div>
               </form>
+            </div>
+          </div>
+        )}
+
+        {/* Transaction Detail View Modal */}
+        {viewingTransaction && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-y-auto">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-4xl w-full my-8 transition-colors">
+              {/* Header */}
+              <div className="p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
+                      Transaction Details
+                    </h2>
+                    <p className="text-sm text-gray-600 dark:text-gray-300">
+                      {viewingTransaction.address} • {viewingTransaction.city}
+                    </p>
+                  </div>
+                  <button
+                    onClick={closeViewModal}
+                    className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors p-2"
+                  >
+                    <X className="w-6 h-6" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Content */}
+              <div className="p-6 max-h-[calc(100vh-250px)] overflow-y-auto">
+                {/* Property Information */}
+                <div className="mb-6">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+                    <Home className="w-5 h-5 text-blue-500" />
+                    Property Information
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg">
+                    <div>
+                      <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Address</label>
+                      <p className="text-gray-900 dark:text-white font-medium">{viewingTransaction.address}</p>
+                    </div>
+                    <div>
+                      <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">City</label>
+                      <p className="text-gray-900 dark:text-white font-medium">{viewingTransaction.city}</p>
+                    </div>
+                    <div>
+                      <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Property Type</label>
+                      <p className="text-gray-900 dark:text-white font-medium">{viewingTransaction.propertyType}</p>
+                    </div>
+                    <div>
+                      <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Client Type</label>
+                      <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold ${
+                        viewingTransaction.clientType === 'Buyer' 
+                          ? 'bg-blue-500 text-white' 
+                          : 'bg-gold-500 text-white'
+                      }`}>
+                        {viewingTransaction.clientType}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Financial Information */}
+                <div className="mb-6">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+                    <DollarSign className="w-5 h-5 text-green-500" />
+                    Financial Information
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg">
+                    <div>
+                      <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">List Price</label>
+                      <p className="text-gray-900 dark:text-white font-bold text-lg">
+                        ${parseFloat(viewingTransaction.listPrice || 0).toLocaleString()}
+                      </p>
+                    </div>
+                    <div>
+                      <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Closed Price</label>
+                      <p className="text-gray-900 dark:text-white font-bold text-lg">
+                        ${parseFloat(viewingTransaction.closedPrice || 0).toLocaleString()}
+                      </p>
+                    </div>
+                    <div>
+                      <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Commission %</label>
+                      <p className="text-gray-900 dark:text-white font-bold text-lg">
+                        {viewingTransaction.commissionPct}%
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Commission Breakdown */}
+                <div className="mb-6">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+                    <TrendingUp className="w-5 h-5 text-purple-500" />
+                    Commission Breakdown
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg border border-purple-200 dark:border-purple-800">
+                      <label className="text-xs font-semibold text-purple-700 dark:text-purple-300 uppercase">GCI</label>
+                      <p className="text-purple-900 dark:text-purple-100 font-bold text-xl">
+                        ${parseFloat(viewingTransaction.gci || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                      </p>
+                    </div>
+                    <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border border-blue-200 dark:border-blue-800">
+                      <label className="text-xs font-semibold text-blue-700 dark:text-blue-300 uppercase">Adjusted GCI</label>
+                      <p className="text-blue-900 dark:text-blue-100 font-bold text-xl">
+                        ${parseFloat(viewingTransaction.adjustedGci || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                      </p>
+                    </div>
+                    <div className="bg-orange-50 dark:bg-orange-900/20 p-4 rounded-lg border border-orange-200 dark:border-orange-800">
+                      <label className="text-xs font-semibold text-orange-700 dark:text-orange-300 uppercase">Total Fees</label>
+                      <p className="text-orange-900 dark:text-orange-100 font-bold text-xl">
+                        ${parseFloat(viewingTransaction.totalBrokerageFees || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                      </p>
+                    </div>
+                    <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg border-2 border-green-500 dark:border-green-700">
+                      <label className="text-xs font-semibold text-green-700 dark:text-green-300 uppercase">NCI</label>
+                      <p className="text-green-900 dark:text-green-100 font-bold text-2xl">
+                        ${parseFloat(viewingTransaction.nci || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Dates & Status */}
+                <div className="mb-6">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+                    <Calendar className="w-5 h-5 text-indigo-500" />
+                    Dates & Status
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg">
+                    <div>
+                      <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">List Date</label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {viewingTransaction.listDate ? new Date(viewingTransaction.listDate).toLocaleDateString() : 'N/A'}
+                      </p>
+                    </div>
+                    <div>
+                      <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Closing Date</label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {new Date(viewingTransaction.closingDate).toLocaleDateString()}
+                      </p>
+                    </div>
+                    <div>
+                      <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Brokerage</label>
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {viewingTransaction.brokerage === 'KW' ? 'Keller Williams (KW)' : 'Bennion Deville Homes (BDH)'}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Additional Information */}
+                {(viewingTransaction.source || viewingTransaction.referralPct || viewingTransaction.assistantBonus || viewingTransaction.buyersAgentSplit) && (
+                  <div className="mb-4">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Additional Information</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg">
+                      {viewingTransaction.source && (
+                        <div>
+                          <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Source</label>
+                          <p className="text-gray-900 dark:text-white font-medium">{viewingTransaction.source}</p>
+                        </div>
+                      )}
+                      {viewingTransaction.referralPct > 0 && (
+                        <div>
+                          <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Referral Fee</label>
+                          <p className="text-gray-900 dark:text-white font-medium">
+                            {viewingTransaction.referralPct}% (${parseFloat(viewingTransaction.referralDollar || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })})
+                          </p>
+                        </div>
+                      )}
+                      {viewingTransaction.assistantBonus > 0 && (
+                        <div>
+                          <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Assistant Bonus</label>
+                          <p className="text-gray-900 dark:text-white font-medium">
+                            ${parseFloat(viewingTransaction.assistantBonus).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                          </p>
+                        </div>
+                      )}
+                      {viewingTransaction.buyersAgentSplit > 0 && (
+                        <div>
+                          <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Buyer's Agent Split</label>
+                          <p className="text-gray-900 dark:text-white font-medium">
+                            ${parseFloat(viewingTransaction.buyersAgentSplit).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Footer Actions */}
+              <div className="p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 flex items-center justify-between">
+                <button
+                  onClick={closeViewModal}
+                  className="px-6 py-3 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors font-medium"
+                >
+                  Close
+                </button>
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => handleDelete(viewingTransaction.id)}
+                    className="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium shadow-sm"
+                  >
+                    Delete
+                  </button>
+                  <button
+                    onClick={() => handleEdit(viewingTransaction)}
+                    className="px-6 py-3 bg-gradient-to-r from-black to-yellow-600 text-white rounded-lg hover:from-gray-900 hover:to-yellow-500 transition-all font-medium shadow-sm"
+                  >
+                    Edit Transaction
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         )}
