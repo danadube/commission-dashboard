@@ -7,7 +7,7 @@ import ThemeToggle from './ThemeToggle';
 /**
  * Janice Glaab Real Estate Commission Dashboard
  * 
- * @version 3.5.1
+ * @version 3.6.0
  * @description Professional dashboard for tracking real estate commissions with Google Sheets integration
  * 
  * ✨ KEY FEATURES:
@@ -136,6 +136,10 @@ const EnhancedRealEstateDashboard = () => {
   const [customLogo, setCustomLogo] = useState(() => {
     return localStorage.getItem('customLogo') || '/assets/logos/app-logo-default.png';
   });
+  
+  // Commission Sheet Scanner State
+  const [isScanning, setIsScanning] = useState(false);
+  const [scanError, setScanError] = useState(null);
   
   // Form Data State
   const [formData, setFormData] = useState({
@@ -637,6 +641,110 @@ const EnhancedRealEstateDashboard = () => {
     if (window.confirm('Remove custom logo and restore default?')) {
       setCustomLogo('/assets/logos/app-logo-default.png');
       localStorage.removeItem('customLogo');
+    }
+  };
+
+  // ==================== COMMISSION SHEET SCANNER ====================
+  
+  const handleScanCommissionSheet = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    // Check file type
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'application/pdf'];
+    if (!validTypes.includes(file.type)) {
+      setScanError('Please upload an image (JPG, PNG, WebP) or PDF file');
+      return;
+    }
+
+    // Check file size (max 20MB)
+    if (file.size > 20 * 1024 * 1024) {
+      setScanError('File size must be less than 20MB');
+      return;
+    }
+
+    setIsScanning(true);
+    setScanError(null);
+
+    try {
+      // Convert file to base64
+      const reader = new FileReader();
+      reader.onloadend = async () => {
+        try {
+          const base64Image = reader.result;
+
+          // Call our serverless function
+          const response = await fetch('/api/scan-commission-sheet', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              imageBase64: base64Image
+            })
+          });
+
+          if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.error || 'Failed to scan commission sheet');
+          }
+
+          const result = await response.json();
+          
+          if (result.success && result.data) {
+            // Auto-fill form with extracted data
+            const extracted = result.data;
+            
+            setFormData(prev => ({
+              ...prev,
+              // Only update fields that were successfully extracted (not null)
+              ...(extracted.transactionType && { transactionType: extracted.transactionType }),
+              ...(extracted.propertyType && { propertyType: extracted.propertyType }),
+              ...(extracted.clientType && { clientType: extracted.clientType }),
+              ...(extracted.address && { address: extracted.address }),
+              ...(extracted.city && { city: extracted.city }),
+              ...(extracted.listPrice && { listPrice: extracted.listPrice.toString() }),
+              ...(extracted.closedPrice && { closedPrice: extracted.closedPrice.toString() }),
+              ...(extracted.listDate && { listDate: extracted.listDate }),
+              ...(extracted.closingDate && { closingDate: extracted.closingDate }),
+              ...(extracted.brokerage && { brokerage: extracted.brokerage }),
+              ...(extracted.commissionPct && { commissionPct: extracted.commissionPct.toString() }),
+              ...(extracted.gci && { gci: extracted.gci.toString() }),
+              ...(extracted.referralPct && { referralPct: extracted.referralPct.toString() }),
+              ...(extracted.referralDollar && { referralDollar: extracted.referralDollar.toString() }),
+              ...(extracted.adjustedGci && { adjustedGci: extracted.adjustedGci.toString() }),
+              ...(extracted.totalBrokerageFees && { totalBrokerageFees: extracted.totalBrokerageFees.toString() }),
+              ...(extracted.nci && { nci: extracted.nci.toString() }),
+              ...(extracted.status && { status: extracted.status }),
+              ...(extracted.referringAgent && { referringAgent: extracted.referringAgent }),
+              ...(extracted.referralFeeReceived && { referralFeeReceived: extracted.referralFeeReceived.toString() }),
+            }));
+
+            // Show success message
+            alert(`✅ Commission sheet scanned successfully!\n\nConfidence: ${extracted.confidence}%\n\nPlease review the auto-filled data before saving.`);
+          } else {
+            throw new Error('No data extracted from commission sheet');
+          }
+        } catch (error) {
+          console.error('Scan error:', error);
+          setScanError(error.message);
+        } finally {
+          setIsScanning(false);
+          // Reset file input
+          event.target.value = '';
+        }
+      };
+
+      reader.onerror = () => {
+        setScanError('Failed to read file');
+        setIsScanning(false);
+      };
+
+      reader.readAsDataURL(file);
+    } catch (error) {
+      console.error('Scan error:', error);
+      setScanError(error.message);
+      setIsScanning(false);
     }
   };
 
@@ -1540,7 +1648,7 @@ const EnhancedRealEstateDashboard = () => {
 
         {/* Footer */}
         <div className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
-          Janice Glaab Real Estate Dashboard v3.5.1 • Built with ❤️ by Dana Dube
+          Janice Glaab Real Estate Dashboard v3.6.0 • Built with ❤️ by Dana Dube
         </div>
 
         {/* Transaction Form Modal */}
@@ -1562,6 +1670,58 @@ const EnhancedRealEstateDashboard = () => {
               </div>
 
               <form onSubmit={handleSubmit} className="p-6 max-h-[calc(100vh-200px)] overflow-y-auto">
+                {/* AI Commission Sheet Scanner */}
+                <div className="mb-6 p-6 bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-2xl border-2 border-purple-200 dark:border-purple-700">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="text-3xl">🤖</div>
+                    <div className="flex-1">
+                      <h3 className="text-lg font-bold text-purple-900 dark:text-purple-100">AI Commission Sheet Scanner</h3>
+                      <p className="text-sm text-purple-700 dark:text-purple-300">Upload a PDF or screenshot to auto-fill this form</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-3">
+                    <label className="flex-1">
+                      <input
+                        type="file"
+                        accept="image/*,.pdf"
+                        onChange={handleScanCommissionSheet}
+                        disabled={isScanning}
+                        className="hidden"
+                        id="commission-sheet-upload"
+                      />
+                      <div className={`flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all cursor-pointer ${
+                        isScanning
+                          ? 'bg-gray-400 cursor-not-allowed'
+                          : 'bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white shadow-lg hover:shadow-xl transform hover:scale-105'
+                      }`}>
+                        {isScanning ? (
+                          <>
+                            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                            <span>Scanning...</span>
+                          </>
+                        ) : (
+                          <>
+                            <Upload className="w-5 h-5" />
+                            <span>📷 Scan Commission Sheet</span>
+                          </>
+                        )}
+                      </div>
+                    </label>
+                  </div>
+                  
+                  {scanError && (
+                    <div className="mt-3 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+                      <p className="text-sm text-red-700 dark:text-red-300">❌ {scanError}</p>
+                    </div>
+                  )}
+                  
+                  <div className="mt-3 text-xs text-purple-600 dark:text-purple-400">
+                    <p>✨ Supports: KW & BDH commission sheets • JPG, PNG, WebP, PDF • Max 20MB</p>
+                    <p className="mt-1">🎯 Auto-detects: Transaction type, amounts, dates, and all fields</p>
+                  </div>
+                </div>
+
                 {/* Basic Information */}
                 <div className="mb-6">
                   <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Basic Information</h3>
