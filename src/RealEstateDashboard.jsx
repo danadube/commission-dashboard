@@ -49,6 +49,25 @@ import ThemeToggle from './ThemeToggle';
  * @for Janice Glaab Real Estate
  */
 
+// Custom Tahoe-style Tooltip Component
+const TahoeTooltip = ({ active, payload, label }) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="glass-morphism bg-white/90 dark:bg-gray-800/90 backdrop-blur-2xl rounded-2xl shadow-2xl p-4 border-2 border-white/30 dark:border-gray-600/30">
+        <p className="font-bold text-gray-900 dark:text-white mb-2 text-sm">{label}</p>
+        {payload.map((entry, index) => (
+          <p key={index} className="text-sm font-medium" style={{ color: entry.color }}>
+            {entry.name}: {typeof entry.value === 'number' && entry.value > 1000 
+              ? `$${entry.value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+              : entry.value}
+          </p>
+        ))}
+      </div>
+    );
+  }
+  return null;
+};
+
 const EnhancedRealEstateDashboard = () => {
   // ==================== STATE MANAGEMENT ====================
   
@@ -966,11 +985,7 @@ const EnhancedRealEstateDashboard = () => {
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="month" tick={{ fontSize: 12 }} />
                 <YAxis tick={{ fontSize: 12 }} />
-                <Tooltip 
-                  contentStyle={{ backgroundColor: '#fff', borderRadius: '8px' }}
-                  labelStyle={{ color: '#000', fontWeight: 'bold' }}
-                  itemStyle={{ color: '#d4af37' }}
-                />
+                <Tooltip content={<TahoeTooltip />} />
                 <Legend />
                 <Line type="monotone" dataKey="gci" stroke="#d4af37" strokeWidth={2} name="GCI" />
                 <Line type="monotone" dataKey="nci" stroke="#10b981" strokeWidth={2} name="NCI" />
@@ -985,11 +1000,7 @@ const EnhancedRealEstateDashboard = () => {
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="month" tick={{ fontSize: 12 }} />
                 <YAxis tick={{ fontSize: 12 }} />
-                <Tooltip 
-                  contentStyle={{ backgroundColor: '#fff', borderRadius: '8px' }}
-                  labelStyle={{ color: '#000', fontWeight: 'bold' }}
-                  itemStyle={{ color: '#d4af37' }}
-                />
+                <Tooltip content={<TahoeTooltip />} />
                 <Legend />
                 <Bar dataKey="transactions" fill="#3b82f6" name="Transactions" />
               </BarChart>
@@ -1014,10 +1025,7 @@ const EnhancedRealEstateDashboard = () => {
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip 
-                  contentStyle={{ backgroundColor: '#fff', borderRadius: '8px' }}
-                  labelStyle={{ color: '#000', fontWeight: 'bold' }}
-                />
+                <Tooltip content={<TahoeTooltip />} />
               </PieChart>
             </ResponsiveContainer>
           </div>
@@ -1029,12 +1037,7 @@ const EnhancedRealEstateDashboard = () => {
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="name" tick={{ fontSize: 12 }} />
                 <YAxis tick={{ fontSize: 12 }} />
-                <Tooltip 
-                  contentStyle={{ backgroundColor: '#fff', borderRadius: '8px' }}
-                  labelStyle={{ color: '#000', fontWeight: 'bold' }}
-                  itemStyle={{ color: '#d4af37' }}
-                  formatter={(value) => `$${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
-                />
+                <Tooltip content={<TahoeTooltip />} />
                 <Bar dataKey="value" fill="#d4af37" name="NCI" />
               </BarChart>
             </ResponsiveContainer>
