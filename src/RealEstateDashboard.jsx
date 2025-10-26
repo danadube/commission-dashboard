@@ -1125,15 +1125,25 @@ const EnhancedRealEstateDashboard = () => {
 
           {/* Sync Error Display */}
           {syncError && (
-            <div className="mt-3 flex items-center justify-between p-2 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-              <p className="text-xs text-red-700 dark:text-red-300 font-medium">{syncError}</p>
-              <button
-                onClick={() => setSyncError(null)}
-                className="text-xs text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300"
-                title="Dismiss"
-              >
-                <X className="w-4 h-4" />
-              </button>
+            <div className="mt-3 flex items-center justify-between gap-3 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+              <p className="text-xs text-red-700 dark:text-red-300 font-medium flex-1">{syncError}</p>
+              <div className="flex items-center gap-2">
+                {syncError.includes('Session expired') && (
+                  <button
+                    onClick={enableGoogleSheets}
+                    className="text-xs bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg font-medium transition-colors"
+                  >
+                    Sign In Again
+                  </button>
+                )}
+                <button
+                  onClick={() => setSyncError(null)}
+                  className="text-xs text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300"
+                  title="Dismiss"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
             </div>
           )}
         </div>
