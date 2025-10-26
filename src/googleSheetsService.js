@@ -206,6 +206,21 @@ export function signOut() {
 }
 
 /**
+ * Helper function to parse currency/number strings from Google Sheets
+ * Handles: "$1,234.56", "1234.56", "1,234", etc.
+ */
+function parseCurrency(value) {
+  if (!value) return 0;
+  if (typeof value === 'number') return value;
+  
+  // Remove currency symbols, commas, spaces
+  const cleaned = String(value).replace(/[$,\s]/g, '');
+  const parsed = parseFloat(cleaned);
+  
+  return isNaN(parsed) ? 0 : parsed;
+}
+
+/**
  * Read transactions from Google Sheets
  */
 export async function readTransactions() {
@@ -241,28 +256,28 @@ export async function readTransactions() {
       city: row[4] || '',
       state: 'CA', // Not in sheet, default to CA
       zip: '', // Not in sheet
-      listPrice: parseFloat(row[5]) || 0,
-      commissionPct: parseFloat(row[6]) || 0,
+      listPrice: parseCurrency(row[5]),
+      commissionPct: parseCurrency(row[6]),
       listDate: row[7] || '',
       closingDate: row[8] || '',
       brokerage: row[9] || 'BDH', // J: Brokerage (BDH or KW)
-      netVolume: parseFloat(row[10]) || 0,
-      closedPrice: parseFloat(row[11]) || 0,
-      gci: parseFloat(row[12]) || 0,
-      referralPct: parseFloat(row[13]) || 0,
-      referralDollar: parseFloat(row[14]) || 0,
-      adjustedGci: parseFloat(row[15]) || 0,
-      preSplitDeduction: parseFloat(row[16]) || 0,
-      totalBrokerageFees: parseFloat(row[17]) || 0,
-      companyDollar: parseFloat(row[17]) || 0, // Using brokeragesplit
-      otherDeductions: parseFloat(row[18]) || 0,
-      nci: parseFloat(row[19]) || 0,
+      netVolume: parseCurrency(row[10]),
+      closedPrice: parseCurrency(row[11]),
+      gci: parseCurrency(row[12]),
+      referralPct: parseCurrency(row[13]),
+      referralDollar: parseCurrency(row[14]),
+      adjustedGci: parseCurrency(row[15]),
+      preSplitDeduction: parseCurrency(row[16]),
+      totalBrokerageFees: parseCurrency(row[17]),
+      companyDollar: parseCurrency(row[17]), // Using brokeragesplit
+      otherDeductions: parseCurrency(row[18]),
+      nci: parseCurrency(row[19]),
       status: row[20] || 'Closed',
-      assistantBonus: parseFloat(row[21]) || 0,
-      buyersAgentSplit: parseFloat(row[22]) || 0,
+      assistantBonus: parseCurrency(row[21]),
+      buyersAgentSplit: parseCurrency(row[22]),
       transactionType: row[23] || 'Sale', // X: Transaction Type (NEW v3.5)
       referringAgent: row[24] || '', // Y: Referring Agent (NEW v3.5)
-      referralFeeReceived: parseFloat(row[25]) || 0, // Z: Referral Fee Received (NEW v3.5)
+      referralFeeReceived: parseCurrency(row[25]), // Z: Referral Fee Received (NEW v3.5)
       notes: '',
     }));
   } catch (error) {
