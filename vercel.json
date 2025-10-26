@@ -1,18 +1,15 @@
 {
-  "buildCommand": "npm run build",
-  "outputDirectory": "build",
-  "framework": "create-react-app",
   "headers": [
     {
       "source": "/(.*)",
       "headers": [
         {
-          "key": "X-Content-Type-Options",
-          "value": "nosniff"
+          "key": "Cross-Origin-Opener-Policy",
+          "value": "same-origin-allow-popups"
         },
         {
-          "key": "X-Frame-Options",
-          "value": "SAMEORIGIN"
+          "key": "Cross-Origin-Embedder-Policy", 
+          "value": "unsafe-none"
         }
       ]
     }
