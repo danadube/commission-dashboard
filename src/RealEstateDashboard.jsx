@@ -850,13 +850,16 @@ const EnhancedRealEstateDashboard = () => {
     
     // Create a NEW array (don't mutate) and sort it
     const sorted = [...filtered].sort((a, b) => {
-      // Sort by closing date
-      const dateA = a.closingDate ? new Date(a.closingDate).getTime() : 0;
-      const dateB = b.closingDate ? new Date(b.closingDate).getTime() : 0;
+      // Sort by closing date - handle empty/invalid dates
+      const dateA = a.closingDate ? new Date(a.closingDate) : new Date(0);
+      const dateB = b.closingDate ? new Date(b.closingDate) : new Date(0);
+      
+      // Check if dates are valid
+      const timeA = isNaN(dateA.getTime()) ? 0 : dateA.getTime();
+      const timeB = isNaN(dateB.getTime()) ? 0 : dateB.getTime();
       
       // Newest first (descending) or oldest first (ascending)
-      const result = sortOrder === 'newest' ? dateB - dateA : dateA - dateB;
-      return result;
+      return sortOrder === 'newest' ? timeB - timeA : timeA - timeB;
     });
     
     return sorted;
