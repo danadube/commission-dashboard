@@ -7,7 +7,7 @@ import ThemeToggle from './ThemeToggle';
 /**
  * Janice Glaab Real Estate Commission Dashboard
  * 
- * @version 3.4.0
+ * @version 3.4.1
  * @description Professional dashboard for tracking real estate commissions with Google Sheets integration
  * 
  * ✨ KEY FEATURES:
@@ -497,6 +497,26 @@ const EnhancedRealEstateDashboard = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     const newFormData = { ...formData, [name]: value };
+    
+    // Bidirectional GCI / Commission % calculation
+    if (name === 'gci' && value && newFormData.closedPrice) {
+      // If user enters GCI, calculate commission %
+      const gciValue = parseFloat(value) || 0;
+      const closedPrice = parseFloat(newFormData.closedPrice) || 0;
+      if (closedPrice > 0) {
+        newFormData.commissionPct = ((gciValue / closedPrice) * 100).toFixed(2);
+      }
+    }
+    
+    // Bidirectional Referral $ / Referral % calculation
+    if (name === 'referralDollar' && value && newFormData.gci) {
+      // If user enters referral $, calculate referral %
+      const referralDollar = parseFloat(value) || 0;
+      const gci = parseFloat(newFormData.gci) || 0;
+      if (gci > 0) {
+        newFormData.referralPct = ((referralDollar / gci) * 100).toFixed(2);
+      }
+    }
     
     // Auto-calculate if relevant fields change
     if (['closedPrice', 'commissionPct', 'referralPct', 'brokerage'].includes(name)) {
@@ -1202,39 +1222,6 @@ const EnhancedRealEstateDashboard = () => {
           )}
         </div>
 
-        {/* Smart Insights */}
-        {smartInsights.length > 0 && (
-          <div className="glass-morphism bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-2xl p-8 mb-8 transition-all duration-700 border border-white/30 dark:border-gray-700/30 backdrop-blur-3xl">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="bg-gradient-to-r from-purple-500 to-blue-500 p-3 rounded-xl">
-                <TrendingUp className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Smart Insights</h2>
-                <p className="text-sm text-gray-600 dark:text-gray-300">Key performance highlights from your data</p>
-              </div>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-              {smartInsights.map((insight, index) => (
-                <div
-                  key={index}
-                  className={`relative overflow-hidden bg-gradient-to-br ${insight.color} rounded-2xl shadow-xl p-6 text-white transform hover:-translate-y-1 hover:scale-105 transition-all duration-500 border-2 border-white/30`}
-                >
-                  <div className="text-4xl mb-3">{insight.icon}</div>
-                  <div className="space-y-1">
-                    <p className="text-xs font-semibold uppercase tracking-wider opacity-90">{insight.label}</p>
-                    <p className="text-xl font-bold leading-tight">{insight.value}</p>
-                    <p className="text-xs opacity-80 font-medium">{insight.subtext}</p>
-                  </div>
-                  {/* Ambient glow effect */}
-                  <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
         {/* Charts */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
           {isInitialLoading ? (
@@ -1304,11 +1291,11 @@ const EnhancedRealEstateDashboard = () => {
             </ResponsiveContainer>
           </div>
 
-          <div className="glass-morphism bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-2xl p-8 transition-all duration-700 border border-white/30 dark:border-gray-700/30 backdrop-blur-3xl">
+          <div className="glass-morphism bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-2xl p-8 transition-all duration-700 border border-white/30 dark:border-gray-700/30 backdrop-blur-3xl animate-[fadeIn_0.7s_ease-out]">
             <h3 className="text-lg font-semibold mb-4 dark:text-white">Income by Brokerage</h3>
             {brokerageData.length > 0 ? (
               <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={brokerageData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                <BarChart data={brokerageData} margin={{ top: 30, right: 40, left: 40, bottom: 20 }} barCategoryGap="30%">
                   <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
                   <XAxis 
                     dataKey="name" 
@@ -1327,7 +1314,8 @@ const EnhancedRealEstateDashboard = () => {
                     fill="#10b981" 
                     name="Net Commission Income" 
                     radius={[8, 8, 0, 0]}
-                    label={{ position: 'top', fill: '#9CA3AF', fontSize: 12 }}
+                    label={{ position: 'top', fill: '#9CA3AF', fontSize: 12, formatter: (value) => `$${(value / 1000).toFixed(1)}k` }}
+                    minPointSize={5}
                   />
                 </BarChart>
               </ResponsiveContainer>
@@ -1340,6 +1328,39 @@ const EnhancedRealEstateDashboard = () => {
             </>
           )}
         </div>
+
+        {/* Smart Insights */}
+        {smartInsights.length > 0 && (
+          <div className="glass-morphism bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-2xl p-8 mb-8 transition-all duration-700 border border-white/30 dark:border-gray-700/30 backdrop-blur-3xl animate-[fadeIn_0.8s_ease-out]">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="bg-gradient-to-r from-purple-500 to-blue-500 p-3 rounded-xl">
+                <TrendingUp className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Smart Insights</h2>
+                <p className="text-sm text-gray-600 dark:text-gray-300">Key performance highlights from your data</p>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+              {smartInsights.map((insight, index) => (
+                <div
+                  key={index}
+                  className={`relative overflow-hidden bg-gradient-to-br ${insight.color} rounded-2xl shadow-xl p-6 text-white transform hover:-translate-y-1 hover:scale-105 transition-all duration-500 border-2 border-white/30`}
+                >
+                  <div className="text-4xl mb-3">{insight.icon}</div>
+                  <div className="space-y-1">
+                    <p className="text-xs font-semibold uppercase tracking-wider opacity-90">{insight.label}</p>
+                    <p className="text-xl font-bold leading-tight">{insight.value}</p>
+                    <p className="text-xs opacity-80 font-medium">{insight.subtext}</p>
+                  </div>
+                  {/* Ambient glow effect */}
+                  <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Transactions List */}
         <div className="glass-morphism bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-2xl p-8 transition-all duration-700 border border-white/30 dark:border-gray-700/30 backdrop-blur-3xl">
@@ -1470,7 +1491,7 @@ const EnhancedRealEstateDashboard = () => {
 
         {/* Footer */}
         <div className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
-          Janice Glaab Real Estate Dashboard v3.4.0 • Built with ❤️ by Dana Dube
+          Janice Glaab Real Estate Dashboard v3.4.1 • Built with ❤️ by Dana Dube
         </div>
 
         {/* Transaction Form Modal */}
@@ -1494,16 +1515,16 @@ const EnhancedRealEstateDashboard = () => {
               <form onSubmit={handleSubmit} className="p-6 max-h-[calc(100vh-200px)] overflow-y-auto">
                 {/* Basic Information */}
                 <div className="mb-6">
-                  <h3 className="text-lg font-semibold mb-4 text-gray-900">Basic Information</h3>
+                  <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Basic Information</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Property Type *</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Property Type *</label>
                       <select
                         name="propertyType"
                         value={formData.propertyType}
                         onChange={handleInputChange}
                         required
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       >
                         <option value="Residential">Residential</option>
                         <option value="Commercial">Commercial</option>
@@ -1512,13 +1533,13 @@ const EnhancedRealEstateDashboard = () => {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Client Type *</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Client Type *</label>
                       <select
                         name="clientType"
                         value={formData.clientType}
                         onChange={handleInputChange}
                         required
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       >
                         <option value="Buyer">Buyer</option>
                         <option value="Seller">Seller</option>
@@ -1526,25 +1547,25 @@ const EnhancedRealEstateDashboard = () => {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Source</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Source</label>
                       <input
                         type="text"
                         name="source"
                         value={formData.source}
                         onChange={handleInputChange}
                         placeholder="e.g., Referral, Zillow, Sign Call"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Brokerage *</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Brokerage *</label>
                       <select
                         name="brokerage"
                         value={formData.brokerage}
                         onChange={handleInputChange}
                         required
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       >
                         <option value="KW">Keller Williams (KW)</option>
                         <option value="BDH">Bennion Deville Homes (BDH)</option>
@@ -1552,7 +1573,7 @@ const EnhancedRealEstateDashboard = () => {
                     </div>
 
                     <div className="md:col-span-2">
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Address *</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Address *</label>
                       <input
                         type="text"
                         name="address"
@@ -1560,12 +1581,12 @@ const EnhancedRealEstateDashboard = () => {
                         onChange={handleInputChange}
                         required
                         placeholder="123 Main St"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">City *</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">City *</label>
                       <input
                         type="text"
                         name="city"
@@ -1573,12 +1594,12 @@ const EnhancedRealEstateDashboard = () => {
                         onChange={handleInputChange}
                         required
                         placeholder="Palm Desert"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">List Price</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">List Price</label>
                       <input
                         type="number"
                         name="listPrice"
@@ -1586,12 +1607,12 @@ const EnhancedRealEstateDashboard = () => {
                         onChange={handleInputChange}
                         step="0.01"
                         placeholder="0.00"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Closed Price *</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Closed Price *</label>
                       <input
                         type="number"
                         name="closedPrice"
@@ -1600,30 +1621,30 @@ const EnhancedRealEstateDashboard = () => {
                         required
                         step="0.01"
                         placeholder="0.00"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">List Date</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">List Date</label>
                       <input
                         type="date"
                         name="listDate"
                         value={formData.listDate}
                         onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Closing Date *</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Closing Date *</label>
                       <input
                         type="date"
                         name="closingDate"
                         value={formData.closingDate}
                         onChange={handleInputChange}
                         required
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       />
                     </div>
                   </div>
@@ -1631,10 +1652,10 @@ const EnhancedRealEstateDashboard = () => {
 
                 {/* Commission Fields */}
                 <div className="mb-6">
-                  <h3 className="text-lg font-semibold mb-4 text-gray-900">Commission Details</h3>
+                  <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Commission Details</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Commission % *</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Commission % *</label>
                       <input
                         type="number"
                         name="commissionPct"
@@ -1643,12 +1664,12 @@ const EnhancedRealEstateDashboard = () => {
                         required
                         step="0.01"
                         placeholder="3.00"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Referral %</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Referral %</label>
                       <input
                         type="number"
                         name="referralPct"
@@ -1656,37 +1677,49 @@ const EnhancedRealEstateDashboard = () => {
                         onChange={handleInputChange}
                         step="0.01"
                         placeholder="0.00"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Gross Commission Income (GCI)</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+                        Gross Commission Income (GCI)
+                        <span className="text-xs text-blue-500 dark:text-blue-400 ml-2">✏️ Editable - auto-calculates Commission %</span>
+                      </label>
                       <input
-                        type="text"
-                        value={`$${formData.gci}`}
-                        readOnly
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-600"
+                        type="number"
+                        name="gci"
+                        value={formData.gci}
+                        onChange={handleInputChange}
+                        step="0.01"
+                        placeholder="0.00"
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Referral Fee Paid</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+                        Referral Fee Paid ($)
+                        <span className="text-xs text-blue-500 dark:text-blue-400 ml-2">✏️ Editable - auto-calculates Referral %</span>
+                      </label>
                       <input
-                        type="text"
-                        value={`$${formData.referralDollar}`}
-                        readOnly
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-600"
+                        type="number"
+                        name="referralDollar"
+                        value={formData.referralDollar}
+                        onChange={handleInputChange}
+                        step="0.01"
+                        placeholder="0.00"
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Adjusted GCI</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Adjusted GCI</label>
                       <input
                         type="text"
                         value={`$${formData.adjustedGci}`}
                         readOnly
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-600"
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-300"
                       />
                     </div>
                   </div>
@@ -1695,10 +1728,10 @@ const EnhancedRealEstateDashboard = () => {
                 {/* Brokerage-Specific Fields */}
                 {formData.brokerage === 'KW' && (
                   <div className="mb-6">
-                    <h3 className="text-lg font-semibold mb-4 text-gray-900">Keller Williams Deductions</h3>
+                    <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Keller Williams Deductions</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Errors & Omissions (E&O)</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Errors & Omissions (E&O)</label>
                         <input
                           type="number"
                           name="eo"
@@ -1706,32 +1739,32 @@ const EnhancedRealEstateDashboard = () => {
                           onChange={handleInputChange}
                           step="0.01"
                           placeholder="0.00"
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Royalty (6% - Auto)</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Royalty (6% - Auto)</label>
                         <input
                           type="text"
                           value={`$${formData.royalty}`}
                           readOnly
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-600"
+                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-300"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Company Dollar (10% - Auto)</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Company Dollar (10% - Auto)</label>
                         <input
                           type="text"
                           value={`$${formData.companyDollar}`}
                           readOnly
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-600"
+                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-300"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">HOA Transfer</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">HOA Transfer</label>
                         <input
                           type="number"
                           name="hoaTransfer"
@@ -1739,12 +1772,12 @@ const EnhancedRealEstateDashboard = () => {
                           onChange={handleInputChange}
                           step="0.01"
                           placeholder="0.00"
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Home Warranty</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Home Warranty</label>
                         <input
                           type="number"
                           name="homeWarranty"
@@ -1752,12 +1785,12 @@ const EnhancedRealEstateDashboard = () => {
                           onChange={handleInputChange}
                           step="0.01"
                           placeholder="0.00"
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">KW Cares</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">KW Cares</label>
                         <input
                           type="number"
                           name="kwCares"
@@ -1765,12 +1798,12 @@ const EnhancedRealEstateDashboard = () => {
                           onChange={handleInputChange}
                           step="0.01"
                           placeholder="0.00"
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">NEXT GEN</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">NEXT GEN</label>
                         <input
                           type="number"
                           name="kwNextGen"
@@ -1778,12 +1811,12 @@ const EnhancedRealEstateDashboard = () => {
                           onChange={handleInputChange}
                           step="0.01"
                           placeholder="0.00"
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">BOLD Scholarship</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">BOLD Scholarship</label>
                         <input
                           type="number"
                           name="boldScholarship"
@@ -1791,12 +1824,12 @@ const EnhancedRealEstateDashboard = () => {
                           onChange={handleInputChange}
                           step="0.01"
                           placeholder="0.00"
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">TC/Concierge</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">TC/Concierge</label>
                         <input
                           type="number"
                           name="tcConcierge"
@@ -1804,12 +1837,12 @@ const EnhancedRealEstateDashboard = () => {
                           onChange={handleInputChange}
                           step="0.01"
                           placeholder="0.00"
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Jelmberg Team</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Jelmberg Team</label>
                         <input
                           type="number"
                           name="jelmbergTeam"
@@ -1817,7 +1850,7 @@ const EnhancedRealEstateDashboard = () => {
                           onChange={handleInputChange}
                           step="0.01"
                           placeholder="0.00"
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         />
                       </div>
                     </div>
@@ -1826,10 +1859,10 @@ const EnhancedRealEstateDashboard = () => {
 
                 {formData.brokerage === 'BDH' && (
                   <div className="mb-6">
-                    <h3 className="text-lg font-semibold mb-4 text-gray-900">Bennion Deville Homes Deductions</h3>
+                    <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Bennion Deville Homes Deductions</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">BDH Split % (Default: 94%)</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">BDH Split % (Default: 94%)</label>
                         <input
                           type="number"
                           name="bdhSplitPct"
@@ -1837,22 +1870,22 @@ const EnhancedRealEstateDashboard = () => {
                           onChange={handleInputChange}
                           step="0.01"
                           placeholder="94.00"
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Pre-Split Deduction (6% - Auto)</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Pre-Split Deduction (6% - Auto)</label>
                         <input
                           type="text"
                           value={`$${formData.preSplitDeduction}`}
                           readOnly
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-600"
+                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-300"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Agent Services Fee (ASF)</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Agent Services Fee (ASF)</label>
                         <input
                           type="number"
                           name="asf"
@@ -1860,12 +1893,12 @@ const EnhancedRealEstateDashboard = () => {
                           onChange={handleInputChange}
                           step="0.01"
                           placeholder="0.00"
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Foundation10</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Foundation10</label>
                         <input
                           type="number"
                           name="foundation10"
@@ -1873,12 +1906,12 @@ const EnhancedRealEstateDashboard = () => {
                           onChange={handleInputChange}
                           step="0.01"
                           placeholder="0.00"
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Admin Fee</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Admin Fee</label>
                         <input
                           type="number"
                           name="adminFee"
@@ -1886,7 +1919,7 @@ const EnhancedRealEstateDashboard = () => {
                           onChange={handleInputChange}
                           step="0.01"
                           placeholder="0.00"
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         />
                       </div>
                     </div>
@@ -1895,10 +1928,10 @@ const EnhancedRealEstateDashboard = () => {
 
                 {/* Universal Fields */}
                 <div className="mb-6">
-                  <h3 className="text-lg font-semibold mb-4 text-gray-900">Additional Deductions</h3>
+                  <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Additional Deductions</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Other Deductions</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Other Deductions</label>
                       <input
                         type="number"
                         name="otherDeductions"
@@ -1906,12 +1939,12 @@ const EnhancedRealEstateDashboard = () => {
                         onChange={handleInputChange}
                         step="0.01"
                         placeholder="0.00"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Buyer's Agent Split</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Buyer's Agent Split</label>
                       <input
                         type="number"
                         name="buyersAgentSplit"
@@ -1919,12 +1952,12 @@ const EnhancedRealEstateDashboard = () => {
                         onChange={handleInputChange}
                         step="0.01"
                         placeholder="0.00"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Assistant Bonus (FYI only)</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Assistant Bonus (FYI only)</label>
                       <input
                         type="number"
                         name="assistantBonus"
@@ -1932,7 +1965,7 @@ const EnhancedRealEstateDashboard = () => {
                         onChange={handleInputChange}
                         step="0.01"
                         placeholder="0.00"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       />
                       <p className="text-xs text-gray-500 mt-1">Not included in NCI calculation</p>
                     </div>
