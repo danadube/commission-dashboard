@@ -127,6 +127,7 @@ const EnhancedRealEstateDashboard = () => {
   const [filterClientType, setFilterClientType] = useState('all');
   const [filterBrokerage, setFilterBrokerage] = useState('all');
   const [filterPropertyType, setFilterPropertyType] = useState('all');
+  const [filterPriceRange, setFilterPriceRange] = useState('all');
   
   // Sort order - newest or oldest first
   const [sortOrder, setSortOrder] = useState(() => {
@@ -824,6 +825,25 @@ const EnhancedRealEstateDashboard = () => {
     
     if (filterPropertyType !== 'all' && transaction.propertyType !== filterPropertyType) return false;
     
+    // Price range filter
+    if (filterPriceRange !== 'all') {
+      const price = parseFloat(transaction.closedPrice) || 0;
+      switch (filterPriceRange) {
+        case 'under500k':
+          if (price >= 500000) return false;
+          break;
+        case '500k-1m':
+          if (price < 500000 || price >= 1000000) return false;
+          break;
+        case '1m-2m':
+          if (price < 1000000 || price >= 2000000) return false;
+          break;
+        case 'over2m':
+          if (price < 2000000) return false;
+          break;
+      }
+    }
+    
     return true;
   }).sort((a, b) => {
     // Sort by closing date
@@ -1158,7 +1178,7 @@ const EnhancedRealEstateDashboard = () => {
             </div>
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
             {/* Year Filter */}
             <div>
               <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2">
@@ -1224,10 +1244,28 @@ const EnhancedRealEstateDashboard = () => {
                 <option value="Land">Land</option>
               </select>
             </div>
+
+            {/* Price Range Filter */}
+            <div>
+              <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2">
+                💰 Price Range
+              </label>
+              <select
+                value={filterPriceRange}
+                onChange={(e) => setFilterPriceRange(e.target.value)}
+                className="w-full px-4 py-2.5 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors font-medium"
+              >
+                <option value="all">All Prices</option>
+                <option value="under500k">Under $500K</option>
+                <option value="500k-1m">$500K - $1M</option>
+                <option value="1m-2m">$1M - $2M</option>
+                <option value="over2m">Over $2M</option>
+              </select>
+            </div>
           </div>
 
           {/* Clear Filters Button */}
-          {(filterYear !== 'all' || filterClientType !== 'all' || filterBrokerage !== 'all' || filterPropertyType !== 'all') && (
+          {(filterYear !== 'all' || filterClientType !== 'all' || filterBrokerage !== 'all' || filterPropertyType !== 'all' || filterPriceRange !== 'all') && (
             <div className="mt-4 flex items-center justify-center">
               <button
                 onClick={() => {
@@ -1235,6 +1273,7 @@ const EnhancedRealEstateDashboard = () => {
                   setFilterClientType('all');
                   setFilterBrokerage('all');
                   setFilterPropertyType('all');
+                  setFilterPriceRange('all');
                 }}
                 className="px-6 py-2 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-100 dark:hover:bg-blue-900/50 rounded-lg transition-all border-2 border-blue-200 dark:border-blue-700"
               >
