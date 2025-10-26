@@ -1031,29 +1031,29 @@ const EnhancedRealEstateDashboard = () => {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="glass-morphism bg-white/70 dark:bg-gray-800/70 rounded-2xl shadow-2xl p-6 mb-8 border border-white/20 dark:border-gray-700/30 backdrop-blur-3xl">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-6">
             {/* Left: Logo & Title */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 flex-1 min-w-0">
               {customLogo && (
                 <img 
                   src={customLogo} 
                   alt="Dashboard Logo" 
-                  className="w-16 h-16 rounded-2xl shadow-lg object-cover border-2 border-white/30 dark:border-gray-700/30"
+                  className="w-14 h-14 rounded-xl shadow-lg object-cover border-2 border-white/30 dark:border-gray-700/30 flex-shrink-0"
                 />
               )}
-              <div>
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 dark:from-purple-400 dark:via-blue-400 dark:to-cyan-400 bg-clip-text text-transparent animate-glow">
+              <div className="min-w-0">
+                <h1 className="text-2xl lg:text-3xl font-bold bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 dark:from-purple-400 dark:via-blue-400 dark:to-cyan-400 bg-clip-text text-transparent animate-glow truncate">
                   Real Estate Commission Dashboard
                 </h1>
-                <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">Track and analyze your commission income</p>
+                <p className="text-xs lg:text-sm text-gray-600 dark:text-gray-300 mt-1">Track and analyze your commission income</p>
               </div>
             </div>
 
             {/* Right: Actions */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 lg:gap-3 flex-shrink-0">
               {/* Sync Status Indicator */}
               {isGoogleSheetsEnabled && isGoogleSheetsAuthorized && (
-                <div className="flex items-center gap-2 px-3 py-2 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-700">
+                <div className="hidden sm:flex items-center gap-2 px-3 py-2 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-700">
                   <Cloud className="w-4 h-4 text-green-600 dark:text-green-400" />
                   <span className="text-xs font-medium text-green-700 dark:text-green-300">
                     {isSyncing ? 'Syncing...' : 'Synced'}
@@ -1062,7 +1062,7 @@ const EnhancedRealEstateDashboard = () => {
               )}
               
               {!isGoogleSheetsEnabled && (
-                <div className="flex items-center gap-2 px-3 py-2 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
+                <div className="hidden sm:flex items-center gap-2 px-3 py-2 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
                   <CloudOff className="w-4 h-4 text-gray-500 dark:text-gray-400" />
                   <span className="text-xs font-medium text-gray-600 dark:text-gray-400">Offline</span>
                 </div>
@@ -1071,19 +1071,17 @@ const EnhancedRealEstateDashboard = () => {
               {/* Add Transaction Button */}
               <button
                 onClick={() => setShowForm(true)}
-                className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-black to-yellow-600 text-white rounded-xl hover:from-gray-900 hover:to-yellow-500 transition-all shadow-lg hover:shadow-xl font-medium"
+                className="flex items-center gap-2 px-4 lg:px-5 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-xl transition-all shadow-lg hover:shadow-xl font-medium"
               >
-                <Plus className="w-5 h-5" />
-                Add Transaction
+                <Plus className="w-4 h-4 lg:w-5 lg:h-5" />
+                <span className="hidden sm:inline">Add Transaction</span>
+                <span className="sm:hidden">Add</span>
               </button>
-
-              {/* Theme Toggle */}
-              <ThemeToggle />
 
               {/* Settings Button */}
               <button
                 onClick={() => setShowSettings(true)}
-                className="p-3 glass-morphism bg-gray-100/80 hover:bg-gray-200/80 dark:bg-gray-700/80 dark:hover:bg-gray-600/80 rounded-xl transition-all shadow-lg hover:shadow-xl border border-white/20 dark:border-gray-600/30 backdrop-blur-xl"
+                className="p-2.5 lg:p-3 glass-morphism bg-gray-100/80 hover:bg-gray-200/80 dark:bg-gray-700/80 dark:hover:bg-gray-600/80 rounded-xl transition-all shadow-lg hover:shadow-xl border border-white/20 dark:border-gray-600/30 backdrop-blur-xl"
                 title="Settings"
               >
                 <Settings className="w-5 h-5 text-gray-700 dark:text-gray-200" />
