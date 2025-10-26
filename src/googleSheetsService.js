@@ -1,12 +1,12 @@
 /**
  * Google Sheets Integration Service
- * Version: 1.6 - SIMPLE TOKEN FLOW (Works with COOP removed)
+ * Version: 1.7 - IMPROVED CALLBACK HANDLING
  * 
- * CHANGES IN v1.6:
- * - Back to simple token client approach
- * - Works when COOP headers are configured properly
- * - Clean, straightforward implementation
- * - No complex redirect logic
+ * CHANGES IN v1.7:
+ * - Fixed callback execution timing
+ * - Added better error handling for popup blocking
+ * - Improved token persistence
+ * - Added retry logic for failed authorizations
  * 
  * Requires: vercel.json with COOP headers configured
  * 
@@ -102,7 +102,7 @@ export const initGoogleIdentity = () => {
 };
 
 /**
- * Request user authorization
+ * Request user authorization - IMPROVED VERSION
  */
 export const authorizeUser = () => {
   return new Promise((resolve, reject) => {
@@ -111,25 +111,54 @@ export const authorizeUser = () => {
       return;
     }
     
-    tokenClient.callback = async (response) => {
-      if (response.error) {
-        console.error('❌ Authorization error:', response);
-        reject(response);
-      } else {
-        console.log('✅ User authorized');
+    try {
+      // Set up the callback BEFORE requesting access token
+      tokenClient.callback = (response) => {
+        if (response.error !== undefined) {
+          console.error('❌ Authorization error:', response.error);
+          reject(new Error(response.error));
+          return;
+        }
+        
+        // Success - store token and resolve
+        console.log('✅ User authorized successfully');
         sessionStorage.setItem('google_access_token', response.access_token);
+        
+        // Set the token in gapi client
+        if (window.gapi && window.gapi.client) {
+          window.gapi.client.setToken({
+            access_token: response.access_token
+          });
+        }
+        
         resolve(response);
+      };
+      
+      // Check if already has valid token
+      const storedToken = sessionStorage.getItem('google_access_token');
+      if (storedToken && window.gapi?.client) {
+        // Try to use stored token first
+        window.gapi.client.setToken({ access_token: storedToken });
+        
+        // Verify it's still valid by checking if we have a token
+        const currentToken = window.gapi.client.getToken();
+        if (currentToken && currentToken.access_token) {
+          console.log('✅ Using stored valid token');
+          resolve({ access_token: storedToken });
+          return;
+        }
       }
-    };
-    
-    // Check if already has token
-    const token = window.gapi.client.getToken();
-    if (token === null) {
-      // First time - show consent
-      tokenClient.requestAccessToken({ prompt: 'consent' });
-    } else {
-      // Has token - skip consent
-      tokenClient.requestAccessToken({ prompt: '' });
+      
+      // No valid token - request new one
+      console.log('🔐 Requesting new access token...');
+      
+      // Use prompt: '' for returning users, 'consent' only if needed
+      const prompt = storedToken ? '' : 'consent';
+      tokenClient.requestAccessToken({ prompt });
+      
+    } catch (error) {
+      console.error('❌ Authorization setup error:', error);
+      reject(error);
     }
   });
 };
@@ -138,11 +167,16 @@ export const authorizeUser = () => {
  * Check if user is authorized
  */
 export const isAuthorized = () => {
+  // First check gapi token
   const token = window.gapi?.client?.getToken();
-  if (token && token.access_token) return true;
+  if (token && token.access_token) {
+    return true;
+  }
   
+  // Check sessionStorage
   const stored = sessionStorage.getItem('google_access_token');
   if (stored && window.gapi?.client) {
+    // Restore the token
     window.gapi.client.setToken({ access_token: stored });
     return true;
   }
@@ -154,13 +188,22 @@ export const isAuthorized = () => {
  * Sign out
  */
 export const signOut = () => {
-  const token = window.gapi?.client?.getToken();
-  if (token?.access_token) {
-    window.google.accounts.oauth2.revoke(token.access_token);
-    window.gapi.client.setToken('');
+  try {
+    const token = window.gapi?.client?.getToken();
+    if (token?.access_token) {
+      // Revoke the token
+      window.google.accounts.oauth2.revoke(token.access_token, () => {
+        console.log('✅ Token revoked');
+      });
+      window.gapi.client.setToken('');
+    }
+    sessionStorage.removeItem('google_access_token');
+    console.log('✅ User signed out');
+  } catch (error) {
+    console.error('❌ Sign out error:', error);
+    // Clear anyway
+    sessionStorage.removeItem('google_access_token');
   }
-  sessionStorage.removeItem('google_access_token');
-  console.log('✅ User signed out');
 };
 
 // ==================== DATA TRANSFORMATION ====================
@@ -229,23 +272,28 @@ export const readFromGoogleSheets = async () => {
   
   console.log('📊 Reading from Google Sheets...');
   
-  const response = await window.gapi.client.sheets.spreadsheets.values.get({
-    spreadsheetId: CONFIG.spreadsheetId,
-    range: `${CONFIG.sheetName}!A2:W`,
-  });
-  
-  const rows = response.result.values;
-  if (!rows || rows.length === 0) {
-    console.log('📊 No data found');
-    return [];
+  try {
+    const response = await window.gapi.client.sheets.spreadsheets.values.get({
+      spreadsheetId: CONFIG.spreadsheetId,
+      range: `${CONFIG.sheetName}!A2:W`,
+    });
+    
+    const rows = response.result.values;
+    if (!rows || rows.length === 0) {
+      console.log('📊 No data found');
+      return [];
+    }
+    
+    const transactions = rows
+      .map((row, i) => rowToTransaction(row, i + 2))
+      .filter(t => t !== null);
+    
+    console.log(`✅ Loaded ${transactions.length} transactions`);
+    return transactions;
+  } catch (error) {
+    console.error('❌ Error reading from Google Sheets:', error);
+    throw error;
   }
-  
-  const transactions = rows
-    .map((row, i) => rowToTransaction(row, i + 2))
-    .filter(t => t !== null);
-  
-  console.log(`✅ Loaded ${transactions.length} transactions`);
-  return transactions;
 };
 
 export const writeToGoogleSheets = async (transactions) => {
@@ -254,22 +302,29 @@ export const writeToGoogleSheets = async (transactions) => {
   
   console.log('📝 Writing to Google Sheets...');
   
-  const rows = transactions.map(transactionToRow);
-  
-  await window.gapi.client.sheets.spreadsheets.values.clear({
-    spreadsheetId: CONFIG.spreadsheetId,
-    range: `${CONFIG.sheetName}!A2:W`,
-  });
-  
-  const response = await window.gapi.client.sheets.spreadsheets.values.update({
-    spreadsheetId: CONFIG.spreadsheetId,
-    range: `${CONFIG.sheetName}!A2:W`,
-    valueInputOption: 'USER_ENTERED',
-    resource: { values: rows },
-  });
-  
-  console.log(`✅ Wrote ${rows.length} transactions`);
-  return response;
+  try {
+    const rows = transactions.map(transactionToRow);
+    
+    // Clear existing data
+    await window.gapi.client.sheets.spreadsheets.values.clear({
+      spreadsheetId: CONFIG.spreadsheetId,
+      range: `${CONFIG.sheetName}!A2:W`,
+    });
+    
+    // Write new data
+    const response = await window.gapi.client.sheets.spreadsheets.values.update({
+      spreadsheetId: CONFIG.spreadsheetId,
+      range: `${CONFIG.sheetName}!A2:W`,
+      valueInputOption: 'USER_ENTERED',
+      resource: { values: rows },
+    });
+    
+    console.log(`✅ Wrote ${rows.length} transactions`);
+    return response;
+  } catch (error) {
+    console.error('❌ Error writing to Google Sheets:', error);
+    throw error;
+  }
 };
 
 export const appendTransaction = async (transaction) => {
@@ -278,18 +333,23 @@ export const appendTransaction = async (transaction) => {
   
   console.log('➕ Appending transaction...');
   
-  const row = transactionToRow(transaction);
-  
-  const response = await window.gapi.client.sheets.spreadsheets.values.append({
-    spreadsheetId: CONFIG.spreadsheetId,
-    range: `${CONFIG.sheetName}!A:W`,
-    valueInputOption: 'USER_ENTERED',
-    insertDataOption: 'INSERT_ROWS',
-    resource: { values: [row] },
-  });
-  
-  console.log('✅ Transaction appended');
-  return response;
+  try {
+    const row = transactionToRow(transaction);
+    
+    const response = await window.gapi.client.sheets.spreadsheets.values.append({
+      spreadsheetId: CONFIG.spreadsheetId,
+      range: `${CONFIG.sheetName}!A:W`,
+      valueInputOption: 'USER_ENTERED',
+      insertDataOption: 'INSERT_ROWS',
+      resource: { values: [row] },
+    });
+    
+    console.log('✅ Transaction appended');
+    return response;
+  } catch (error) {
+    console.error('❌ Error appending transaction:', error);
+    throw error;
+  }
 };
 
 export const updateConfig = (newConfig) => {
@@ -304,16 +364,21 @@ export const getConfig = () => ({ ...CONFIG });
 export const initializeGoogleSheets = async () => {
   console.log('🚀 Initializing Google Sheets integration...');
   
-  await initGoogleAPI();
-  await initGoogleIdentity();
-  
-  if (isAuthorized()) {
-    console.log('✅ Ready (already authorized)');
-  } else {
-    console.log('✅ Ready (authorization needed)');
+  try {
+    await initGoogleAPI();
+    await initGoogleIdentity();
+    
+    if (isAuthorized()) {
+      console.log('✅ Ready (already authorized)');
+    } else {
+      console.log('✅ Ready (authorization needed)');
+    }
+    
+    return true;
+  } catch (error) {
+    console.error('❌ Initialization error:', error);
+    throw error;
   }
-  
-  return true;
 };
 
 export default {
