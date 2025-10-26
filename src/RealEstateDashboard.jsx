@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { DollarSign, TrendingUp, Home, Calendar, Edit2, Trash2, X, Plus, Filter, Download, Upload, RefreshCw, LogOut, Cloud, CloudOff, Settings } from 'lucide-react';
 import * as GoogleSheetsService from './googleSheetsService';
@@ -807,52 +807,54 @@ const EnhancedRealEstateDashboard = () => {
 
   // ==================== FILTERING & SORTING ====================
   
-  const filteredTransactions = transactions.filter(transaction => {
-    const year = transaction.closingDate ? new Date(transaction.closingDate).getFullYear().toString() : '';
-    
-    if (filterYear !== 'all' && year !== filterYear) return false;
-    if (filterClientType !== 'all' && transaction.clientType !== filterClientType) return false;
-    
-    // Handle both full names and abbreviations for brokerage filter
-    if (filterBrokerage !== 'all') {
-      const brokerageName = transaction.brokerage || '';
-      const matchesFilter = 
-        brokerageName === filterBrokerage || 
-        (filterBrokerage === 'KW' && brokerageName === 'Keller Williams') ||
-        (filterBrokerage === 'BDH' && brokerageName === 'Bennion Deville Homes');
-      if (!matchesFilter) return false;
-    }
-    
-    if (filterPropertyType !== 'all' && transaction.propertyType !== filterPropertyType) return false;
-    
-    // Price range filter
-    if (filterPriceRange !== 'all') {
-      const price = parseFloat(transaction.closedPrice) || 0;
-      switch (filterPriceRange) {
-        case 'under500k':
-          if (price >= 500000) return false;
-          break;
-        case '500k-1m':
-          if (price < 500000 || price >= 1000000) return false;
-          break;
-        case '1m-2m':
-          if (price < 1000000 || price >= 2000000) return false;
-          break;
-        case 'over2m':
-          if (price < 2000000) return false;
-          break;
+  const filteredTransactions = useMemo(() => {
+    return transactions.filter(transaction => {
+      const year = transaction.closingDate ? new Date(transaction.closingDate).getFullYear().toString() : '';
+      
+      if (filterYear !== 'all' && year !== filterYear) return false;
+      if (filterClientType !== 'all' && transaction.clientType !== filterClientType) return false;
+      
+      // Handle both full names and abbreviations for brokerage filter
+      if (filterBrokerage !== 'all') {
+        const brokerageName = transaction.brokerage || '';
+        const matchesFilter = 
+          brokerageName === filterBrokerage || 
+          (filterBrokerage === 'KW' && brokerageName === 'Keller Williams') ||
+          (filterBrokerage === 'BDH' && brokerageName === 'Bennion Deville Homes');
+        if (!matchesFilter) return false;
       }
-    }
-    
-    return true;
-  }).sort((a, b) => {
-    // Sort by closing date
-    const dateA = a.closingDate ? new Date(a.closingDate).getTime() : 0;
-    const dateB = b.closingDate ? new Date(b.closingDate).getTime() : 0;
-    
-    // Newest first (descending) or oldest first (ascending)
-    return sortOrder === 'newest' ? dateB - dateA : dateA - dateB;
-  });
+      
+      if (filterPropertyType !== 'all' && transaction.propertyType !== filterPropertyType) return false;
+      
+      // Price range filter
+      if (filterPriceRange !== 'all') {
+        const price = parseFloat(transaction.closedPrice) || 0;
+        switch (filterPriceRange) {
+          case 'under500k':
+            if (price >= 500000) return false;
+            break;
+          case '500k-1m':
+            if (price < 500000 || price >= 1000000) return false;
+            break;
+          case '1m-2m':
+            if (price < 1000000 || price >= 2000000) return false;
+            break;
+          case 'over2m':
+            if (price < 2000000) return false;
+            break;
+        }
+      }
+      
+      return true;
+    }).sort((a, b) => {
+      // Sort by closing date
+      const dateA = a.closingDate ? new Date(a.closingDate).getTime() : 0;
+      const dateB = b.closingDate ? new Date(b.closingDate).getTime() : 0;
+      
+      // Newest first (descending) or oldest first (ascending)
+      return sortOrder === 'newest' ? dateB - dateA : dateA - dateB;
+    });
+  }, [transactions, filterYear, filterClientType, filterBrokerage, filterPropertyType, filterPriceRange, sortOrder]);
   
   // Toggle sort order function
   const toggleSortOrder = () => {
