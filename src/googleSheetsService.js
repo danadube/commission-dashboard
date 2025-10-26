@@ -1,5 +1,5 @@
 /**
- * Google Sheets Service - Version 2.0 (One Tap Auth)
+ * Google Sheets Service - Version 2.0 (One Tap Auth - Backward Compatible)
  * Real Estate Commission Dashboard - Google Sheets Integration
  * Uses Google One Tap for authentication (no popups, no COOP issues)
  */
@@ -349,25 +349,38 @@ export async function deleteTransaction(transactionId) {
   }
 }
 
-// Export all functions with aliases for backward compatibility
+// BACKWARD COMPATIBILITY: Export all functions with old names as aliases
 export const initializeGoogleSheets = initialize;
 export const isAuthorized = hasValidToken;
 export const authorizeUser = signIn;
 export const signOutUser = signOut;
+export const readFromGoogleSheets = readTransactions;
+export const writeToGoogleSheets = writeTransactions;
+export const addToGoogleSheets = addTransaction;
+export const updateInGoogleSheets = updateTransaction;
+export const deleteFromGoogleSheets = deleteTransaction;
 
-// Default export
+// Default export with both old and new names
 export default {
+  // New names
   initialize,
-  initializeGoogleSheets,
   hasValidToken,
-  isAuthorized,
   signIn,
-  authorizeUser,
   signOut,
-  signOutUser,
   readTransactions,
   writeTransactions,
   addTransaction,
   updateTransaction,
   deleteTransaction,
+  
+  // Old names (backward compatibility)
+  initializeGoogleSheets,
+  isAuthorized,
+  authorizeUser,
+  signOutUser,
+  readFromGoogleSheets,
+  writeToGoogleSheets,
+  addToGoogleSheets,
+  updateInGoogleSheets,
+  deleteFromGoogleSheets,
 };
