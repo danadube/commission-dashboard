@@ -1582,7 +1582,7 @@ const EnhancedRealEstateDashboard = () => {
               </p>
             </div>
           ) : (
-            <div key={`transactions-${sortOrder}-${sortVersion}`} className="space-y-4 animate-[fadeIn_0.8s_ease-out]">
+            <div className="space-y-4 animate-[fadeIn_0.8s_ease-out]">
               {filteredTransactions.map((transaction, index) => {
                 const isBuyer = transaction.clientType === 'Buyer';
                 const isReferralOut = transaction.transactionType === 'Referral Out';
@@ -1591,7 +1591,7 @@ const EnhancedRealEstateDashboard = () => {
                 
                 return (
                 <div
-                  key={`${transaction.id}-${sortVersion}-${index}`}
+                  key={`${sortOrder}-${sortVersion}-${index}`}
                   onClick={() => handleView(transaction)}
                   className={`flex items-center justify-between p-5 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-1 cursor-pointer border-2 ${
                     isReferral
