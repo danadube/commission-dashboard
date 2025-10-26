@@ -1,26 +1,22 @@
 /**
- * Google Sheets Service - Version 2.1 (Redirect OAuth)
+ * Google Sheets Service - Version 2.2 (Manual Redirect - NO POPUPS!)
  * Real Estate Commission Dashboard - Google Sheets Integration
- * Uses OAuth redirect flow (NO popups, NO COOP issues)
+ * Uses manual OAuth redirect (bypasses tokenClient completely)
  */
 
 const SCOPES = 'https://www.googleapis.com/auth/spreadsheets';
 const DISCOVERY_DOC = 'https://sheets.googleapis.com/$discovery/rest?version=v4';
 
 let gapiInited = false;
-let tokenClient = null;
 
 /**
  * Initialize the Google APIs
  */
 export async function initialize() {
-  console.log('🚀 Initializing Google Sheets integration (Redirect Flow)...');
+  console.log('🚀 Initializing Google Sheets integration (Manual Redirect)...');
   
   // Initialize GAPI (Google API Client)
   await initializeGapiClient();
-  
-  // Initialize OAuth token client for redirect flow
-  initializeTokenClient();
   
   // Check if we're returning from OAuth redirect
   handleOAuthCallback();
@@ -58,26 +54,6 @@ async function initializeGapiClient() {
       }
     });
   });
-}
-
-/**
- * Initialize token client for redirect flow
- */
-function initializeTokenClient() {
-  if (!window.google?.accounts?.oauth2) {
-    console.error('Google Identity Services not loaded');
-    return;
-  }
-
-  // Use redirect flow instead of popup
-  tokenClient = window.google.accounts.oauth2.initTokenClient({
-    client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
-    scope: SCOPES,
-    ux_mode: 'redirect', // KEY CHANGE: Use redirect instead of popup
-    redirect_uri: window.location.origin,
-  });
-
-  console.log('✅ Google Identity Services initialized (redirect mode)');
 }
 
 /**
@@ -141,23 +117,34 @@ export function hasValidToken() {
 }
 
 /**
- * Sign in the user using redirect flow (NO POPUP!)
+ * Sign in the user using MANUAL redirect (NO tokenClient, NO popups!)
  */
 export function signIn() {
-  if (!tokenClient) {
-    console.error('Token client not initialized');
-    return Promise.reject(new Error('Token client not initialized'));
-  }
-
+  console.log('🔐 Building OAuth redirect URL...');
+  
+  const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+  const redirectUri = window.location.origin + window.location.pathname;
+  const scope = SCOPES;
+  
+  // Build OAuth URL manually
+  const authUrl = new URL('https://accounts.google.com/o/oauth2/v2/auth');
+  authUrl.searchParams.set('client_id', clientId);
+  authUrl.searchParams.set('redirect_uri', redirectUri);
+  authUrl.searchParams.set('response_type', 'token');
+  authUrl.searchParams.set('scope', scope);
+  authUrl.searchParams.set('include_granted_scopes', 'true');
+  authUrl.searchParams.set('state', 'pass-through-value');
+  
   console.log('🔐 Redirecting to Google sign-in...');
+  console.log('📍 Redirect URI:', redirectUri);
   
   // Save current state before redirect
   sessionStorage.setItem('preAuthPath', window.location.pathname);
   
-  // This will redirect to Google's OAuth page
-  tokenClient.requestAccessToken({ prompt: 'consent' });
+  // Manually redirect (NO POPUPS!)
+  window.location.href = authUrl.toString();
   
-  // Return a promise that will resolve after redirect
+  // Return a promise (though we're redirecting, so this won't resolve in this page load)
   return new Promise((resolve) => {
     // Listen for auth success event after redirect
     window.addEventListener('googleAuthSuccess', () => {
@@ -172,8 +159,16 @@ export function signIn() {
 export function signOut() {
   const token = window.gapi?.client?.getToken();
   if (token?.access_token) {
-    window.google.accounts.oauth2.revoke(token.access_token, () => {
-      console.log('✅ User signed out');
+    // Revoke the token
+    fetch(`https://oauth2.googleapis.com/revoke?token=${token.access_token}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    }).then(() => {
+      console.log('✅ Token revoked');
+    }).catch(err => {
+      console.log('⚠️ Token revocation failed:', err);
     });
   }
   
