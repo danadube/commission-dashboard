@@ -810,8 +810,9 @@ const EnhancedRealEstateDashboard = () => {
 
   // ==================== FILTERING & SORTING ====================
   
-  const filteredTransactions = useMemo(() => {
-    console.log('🔧 useMemo RUNNING with sortOrder:', sortOrder, 'sortVersion:', sortVersion);
+  // Compute filtered and sorted transactions - NO useMemo to avoid stale closures
+  const computeFilteredTransactions = () => {
+    console.log('🔧 Computing with sortOrder:', sortOrder, 'sortVersion:', sortVersion);
     const filtered = transactions.filter(transaction => {
       const year = transaction.closingDate ? new Date(transaction.closingDate).getFullYear().toString() : '';
       
@@ -870,20 +871,16 @@ const EnhancedRealEstateDashboard = () => {
       sorted.slice(0, 3).map(t => ({ addr: t.address?.substring(0, 15), date: t.closingDate })));
     
     return sorted;
-  }, [transactions, filterYear, filterClientType, filterBrokerage, filterPropertyType, filterPriceRange, sortOrder, sortVersion]);
+  };
+  
+  const filteredTransactions = computeFilteredTransactions();
   
   // Toggle sort order function
   const toggleSortOrder = () => {
     const newOrder = sortOrder === 'newest' ? 'oldest' : 'newest';
-    
-    // Force a hard state update by batching
+    setSortVersion(v => v + 1);
     setSortOrder(newOrder);
     localStorage.setItem('transactionSortOrder', newOrder);
-    
-    // Use setTimeout to ensure state is committed before incrementing version
-    setTimeout(() => {
-      setSortVersion(v => v + 1);
-    }, 0);
   };
 
   // ==================== METRICS ====================
