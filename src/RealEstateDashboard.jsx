@@ -103,33 +103,58 @@ const EnhancedRealEstateDashboard = () => {
   
   useEffect(() => {
     initializeApp();
+    
+    // Listen for OAuth success event (after redirect)
+    const handleOAuthSuccess = async () => {
+      console.log('🎉 OAuth success event detected, updating UI...');
+      setIsGoogleSheetsEnabled(true);
+      setIsGoogleSheetsAuthorized(true);
+      localStorage.setItem('googleSheetsEnabled', 'true');
+      
+      // Load data from Google Sheets
+      try {
+        await loadFromGoogleSheets();
+      } catch (error) {
+        console.error('Error loading after OAuth:', error);
+        setSyncError('Failed to load data: ' + error.message);
+      }
+    };
+    
+    window.addEventListener('googleAuthSuccess', handleOAuthSuccess);
+    
+    return () => {
+      window.removeEventListener('googleAuthSuccess', handleOAuthSuccess);
+    };
   }, []);
 
   const initializeApp = async () => {
-    // Check if Google Sheets should be enabled
-    const sheetsEnabled = localStorage.getItem('googleSheetsEnabled') === 'true';
-    setIsGoogleSheetsEnabled(sheetsEnabled);
-    
-    if (sheetsEnabled) {
-      try {
-        // Initialize Google Sheets API
-        await GoogleSheetsService.initializeGoogleSheets();
+    try {
+      // Always initialize Google Sheets API
+      await GoogleSheetsService.initializeGoogleSheets();
+      
+      // Check if user just completed OAuth (has valid token)
+      if (GoogleSheetsService.isAuthorized()) {
+        console.log('✅ User is authorized, enabling Google Sheets sync');
+        setIsGoogleSheetsEnabled(true);
+        setIsGoogleSheetsAuthorized(true);
+        localStorage.setItem('googleSheetsEnabled', 'true');
+        await loadFromGoogleSheets();
+      } else {
+        // Check if Google Sheets was previously enabled
+        const sheetsEnabled = localStorage.getItem('googleSheetsEnabled') === 'true';
+        setIsGoogleSheetsEnabled(sheetsEnabled);
         
-        // Check if already authorized
-        if (GoogleSheetsService.isAuthorized()) {
-          setIsGoogleSheetsAuthorized(true);
-          await loadFromGoogleSheets();
-        } else {
-          // Fall back to localStorage
-          loadFromLocalStorage();
+        if (sheetsEnabled) {
+          console.log('⚠️ Google Sheets was enabled but token expired');
+          setSyncError('Session expired. Please sign in again.');
         }
-      } catch (error) {
-        console.error('Failed to initialize Google Sheets:', error);
-        setSyncError('Failed to initialize Google Sheets');
+        
+        // Load from localStorage
         loadFromLocalStorage();
       }
-    } else {
-      // Use localStorage only
+    } catch (error) {
+      console.error('Failed to initialize app:', error);
+      setSyncError('Failed to initialize: ' + error.message);
       loadFromLocalStorage();
     }
   };
