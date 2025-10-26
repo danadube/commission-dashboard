@@ -48,6 +48,11 @@ const EnhancedRealEstateDashboard = () => {
   const [filterBrokerage, setFilterBrokerage] = useState('all');
   const [filterPropertyType, setFilterPropertyType] = useState('all');
   
+  // Sort order - newest or oldest first
+  const [sortOrder, setSortOrder] = useState(() => {
+    return localStorage.getItem('transactionSortOrder') || 'newest';
+  });
+  
   // Form Data State
   const [formData, setFormData] = useState({
     // Basic Info
@@ -499,7 +504,7 @@ const EnhancedRealEstateDashboard = () => {
     setShowForm(false);
   };
 
-  // ==================== FILTERING ====================
+  // ==================== FILTERING & SORTING ====================
   
   const filteredTransactions = transactions.filter(transaction => {
     const year = transaction.closingDate ? new Date(transaction.closingDate).getFullYear().toString() : '';
@@ -510,7 +515,21 @@ const EnhancedRealEstateDashboard = () => {
     if (filterPropertyType !== 'all' && transaction.propertyType !== filterPropertyType) return false;
     
     return true;
+  }).sort((a, b) => {
+    // Sort by closing date
+    const dateA = a.closingDate ? new Date(a.closingDate).getTime() : 0;
+    const dateB = b.closingDate ? new Date(b.closingDate).getTime() : 0;
+    
+    // Newest first (descending) or oldest first (ascending)
+    return sortOrder === 'newest' ? dateB - dateA : dateA - dateB;
   });
+  
+  // Toggle sort order function
+  const toggleSortOrder = () => {
+    const newOrder = sortOrder === 'newest' ? 'oldest' : 'newest';
+    setSortOrder(newOrder);
+    localStorage.setItem('transactionSortOrder', newOrder);
+  };
 
   // ==================== METRICS ====================
   
@@ -930,14 +949,26 @@ const EnhancedRealEstateDashboard = () => {
 
         {/* Transactions List */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 transition-colors">
-          <h2 className="text-xl font-bold mb-4 dark:text-white">
-            Filtered Transactions
+          <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
+            <h2 className="text-xl font-bold dark:text-white">
+              Filtered Transactions
+              {filteredTransactions.length > 0 && (
+                <span className="text-gray-500 dark:text-gray-400 font-normal ml-2">
+                  ({filteredTransactions.length} total)
+                </span>
+              )}
+            </h2>
+            
             {filteredTransactions.length > 0 && (
-              <span className="text-gray-500 font-normal ml-2">
-                ({filteredTransactions.length} total)
-              </span>
+              <button
+                onClick={toggleSortOrder}
+                className="flex items-center gap-2 px-4 py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-all font-medium border border-blue-200 dark:border-blue-800 shadow-sm"
+              >
+                <Calendar className="w-4 h-4" />
+                <span>{sortOrder === 'newest' ? 'Newest First ↓' : 'Oldest First ↑'}</span>
+              </button>
             )}
-          </h2>
+          </div>
 
           {filteredTransactions.length === 0 ? (
             <div className="text-center py-12">
