@@ -206,7 +206,7 @@ export async function readTransactions() {
       throw new Error('Spreadsheet ID not configured');
     }
     
-    const range = 'Transactions!A2:V';
+    const range = 'Transactions!A2:W';
 
     const response = await window.gapi.client.sheets.spreadsheets.values.get({
       spreadsheetId,
@@ -229,21 +229,21 @@ export async function readTransactions() {
       commissionPct: parseFloat(row[6]) || 0,
       listDate: row[7] || '',
       closingDate: row[8] || '',
-      netVolume: parseFloat(row[9]) || 0,
-      closedPrice: parseFloat(row[10]) || 0,
-      gci: parseFloat(row[11]) || 0,
-      referralPct: parseFloat(row[12]) || 0,
-      referralDollar: parseFloat(row[13]) || 0,
-      adjustedGci: parseFloat(row[14]) || 0,
-      preSplitDeduction: parseFloat(row[15]) || 0,
-      brokerage: 'BDH', // Default to BDH (Bennion Deville Homes)
-      totalBrokerageFees: parseFloat(row[16]) || 0,
-      companyDollar: parseFloat(row[16]) || 0, // Using brokeragesplit
-      otherDeductions: parseFloat(row[17]) || 0,
-      nci: parseFloat(row[18]) || 0,
-      status: row[19] || 'Closed',
-      assistantBonus: parseFloat(row[20]) || 0,
-      buyersAgentSplit: parseFloat(row[21]) || 0,
+      brokerage: row[9] || 'BDH', // J: Brokerage (BDH or KW)
+      netVolume: parseFloat(row[10]) || 0,
+      closedPrice: parseFloat(row[11]) || 0,
+      gci: parseFloat(row[12]) || 0,
+      referralPct: parseFloat(row[13]) || 0,
+      referralDollar: parseFloat(row[14]) || 0,
+      adjustedGci: parseFloat(row[15]) || 0,
+      preSplitDeduction: parseFloat(row[16]) || 0,
+      totalBrokerageFees: parseFloat(row[17]) || 0,
+      companyDollar: parseFloat(row[17]) || 0, // Using brokeragesplit
+      otherDeductions: parseFloat(row[18]) || 0,
+      nci: parseFloat(row[19]) || 0,
+      status: row[20] || 'Closed',
+      assistantBonus: parseFloat(row[21]) || 0,
+      buyersAgentSplit: parseFloat(row[22]) || 0,
       notes: '',
     }));
   } catch (error) {
@@ -272,7 +272,7 @@ export async function writeTransactions(transactions) {
     console.log('💾 Writing to Google Sheets...');
     
     const spreadsheetId = process.env.REACT_APP_SPREADSHEET_ID;
-    const range = 'Transactions!A2:V';
+    const range = 'Transactions!A2:W';
 
     const rows = transactions.map(t => [
       t.propertyType || 'Residential',        // A: Property Type
@@ -284,19 +284,20 @@ export async function writeTransactions(transactions) {
       t.commissionPct || 0,                   // G: Commission %
       t.listDate || '',                       // H: List Date
       t.closingDate || '',                    // I: Closing Date
-      t.netVolume || 0,                       // J: Net Volume
-      t.closedPrice || 0,                     // K: Closed Price
-      t.gci || 0,                             // L: GCI
-      t.referralPct || 0,                     // M: Referral %
-      t.referralDollar || 0,                  // N: Referral Dollar
-      t.adjustedGci || 0,                     // O: Adjusted GCI
-      t.preSplitDeduction || 0,               // P: Pre-split Deduction
-      t.totalBrokerageFees || 0,              // Q: Brokerage Split
-      t.otherDeductions || 0,                 // R: Admin Fees/Other Deductions
-      t.nci || 0,                             // S: NCI
-      t.status || 'Closed',                   // T: Status
-      t.assistantBonus || 0,                  // U: Assistant Bonus
-      t.buyersAgentSplit || 0,                // V: Buyer's Agent Split
+      t.brokerage || 'BDH',                   // J: Brokerage (BDH or KW)
+      t.netVolume || 0,                       // K: Net Volume
+      t.closedPrice || 0,                     // L: Closed Price
+      t.gci || 0,                             // M: GCI
+      t.referralPct || 0,                     // N: Referral %
+      t.referralDollar || 0,                  // O: Referral Dollar
+      t.adjustedGci || 0,                     // P: Adjusted GCI
+      t.preSplitDeduction || 0,               // Q: Pre-split Deduction
+      t.totalBrokerageFees || 0,              // R: Brokerage Split
+      t.otherDeductions || 0,                 // S: Admin Fees/Other Deductions
+      t.nci || 0,                             // T: NCI
+      t.status || 'Closed',                   // U: Status
+      t.assistantBonus || 0,                  // V: Assistant Bonus
+      t.buyersAgentSplit || 0,                // W: Buyer's Agent Split
     ]);
 
     // Clear existing data
