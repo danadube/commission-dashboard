@@ -124,17 +124,21 @@ Your Google Sheet should have these columns (A-W):
 
 ---
 
-## 🎯 Current Version: v3.3.2
+## 🎯 Current Version: v3.3.3 (macOS Tahoe Edition)
 
 ### **Recent Updates:**
-- ✅ Color-coded buyer/seller transaction cards
-- ✅ Transaction detail modal (click to view)
-- ✅ Chronological sorting with toggle
-- ✅ Dark/Light/System theme support
-- ✅ Enhanced card readability and visual design
-- ✅ Google Sheets OAuth integration fixed
-- ✅ 22-column data mapping
-- ✅ Brokerage column support (KW/BDH)
+- ✅ **macOS Tahoe (2026) Design** - Glass morphism, spring animations, mesh gradients
+- ✅ **Smart Insights** - 5 intelligent performance highlights
+- ✅ **Better Chart Tooltips** - Glass morphism with perfect dark mode
+- ✅ **Better Filter Terminology** - No acronyms, clear labels
+- ✅ **Colorful Info Cards** - Vibrant multi-color gradients
+- ✅ **Color-coded buyer/seller cards** - Blue/Gold themes
+- ✅ **Transaction detail modal** - Click to view full details
+- ✅ **Chronological sorting** - Newest/oldest toggle
+- ✅ **Dark/Light/System theme** - Complete theme support
+- ✅ **Google Sheets OAuth fixed** - Full integration working
+- ✅ **22-column data mapping** - Comprehensive tracking
+- ✅ **Brokerage support** - KW & BDH
 
 ---
 
@@ -178,15 +182,50 @@ This is a private dashboard for Janice Glaab's real estate business. For feature
 
 ---
 
-## 📊 Future Roadmap
+## 📊 Roadmap
 
-- [ ] Agent performance comparisons
+### **Phase 4: Polish & Refinement** (Next)
+- [ ] Loading animations and skeletons
+- [ ] Enhanced mobile responsiveness  
+- [ ] Keyboard shortcuts (⌘/Ctrl shortcuts)
+- [ ] Accessibility improvements (ARIA labels)
+- [ ] Print-friendly view
+- [ ] Onboarding tutorial
+
+### **Phase 5: Power User Features**
+- [ ] Advanced search functionality
+- [ ] Custom date range picker
+- [ ] Export insights to PDF
+- [ ] Bulk edit transactions
+- [ ] Transaction notes/comments
+- [ ] Tags and categories
+
+### **Phase 6: Analytics++**
 - [ ] Goal tracking and projections
+- [ ] Year-over-year comparisons
+- [ ] Commission forecasting
+- [ ] Performance trends
+- [ ] Custom reports
+- [ ] Benchmark data
+
+### **Phase 7: Integrations**
 - [ ] Email notifications for milestones
+- [ ] Calendar integration
+- [ ] CRM system integration
+- [ ] Automated data import
+- [ ] API for external tools
+
+### **Phase 8: Multi-Agent SaaS**
+- [ ] Agent performance comparisons
+- [ ] Team dashboards
+- [ ] Role-based permissions
+- [ ] Multi-tenant architecture
+- [ ] Team analytics and leaderboards
 - [ ] Mobile app version
-- [ ] Multi-agent SaaS platform expansion
-- [ ] Advanced reporting and insights
-- [ ] Integration with CRM systems
+
+---
+
+**See [FEATURE_STATUS.md](FEATURE_STATUS.md) for complete feature tracking**
 
 ---
 
