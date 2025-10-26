@@ -862,25 +862,9 @@ const EnhancedRealEstateDashboard = () => {
       const timeA = isNaN(dateA.getTime()) ? 0 : dateA.getTime();
       const timeB = isNaN(dateB.getTime()) ? 0 : dateB.getTime();
       
-      // DEBUG: Log first comparison
-      if (filtered.length > 1) {
-        console.log('🧮 Sort comparison example:', {
-          a: { date: a.closingDate, parsed: dateA.toString(), time: timeA },
-          b: { date: b.closingDate, parsed: dateB.toString(), time: timeB },
-          sortOrder,
-          result: sortOrder === 'newest' ? timeB - timeA : timeA - timeB
-        });
-      }
-      
       // Newest first (descending) or oldest first (ascending)
       return sortOrder === 'newest' ? timeB - timeA : timeA - timeB;
     });
-    
-    console.log('🔧 useMemo RESULT - first 5:', sorted.slice(0, 5).map(t => ({ 
-      address: t.address?.substring(0, 20), 
-      date: t.closingDate,
-      parsed: new Date(t.closingDate).toISOString()
-    })));
     
     return sorted;
   }, [transactions, filterYear, filterClientType, filterBrokerage, filterPropertyType, filterPriceRange, sortOrder, sortVersion]);
@@ -889,25 +873,9 @@ const EnhancedRealEstateDashboard = () => {
   const toggleSortOrder = () => {
     const newOrder = sortOrder === 'newest' ? 'oldest' : 'newest';
     setSortOrder(newOrder);
-    setSortVersion(v => {
-      console.log('🔄 Setting sortVersion from', v, 'to', v + 1, 'with sortOrder:', newOrder);
-      return v + 1;
-    });
+    setSortVersion(v => v + 1);
     localStorage.setItem('transactionSortOrder', newOrder);
   };
-  
-  // Log after state updates
-  useEffect(() => {
-    if (filteredTransactions.length > 0) {
-      console.log('📊 After state update:', {
-        sortOrder,
-        sortVersion,
-        firstTransaction: filteredTransactions[0]?.address,
-        firstDate: filteredTransactions[0]?.closingDate,
-        first5Dates: filteredTransactions.slice(0, 5).map(t => t.closingDate)
-      });
-    }
-  }, [sortOrder, sortVersion, filteredTransactions]);
 
   // ==================== METRICS ====================
   
@@ -1612,7 +1580,7 @@ const EnhancedRealEstateDashboard = () => {
             </div>
           ) : (
             <div key={`transactions-${sortOrder}-${sortVersion}`} className="space-y-4 animate-[fadeIn_0.8s_ease-out]">
-              {filteredTransactions.map(transaction => {
+              {filteredTransactions.map((transaction, index) => {
                 const isBuyer = transaction.clientType === 'Buyer';
                 const isReferralOut = transaction.transactionType === 'Referral Out';
                 const isReferralIn = transaction.transactionType === 'Referral In';
@@ -1620,7 +1588,7 @@ const EnhancedRealEstateDashboard = () => {
                 
                 return (
                 <div
-                  key={transaction.id}
+                  key={`${transaction.id}-${sortVersion}-${index}`}
                   onClick={() => handleView(transaction)}
                   className={`flex items-center justify-between p-5 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-1 cursor-pointer border-2 ${
                     isReferral
