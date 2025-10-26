@@ -1221,11 +1221,20 @@ const EnhancedRealEstateDashboard = () => {
                   cx="50%"
                   cy="50%"
                   labelLine={false}
-                  label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                  label={(entry) => {
+                    const { name, percent } = entry;
+                    return {
+                      value: `${name}: ${(percent * 100).toFixed(0)}%`,
+                      style: { 
+                        fontSize: '14px', 
+                        fontWeight: 'bold', 
+                        fill: 'white',
+                        textShadow: '1px 1px 2px rgba(0,0,0,0.8)'
+                      }
+                    };
+                  }}
                   outerRadius={100}
-                  fill="#8884d8"
                   dataKey="value"
-                  style={{ fontSize: '14px', fontWeight: 'bold', fill: 'white' }}
                 >
                   {pieData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
