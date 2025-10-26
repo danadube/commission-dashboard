@@ -849,7 +849,8 @@ const EnhancedRealEstateDashboard = () => {
       return true;
     });
     
-    const sorted = filtered.sort((a, b) => {
+    // Create a NEW array (don't mutate) and sort it
+    const sorted = [...filtered].sort((a, b) => {
       // Sort by closing date
       const dateA = a.closingDate ? new Date(a.closingDate).getTime() : 0;
       const dateB = b.closingDate ? new Date(b.closingDate).getTime() : 0;
