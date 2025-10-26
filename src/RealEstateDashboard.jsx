@@ -7,7 +7,7 @@ import ThemeToggle from './ThemeToggle';
 /**
  * Janice Glaab Real Estate Commission Dashboard
  * 
- * @version 3.3.2
+ * @version 3.3.5
  * @description Professional dashboard for tracking real estate commissions with Google Sheets integration
  * 
  * ✨ KEY FEATURES:
@@ -96,7 +96,7 @@ const EnhancedRealEstateDashboard = () => {
   
   // Logo State
   const [customLogo, setCustomLogo] = useState(() => {
-    return localStorage.getItem('customLogo') || null;
+    return localStorage.getItem('customLogo') || '/assets/logos/app-logo-default.png';
   });
   
   // Form Data State
@@ -554,8 +554,8 @@ const EnhancedRealEstateDashboard = () => {
   };
   
   const handleLogoRemove = () => {
-    if (window.confirm('Remove custom logo?')) {
-      setCustomLogo(null);
+    if (window.confirm('Remove custom logo and restore default?')) {
+      setCustomLogo('/assets/logos/app-logo-default.png');
       localStorage.removeItem('customLogo');
     }
   };
@@ -1399,7 +1399,7 @@ const EnhancedRealEstateDashboard = () => {
 
         {/* Footer */}
         <div className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
-          Janice Glaab Real Estate Dashboard v3.3.3 • Built with ❤️ by Dana Dube
+          Janice Glaab Real Estate Dashboard v3.3.5 • Built with ❤️ by Dana Dube
         </div>
 
         {/* Transaction Form Modal */}

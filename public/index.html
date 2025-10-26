@@ -2,6 +2,9 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/assets/logos/app-logo-light.png" id="favicon-light" />
+    <link rel="icon" href="%PUBLIC_URL%/assets/logos/app-logo-dark.png" id="favicon-dark" media="(prefers-color-scheme: dark)" />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/assets/logos/app-logo-default.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
     <meta
@@ -9,6 +12,41 @@
       content="Real Estate Commission Dashboard - Track and analyze your commission income"
     />
     <title>Real Estate Commission Dashboard</title>
+    
+    <!-- Dynamic Favicon Switcher for Theme Changes -->
+    <script>
+      // Update favicon based on theme
+      function updateFavicon() {
+        const isDark = document.documentElement.classList.contains('dark') || 
+                      (localStorage.getItem('theme') === 'system' && 
+                       window.matchMedia('(prefers-color-scheme: dark)').matches);
+        
+        const lightFavicon = document.getElementById('favicon-light');
+        const darkFavicon = document.getElementById('favicon-dark');
+        
+        if (lightFavicon && darkFavicon) {
+          if (isDark) {
+            lightFavicon.disabled = true;
+            darkFavicon.disabled = false;
+          } else {
+            lightFavicon.disabled = false;
+            darkFavicon.disabled = true;
+          }
+        }
+      }
+      
+      // Run on load
+      document.addEventListener('DOMContentLoaded', updateFavicon);
+      
+      // Watch for theme changes
+      if (window.matchMedia) {
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateFavicon);
+      }
+      
+      // Watch for manual theme toggle
+      const observer = new MutationObserver(updateFavicon);
+      observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    </script>
     
     <!-- SF Pro Font (Apple's Official Font) -->
     <style>
