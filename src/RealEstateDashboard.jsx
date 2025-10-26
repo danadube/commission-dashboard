@@ -882,6 +882,15 @@ const EnhancedRealEstateDashboard = () => {
   
   const filteredTransactions = computeFilteredTransactions();
   
+  // Create a brand new array reference to force React to see it as different
+  const displayTransactions = React.useMemo(() => {
+    // Map to completely new objects so React sees them as different
+    return filteredTransactions.map((t, idx) => ({
+      ...t,
+      _displayKey: `${sortVersion}-${idx}`
+    }));
+  }, [filteredTransactions, sortVersion]);
+  
   // Toggle sort order function
   const toggleSortOrder = () => {
     const newOrder = sortOrder === 'newest' ? 'oldest' : 'newest';
@@ -1598,7 +1607,7 @@ const EnhancedRealEstateDashboard = () => {
             </div>
           ) : (
             <div className="space-y-4 animate-[fadeIn_0.8s_ease-out]">
-              {filteredTransactions.map((transaction, index) => {
+              {displayTransactions.map((transaction, index) => {
                 const isBuyer = transaction.clientType === 'Buyer';
                 const isReferralOut = transaction.transactionType === 'Referral Out';
                 const isReferralIn = transaction.transactionType === 'Referral In';
@@ -1606,7 +1615,7 @@ const EnhancedRealEstateDashboard = () => {
                 
                 return (
                 <div
-                  key={`${sortOrder}-${sortVersion}-${index}`}
+                  key={transaction._displayKey}
                   onClick={() => handleView(transaction)}
                   className={`flex items-center justify-between p-5 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-1 cursor-pointer border-2 ${
                     isReferral
