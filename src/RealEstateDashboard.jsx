@@ -134,6 +134,9 @@ const EnhancedRealEstateDashboard = () => {
     return localStorage.getItem('transactionSortOrder') || 'newest';
   });
   
+  // Force re-render counter
+  const [sortVersion, setSortVersion] = useState(0);
+  
   // Logo State
   const [customLogo, setCustomLogo] = useState(() => {
     return localStorage.getItem('customLogo') || '/assets/logos/app-logo-default.png';
@@ -876,6 +879,7 @@ const EnhancedRealEstateDashboard = () => {
   const toggleSortOrder = () => {
     const newOrder = sortOrder === 'newest' ? 'oldest' : 'newest';
     setSortOrder(newOrder);
+    setSortVersion(v => v + 1); // Force re-render
     localStorage.setItem('transactionSortOrder', newOrder);
   };
 
@@ -1581,7 +1585,7 @@ const EnhancedRealEstateDashboard = () => {
               </p>
             </div>
           ) : (
-            <div key={`transactions-${sortOrder}`} className="space-y-4 animate-[fadeIn_0.8s_ease-out]">
+            <div key={`transactions-${sortOrder}-${sortVersion}`} className="space-y-4 animate-[fadeIn_0.8s_ease-out]">
               {filteredTransactions.map(transaction => {
                 const isBuyer = transaction.clientType === 'Buyer';
                 const isReferralOut = transaction.transactionType === 'Referral Out';
