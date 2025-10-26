@@ -865,13 +865,6 @@ const EnhancedRealEstateDashboard = () => {
       return sortOrder === 'newest' ? timeB - timeA : timeA - timeB;
     });
     
-    // Debug: Show first 5 after sorting
-    console.log(`🔄 Sorted (${sortOrder}):`, sorted.slice(0, 5).map(t => ({
-      address: t.address?.substring(0, 20),
-      date: t.closingDate,
-      timestamp: t.closingDate ? new Date(t.closingDate).getTime() : 0
-    })));
-    
     return sorted;
   }, [transactions, filterYear, filterClientType, filterBrokerage, filterPropertyType, filterPriceRange, sortOrder, sortVersion]);
   
