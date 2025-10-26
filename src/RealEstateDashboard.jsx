@@ -650,10 +650,14 @@ const EnhancedRealEstateDashboard = () => {
     const file = event.target.files[0];
     if (!file) return;
 
-    // Check file type
-    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'application/pdf'];
+    // Check file type - OpenAI Vision only supports images, not PDFs
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
     if (!validTypes.includes(file.type)) {
-      setScanError('Please upload an image (JPG, PNG, WebP) or PDF file');
+      if (file.type === 'application/pdf') {
+        setScanError('PDFs not supported yet. Please take a screenshot of the PDF and upload the image instead. (JPG, PNG, WebP)');
+      } else {
+        setScanError('Please upload an image file (JPG, PNG, WebP)');
+      }
       return;
     }
 
@@ -1676,7 +1680,7 @@ const EnhancedRealEstateDashboard = () => {
                     <div className="text-3xl">🤖</div>
                     <div className="flex-1">
                       <h3 className="text-lg font-bold text-purple-900 dark:text-purple-100">AI Commission Sheet Scanner</h3>
-                      <p className="text-sm text-purple-700 dark:text-purple-300">Upload a PDF or screenshot to auto-fill this form</p>
+                      <p className="text-sm text-purple-700 dark:text-purple-300">Upload a screenshot or image to auto-fill this form</p>
                     </div>
                   </div>
                   
@@ -1684,7 +1688,7 @@ const EnhancedRealEstateDashboard = () => {
                     <label className="flex-1">
                       <input
                         type="file"
-                        accept="image/*,.pdf"
+                        accept="image/*"
                         onChange={handleScanCommissionSheet}
                         disabled={isScanning}
                         className="hidden"
@@ -1717,8 +1721,9 @@ const EnhancedRealEstateDashboard = () => {
                   )}
                   
                   <div className="mt-3 text-xs text-purple-600 dark:text-purple-400">
-                    <p>✨ Supports: KW & BDH commission sheets • JPG, PNG, WebP, PDF • Max 20MB</p>
+                    <p>✨ Supports: KW & BDH commission sheets • JPG, PNG, WebP • Max 20MB</p>
                     <p className="mt-1">🎯 Auto-detects: Transaction type, amounts, dates, and all fields</p>
+                    <p className="mt-1">💡 Tip: For PDFs, take a screenshot first (Cmd+Shift+4 on Mac)</p>
                   </div>
                 </div>
 

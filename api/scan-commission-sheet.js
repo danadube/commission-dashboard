@@ -1,6 +1,9 @@
 /**
  * Serverless function to scan commission sheets using OpenAI Vision API
  * Keeps API key secure on the server side
+ * 
+ * Note: OpenAI Vision only supports images (JPG, PNG, WebP), not PDFs.
+ * For PDFs, user should convert to image first or take a screenshot.
  */
 
 export default async function handler(req, res) {
