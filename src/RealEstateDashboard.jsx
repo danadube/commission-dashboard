@@ -871,6 +871,13 @@ const EnhancedRealEstateDashboard = () => {
   // Toggle sort order function
   const toggleSortOrder = () => {
     const newOrder = sortOrder === 'newest' ? 'oldest' : 'newest';
+    console.log('🔄 Toggle clicked:', { 
+      old: sortOrder, 
+      new: newOrder, 
+      sortVersion,
+      firstTransactionBefore: filteredTransactions[0]?.address,
+      firstTransactionDateBefore: filteredTransactions[0]?.closingDate
+    });
     setSortOrder(newOrder);
     setSortVersion(v => v + 1); // Force re-render
     localStorage.setItem('transactionSortOrder', newOrder);
