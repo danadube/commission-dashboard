@@ -1543,7 +1543,7 @@ const EnhancedRealEstateDashboard = () => {
         )}
 
         {/* Transactions List */}
-        <div className="glass-morphism bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-2xl p-8 transition-all duration-700 border border-white/30 dark:border-gray-700/30 backdrop-blur-3xl">
+        <div key={`transaction-list-${sortVersion}`} className="glass-morphism bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-2xl p-8 transition-all duration-700 border border-white/30 dark:border-gray-700/30 backdrop-blur-3xl">
           <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
             <h2 className="text-xl font-bold dark:text-white">
               Filtered Transactions
