@@ -873,7 +873,7 @@ const EnhancedRealEstateDashboard = () => {
     })));
     
     return sorted;
-  }, [transactions, filterYear, filterClientType, filterBrokerage, filterPropertyType, filterPriceRange, sortOrder]);
+  }, [transactions, filterYear, filterClientType, filterBrokerage, filterPropertyType, filterPriceRange, sortOrder, sortVersion]);
   
   // Toggle sort order function
   const toggleSortOrder = () => {
