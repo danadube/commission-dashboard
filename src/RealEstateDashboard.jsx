@@ -604,6 +604,103 @@ const EnhancedRealEstateDashboard = () => {
     totalReferralFees: filteredTransactions.reduce((sum, t) => sum + (parseFloat(t.referralDollar) || 0), 0)
   };
 
+  // ==================== SMART INSIGHTS ====================
+  
+  const calculateInsights = () => {
+    if (filteredTransactions.length === 0) return [];
+    
+    const insights = [];
+    
+    // Best performing month
+    const monthlyData = filteredTransactions.reduce((acc, t) => {
+      if (t.closingDate) {
+        const month = new Date(t.closingDate).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+        if (!acc[month]) acc[month] = { month, nci: 0, count: 0 };
+        acc[month].nci += parseFloat(t.nci) || 0;
+        acc[month].count += 1;
+      }
+      return acc;
+    }, {});
+    
+    const bestMonth = Object.values(monthlyData).sort((a, b) => b.nci - a.nci)[0];
+    if (bestMonth) {
+      insights.push({
+        icon: '🏆',
+        label: 'Best Month',
+        value: bestMonth.month,
+        subtext: `$${bestMonth.nci.toLocaleString('en-US', { minimumFractionDigits: 2 })} earned`,
+        color: 'from-yellow-500 to-orange-500'
+      });
+    }
+    
+    // Top property type
+    const propertyTypes = filteredTransactions.reduce((acc, t) => {
+      acc[t.propertyType] = (acc[t.propertyType] || 0) + (parseFloat(t.nci) || 0);
+      return acc;
+    }, {});
+    const topProperty = Object.entries(propertyTypes).sort((a, b) => b[1] - a[1])[0];
+    if (topProperty) {
+      insights.push({
+        icon: '🏠',
+        label: 'Top Property Type',
+        value: topProperty[0],
+        subtext: `$${topProperty[1].toLocaleString('en-US', { minimumFractionDigits: 2 })} in commissions`,
+        color: 'from-blue-500 to-cyan-500'
+      });
+    }
+    
+    // Average days to close
+    const daysToClose = filteredTransactions
+      .filter(t => t.listDate && t.closingDate)
+      .map(t => {
+        const start = new Date(t.listDate);
+        const end = new Date(t.closingDate);
+        return Math.round((end - start) / (1000 * 60 * 60 * 24));
+      })
+      .filter(days => days > 0);
+    
+    if (daysToClose.length > 0) {
+      const avgDays = Math.round(daysToClose.reduce((sum, d) => sum + d, 0) / daysToClose.length);
+      insights.push({
+        icon: '⏱️',
+        label: 'Avg Days to Close',
+        value: `${avgDays} days`,
+        subtext: `Based on ${daysToClose.length} transactions`,
+        color: 'from-purple-500 to-pink-500'
+      });
+    }
+    
+    // Buyer vs Seller performance
+    const buyerNCI = filteredTransactions.filter(t => t.clientType === 'Buyer').reduce((sum, t) => sum + (parseFloat(t.nci) || 0), 0);
+    const sellerNCI = filteredTransactions.filter(t => t.clientType === 'Seller').reduce((sum, t) => sum + (parseFloat(t.nci) || 0), 0);
+    const strongerSide = buyerNCI > sellerNCI ? 'Buyers' : 'Sellers';
+    const percentage = Math.round((Math.max(buyerNCI, sellerNCI) / (buyerNCI + sellerNCI)) * 100);
+    
+    insights.push({
+      icon: strongerSide === 'Buyers' ? '🔵' : '⭐',
+      label: 'Stronger Side',
+      value: strongerSide,
+      subtext: `${percentage}% of total income`,
+      color: strongerSide === 'Buyers' ? 'from-blue-500 to-indigo-500' : 'from-amber-500 to-yellow-500'
+    });
+    
+    // Highest single commission
+    const highestDeal = filteredTransactions.sort((a, b) => (parseFloat(b.nci) || 0) - (parseFloat(a.nci) || 0))[0];
+    if (highestDeal) {
+      insights.push({
+        icon: '💎',
+        label: 'Biggest Deal',
+        value: `$${parseFloat(highestDeal.nci).toLocaleString('en-US', { minimumFractionDigits: 2 })}`,
+        subtext: highestDeal.address,
+        color: 'from-green-500 to-emerald-500'
+      });
+    }
+    
+    return insights;
+  };
+  
+  const smartInsights = calculateInsights();
+
   // ==================== CHART DATA ====================
   
   const monthlyData = filteredTransactions.reduce((acc, transaction) => {
@@ -975,6 +1072,39 @@ const EnhancedRealEstateDashboard = () => {
             </div>
           </div>
         </div>
+
+        {/* Smart Insights */}
+        {smartInsights.length > 0 && (
+          <div className="glass-morphism bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-2xl p-8 mb-8 transition-all duration-700 border border-white/30 dark:border-gray-700/30 backdrop-blur-3xl">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="bg-gradient-to-r from-purple-500 to-blue-500 p-3 rounded-xl">
+                <TrendingUp className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Smart Insights</h2>
+                <p className="text-sm text-gray-600 dark:text-gray-300">Key performance highlights from your data</p>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+              {smartInsights.map((insight, index) => (
+                <div
+                  key={index}
+                  className={`relative overflow-hidden bg-gradient-to-br ${insight.color} rounded-2xl shadow-xl p-6 text-white transform hover:-translate-y-1 hover:scale-105 transition-all duration-500 border-2 border-white/30`}
+                >
+                  <div className="text-4xl mb-3">{insight.icon}</div>
+                  <div className="space-y-1">
+                    <p className="text-xs font-semibold uppercase tracking-wider opacity-90">{insight.label}</p>
+                    <p className="text-xl font-bold leading-tight">{insight.value}</p>
+                    <p className="text-xs opacity-80 font-medium">{insight.subtext}</p>
+                  </div>
+                  {/* Ambient glow effect */}
+                  <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Charts */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
