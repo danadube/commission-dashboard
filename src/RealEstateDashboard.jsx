@@ -1002,24 +1002,38 @@ const EnhancedRealEstateDashboard = () => {
             </div>
           ) : (
             <div className="space-y-4">
-              {filteredTransactions.map(transaction => (
+              {filteredTransactions.map(transaction => {
+                const isBuyer = transaction.clientType === 'Buyer';
+                return (
                 <div
                   key={transaction.id}
                   onClick={() => handleView(transaction)}
-                  className="flex items-center justify-between p-5 bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 rounded-xl shadow-lg hover:shadow-xl hover:border-blue-400 dark:hover:border-blue-500 transition-all duration-200 transform hover:-translate-y-1 cursor-pointer"
+                  className={`flex items-center justify-between p-5 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-1 cursor-pointer border-2 ${
+                    isBuyer
+                      ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-300 dark:border-blue-700 hover:border-blue-500 dark:hover:border-blue-500'
+                      : 'bg-amber-50 dark:bg-yellow-900/20 border-amber-300 dark:border-yellow-700 hover:border-amber-500 dark:hover:border-yellow-500'
+                  }`}
                 >
                   <div className="flex items-center gap-4 flex-1">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-2 flex-wrap">
-                        <h3 className="font-bold text-lg text-gray-900 dark:text-white truncate">{transaction.address}</h3>
-                        <span className={`px-3 py-1 rounded-full text-xs font-bold shadow-sm ${
-                          transaction.clientType === 'Buyer' 
-                            ? 'bg-blue-500 text-white dark:bg-blue-600' 
-                            : 'bg-gold-500 text-white dark:bg-gold-600'
+                        <h3 className={`font-bold text-lg truncate ${
+                          isBuyer 
+                            ? 'text-blue-900 dark:text-blue-100' 
+                            : 'text-amber-900 dark:text-yellow-100'
+                        }`}>{transaction.address}</h3>
+                        <span className={`px-3 py-1 rounded-full text-xs font-bold shadow-md border-2 ${
+                          isBuyer
+                            ? 'bg-blue-600 text-white border-blue-700 dark:bg-blue-500 dark:border-blue-400' 
+                            : 'bg-amber-500 text-white border-amber-600 dark:bg-yellow-500 dark:border-yellow-400'
                         }`}>
-                          {transaction.clientType}
+                          {isBuyer ? '🔵 ' : '⭐ '}{transaction.clientType}
                         </span>
-                        <span className="px-3 py-1 rounded-full text-xs font-bold bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-100 shadow-sm">
+                        <span className={`px-3 py-1 rounded-full text-xs font-bold shadow-sm border ${
+                          isBuyer
+                            ? 'bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-100 border-blue-300 dark:border-blue-600'
+                            : 'bg-amber-100 dark:bg-yellow-800 text-amber-800 dark:text-yellow-100 border-amber-300 dark:border-yellow-600'
+                        }`}>
                           {transaction.brokerage === 'KW' ? 'Keller Williams' : 'Bennion Deville Homes'}
                         </span>
                       </div>
@@ -1040,8 +1054,12 @@ const EnhancedRealEstateDashboard = () => {
                         </span>
                       </div>
                     </div>
-                    <div className="text-right bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900 dark:to-green-800 px-4 py-3 rounded-lg border-2 border-green-200 dark:border-green-700 shadow-sm">
-                      <p className="text-xs text-green-700 dark:text-green-300 font-semibold uppercase tracking-wide">NCI</p>
+                    <div className={`text-right px-4 py-3 rounded-lg shadow-md border-2 ${
+                      isBuyer
+                        ? 'bg-gradient-to-br from-green-50 to-blue-50 dark:from-green-900/50 dark:to-blue-900/50 border-green-300 dark:border-green-600'
+                        : 'bg-gradient-to-br from-green-50 to-amber-50 dark:from-green-900/50 dark:to-yellow-900/50 border-green-300 dark:border-green-600'
+                    }`}>
+                      <p className="text-xs text-green-700 dark:text-green-300 font-semibold uppercase tracking-wide">💵 NCI</p>
                       <p className="text-xl font-bold text-green-700 dark:text-green-200">
                         ${parseFloat(transaction.nci || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </p>
@@ -1064,7 +1082,8 @@ const EnhancedRealEstateDashboard = () => {
                     </button>
                   </div>
                 </div>
-              ))}
+              );
+              })}
             </div>
           )}
         </div>
