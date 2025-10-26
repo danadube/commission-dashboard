@@ -7,7 +7,7 @@ import ThemeToggle from './ThemeToggle';
 /**
  * Janice Glaab Real Estate Commission Dashboard
  * 
- * @version 3.5.0
+ * @version 3.5.1
  * @description Professional dashboard for tracking real estate commissions with Google Sheets integration
  * 
  * ✨ KEY FEATURES:
@@ -861,15 +861,18 @@ const EnhancedRealEstateDashboard = () => {
   
   const exportToCSV = () => {
     const headers = [
-      'Property Type', 'Client Type', 'Source', 'Address', 'City', 
+      'Property Type', 'Client Type', 'Transaction Type', 'Source', 'Address', 'City', 
       'List Price', 'Closed Price', 'List Date', 'Closing Date',
       'Brokerage', 'Commission %', 'GCI', 'Referral %', 'Referral $',
-      'Adjusted GCI', 'Total Brokerage Fees', 'NCI', 'Status'
+      'Adjusted GCI', 'Pre-Split Deduction', 'Total Brokerage Fees', 'NCI', 
+      'Status', 'Assistant Bonus', 'Buyers Agent Split',
+      'Referring Agent', 'Referral Fee Received', 'Net Volume'
     ];
 
     const rows = filteredTransactions.map(t => [
       t.propertyType,
       t.clientType,
+      t.transactionType || 'Sale',
       t.source,
       t.address,
       t.city,
@@ -883,9 +886,15 @@ const EnhancedRealEstateDashboard = () => {
       t.referralPct,
       t.referralDollar,
       t.adjustedGci,
+      t.preSplitDeduction || 0,
       t.totalBrokerageFees,
       t.nci,
-      t.status
+      t.status,
+      t.assistantBonus || 0,
+      t.buyersAgentSplit || 0,
+      t.referringAgent || '',
+      t.referralFeeReceived || 0,
+      t.netVolume || 0
     ]);
 
     const csvContent = [
@@ -1531,7 +1540,7 @@ const EnhancedRealEstateDashboard = () => {
 
         {/* Footer */}
         <div className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
-          Janice Glaab Real Estate Dashboard v3.5.0 • Built with ❤️ by Dana Dube
+          Janice Glaab Real Estate Dashboard v3.5.1 • Built with ❤️ by Dana Dube
         </div>
 
         {/* Transaction Form Modal */}
