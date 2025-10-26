@@ -1,28 +1,29 @@
 /**
- * Google Sheets Service - Version 2.0 (One Tap Auth - Backward Compatible)
+ * Google Sheets Service - Version 2.1 (Redirect OAuth)
  * Real Estate Commission Dashboard - Google Sheets Integration
- * Uses Google One Tap for authentication (no popups, no COOP issues)
+ * Uses OAuth redirect flow (NO popups, NO COOP issues)
  */
 
 const SCOPES = 'https://www.googleapis.com/auth/spreadsheets';
 const DISCOVERY_DOC = 'https://sheets.googleapis.com/$discovery/rest?version=v4';
 
 let gapiInited = false;
-let gisInited = false;
 let tokenClient = null;
-let accessToken = null;
 
 /**
  * Initialize the Google APIs
  */
 export async function initialize() {
-  console.log('🚀 Initializing Google Sheets integration (One Tap)...');
+  console.log('🚀 Initializing Google Sheets integration (Redirect Flow)...');
   
   // Initialize GAPI (Google API Client)
   await initializeGapiClient();
   
-  // Initialize GIS (Google Identity Services) with One Tap
-  await initializeGisClient();
+  // Initialize OAuth token client for redirect flow
+  initializeTokenClient();
+  
+  // Check if we're returning from OAuth redirect
+  handleOAuthCallback();
   
   console.log('✅ Google Sheets integration ready');
 }
@@ -60,80 +61,108 @@ async function initializeGapiClient() {
 }
 
 /**
- * Initialize Google Identity Services with One Tap
+ * Initialize token client for redirect flow
  */
-async function initializeGisClient() {
-  return new Promise((resolve, reject) => {
-    if (gisInited) {
-      resolve();
-      return;
-    }
+function initializeTokenClient() {
+  if (!window.google?.accounts?.oauth2) {
+    console.error('Google Identity Services not loaded');
+    return;
+  }
 
-    if (!window.google?.accounts?.oauth2) {
-      reject(new Error('Google Identity Services not loaded'));
-      return;
-    }
-
-    try {
-      // Create token client for programmatic access token requests
-      tokenClient = window.google.accounts.oauth2.initTokenClient({
-        client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
-        scope: SCOPES,
-        callback: '', // Will be set dynamically
-      });
-
-      gisInited = true;
-      console.log('✅ Google Identity Services initialized');
-      resolve();
-    } catch (error) {
-      console.error('❌ Error initializing GIS:', error);
-      reject(error);
-    }
+  // Use redirect flow instead of popup
+  tokenClient = window.google.accounts.oauth2.initTokenClient({
+    client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
+    scope: SCOPES,
+    ux_mode: 'redirect', // KEY CHANGE: Use redirect instead of popup
+    redirect_uri: window.location.origin,
   });
+
+  console.log('✅ Google Identity Services initialized (redirect mode)');
+}
+
+/**
+ * Handle OAuth callback after redirect
+ */
+function handleOAuthCallback() {
+  // Check if we have an access token in the URL hash
+  const hash = window.location.hash;
+  if (hash && hash.includes('access_token=')) {
+    console.log('🔐 Processing OAuth callback...');
+    
+    // Parse the hash to extract the token
+    const params = new URLSearchParams(hash.substring(1));
+    const accessToken = params.get('access_token');
+    const expiresIn = params.get('expires_in');
+    
+    if (accessToken) {
+      // Set the token in gapi
+      window.gapi.client.setToken({
+        access_token: accessToken,
+        expires_in: parseInt(expiresIn || '3600'),
+      });
+      
+      // Store in session storage for persistence
+      sessionStorage.setItem('google_access_token', accessToken);
+      sessionStorage.setItem('google_token_expires', Date.now() + parseInt(expiresIn || '3600') * 1000);
+      
+      console.log('✅ Access token received and stored');
+      
+      // Clean up URL
+      window.history.replaceState(null, '', window.location.pathname);
+      
+      // Trigger a custom event to notify the app
+      window.dispatchEvent(new CustomEvent('googleAuthSuccess'));
+    }
+  } else {
+    // Check if we have a stored token
+    const storedToken = sessionStorage.getItem('google_access_token');
+    const tokenExpires = parseInt(sessionStorage.getItem('google_token_expires') || '0');
+    
+    if (storedToken && tokenExpires > Date.now()) {
+      console.log('✅ Using stored access token');
+      window.gapi.client.setToken({
+        access_token: storedToken,
+      });
+    }
+  }
 }
 
 /**
  * Check if user has a valid access token
  */
 export function hasValidToken() {
-  return accessToken !== null && window.gapi?.client?.getToken() !== null;
+  const token = window.gapi?.client?.getToken();
+  if (token && token.access_token) {
+    // Check if stored token is still valid
+    const tokenExpires = parseInt(sessionStorage.getItem('google_token_expires') || '0');
+    return tokenExpires > Date.now();
+  }
+  return false;
 }
 
 /**
- * Sign in the user using One Tap or standard OAuth
- * Returns a promise that resolves when authentication is complete
+ * Sign in the user using redirect flow (NO POPUP!)
  */
 export function signIn() {
-  return new Promise((resolve, reject) => {
-    if (!tokenClient) {
-      reject(new Error('Google Identity Services not initialized'));
-      return;
-    }
+  if (!tokenClient) {
+    console.error('Token client not initialized');
+    return Promise.reject(new Error('Token client not initialized'));
+  }
 
-    try {
-      console.log('🔐 Requesting access token...');
-      
-      // Set the callback for this specific request
-      tokenClient.callback = async (response) => {
-        if (response.error !== undefined) {
-          console.error('❌ OAuth error:', response);
-          reject(new Error(response.error));
-          return;
-        }
-
-        // Store the access token
-        accessToken = response.access_token;
-        console.log('✅ Access token received');
-        resolve(response);
-      };
-
-      // Request the access token
-      // This will show Google's account picker (One Tap style)
-      tokenClient.requestAccessToken({ prompt: 'consent' });
-    } catch (error) {
-      console.error('❌ Error during sign-in:', error);
-      reject(error);
-    }
+  console.log('🔐 Redirecting to Google sign-in...');
+  
+  // Save current state before redirect
+  sessionStorage.setItem('preAuthPath', window.location.pathname);
+  
+  // This will redirect to Google's OAuth page
+  tokenClient.requestAccessToken({ prompt: 'consent' });
+  
+  // Return a promise that will resolve after redirect
+  return new Promise((resolve) => {
+    // Listen for auth success event after redirect
+    window.addEventListener('googleAuthSuccess', () => {
+      resolve({ success: true });
+    }, { once: true });
   });
 }
 
@@ -142,13 +171,21 @@ export function signIn() {
  */
 export function signOut() {
   const token = window.gapi?.client?.getToken();
-  if (token !== null) {
+  if (token?.access_token) {
     window.google.accounts.oauth2.revoke(token.access_token, () => {
       console.log('✅ User signed out');
     });
-    window.gapi.client.setToken(null);
   }
-  accessToken = null;
+  
+  // Clear stored tokens
+  sessionStorage.removeItem('google_access_token');
+  sessionStorage.removeItem('google_token_expires');
+  sessionStorage.removeItem('preAuthPath');
+  
+  // Clear gapi token
+  window.gapi?.client?.setToken(null);
+  
+  console.log('✅ Session cleared');
 }
 
 /**
@@ -163,7 +200,7 @@ export async function readTransactions() {
     console.log('📊 Reading from Google Sheets...');
     
     const spreadsheetId = process.env.REACT_APP_SPREADSHEET_ID;
-    const range = 'Transactions!A2:O'; // Read from row 2 to skip headers
+    const range = 'Transactions!A2:O';
 
     const response = await window.gapi.client.sheets.spreadsheets.values.get({
       spreadsheetId: spreadsheetId,
@@ -173,7 +210,6 @@ export async function readTransactions() {
     const rows = response.result.values || [];
     console.log(`✅ Loaded ${rows.length} transactions from Google Sheets`);
 
-    // Convert rows to transaction objects
     const transactions = rows.map((row, index) => ({
       id: row[0] || `sheet-${index + 1}`,
       date: row[1] || '',
@@ -213,7 +249,6 @@ export async function writeTransactions(transactions) {
     const spreadsheetId = process.env.REACT_APP_SPREADSHEET_ID;
     const range = 'Transactions!A2:O';
 
-    // Convert transactions to rows
     const rows = transactions.map(t => [
       t.id,
       t.date,
@@ -232,13 +267,11 @@ export async function writeTransactions(transactions) {
       t.archived ? 'TRUE' : 'FALSE',
     ]);
 
-    // Clear existing data first
     await window.gapi.client.sheets.spreadsheets.values.clear({
       spreadsheetId: spreadsheetId,
       range: range,
     });
 
-    // Write new data
     const response = await window.gapi.client.sheets.spreadsheets.values.update({
       spreadsheetId: spreadsheetId,
       range: range,
@@ -312,7 +345,6 @@ export async function updateTransaction(transaction) {
   }
 
   try {
-    // For simplicity, we'll reload all transactions, update the one we need, and write back
     const transactions = await readTransactions();
     const index = transactions.findIndex(t => t.id === transaction.id);
     
@@ -349,7 +381,7 @@ export async function deleteTransaction(transactionId) {
   }
 }
 
-// BACKWARD COMPATIBILITY: Export all functions with old names as aliases
+// BACKWARD COMPATIBILITY: Export with old function names
 export const initializeGoogleSheets = initialize;
 export const isAuthorized = hasValidToken;
 export const authorizeUser = signIn;
@@ -360,9 +392,8 @@ export const addToGoogleSheets = addTransaction;
 export const updateInGoogleSheets = updateTransaction;
 export const deleteFromGoogleSheets = deleteTransaction;
 
-// Default export with both old and new names
+// Default export
 export default {
-  // New names
   initialize,
   hasValidToken,
   signIn,
@@ -372,8 +403,6 @@ export default {
   addTransaction,
   updateTransaction,
   deleteTransaction,
-  
-  // Old names (backward compatibility)
   initializeGoogleSheets,
   isAuthorized,
   authorizeUser,
