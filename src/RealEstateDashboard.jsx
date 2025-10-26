@@ -871,17 +871,26 @@ const EnhancedRealEstateDashboard = () => {
   // Toggle sort order function
   const toggleSortOrder = () => {
     const newOrder = sortOrder === 'newest' ? 'oldest' : 'newest';
-    console.log('🔄 Toggle clicked:', { 
-      old: sortOrder, 
-      new: newOrder, 
-      sortVersion,
-      firstTransactionBefore: filteredTransactions[0]?.address,
-      firstTransactionDateBefore: filteredTransactions[0]?.closingDate
-    });
     setSortOrder(newOrder);
-    setSortVersion(v => v + 1); // Force re-render
+    setSortVersion(v => {
+      console.log('🔄 Setting sortVersion from', v, 'to', v + 1, 'with sortOrder:', newOrder);
+      return v + 1;
+    });
     localStorage.setItem('transactionSortOrder', newOrder);
   };
+  
+  // Log after state updates
+  useEffect(() => {
+    if (filteredTransactions.length > 0) {
+      console.log('📊 After state update:', {
+        sortOrder,
+        sortVersion,
+        firstTransaction: filteredTransactions[0]?.address,
+        firstDate: filteredTransactions[0]?.closingDate,
+        first5Dates: filteredTransactions.slice(0, 5).map(t => t.closingDate)
+      });
+    }
+  }, [sortOrder, sortVersion, filteredTransactions]);
 
   // ==================== METRICS ====================
   
