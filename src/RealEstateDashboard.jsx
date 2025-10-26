@@ -1571,7 +1571,7 @@ const EnhancedRealEstateDashboard = () => {
               </p>
             </div>
           ) : (
-            <div className="space-y-4 animate-[fadeIn_0.8s_ease-out]">
+            <div key={`transactions-${sortOrder}`} className="space-y-4 animate-[fadeIn_0.8s_ease-out]">
               {filteredTransactions.map(transaction => {
                 const isBuyer = transaction.clientType === 'Buyer';
                 const isReferralOut = transaction.transactionType === 'Referral Out';
