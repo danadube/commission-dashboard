@@ -19,8 +19,10 @@ export default async function handler(req, res) {
     const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
     if (!OPENAI_API_KEY) {
-      return res.status(500).json({ error: 'OpenAI API key not configured' });
+      return res.status(500).json({ error: 'OpenAI API key not configured. Please add OPENAI_API_KEY to Vercel environment variables.' });
     }
+
+    console.log('Scanning commission sheet with OpenAI Vision...');
 
     // Call OpenAI Vision API
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -30,7 +32,7 @@ export default async function handler(req, res) {
         'Authorization': `Bearer ${OPENAI_API_KEY}`
       },
       body: JSON.stringify({
-        model: 'gpt-4o', // Using GPT-4 Turbo with vision
+        model: 'gpt-4o', // GPT-4 Omni with vision (latest model)
         messages: [
           {
             role: 'system',
@@ -93,9 +95,23 @@ DETECTION RULES:
     });
 
     if (!response.ok) {
-      const error = await response.text();
-      console.error('OpenAI API error:', error);
-      return res.status(response.status).json({ error: 'OpenAI API request failed', details: error });
+      const errorText = await response.text();
+      console.error('OpenAI API error:', response.status, errorText);
+      
+      let errorMessage = 'OpenAI API request failed';
+      try {
+        const errorJson = JSON.parse(errorText);
+        errorMessage = errorJson.error?.message || errorMessage;
+      } catch (e) {
+        // If not JSON, use the text as is
+        errorMessage = errorText || errorMessage;
+      }
+      
+      return res.status(response.status).json({ 
+        error: errorMessage,
+        statusCode: response.status,
+        details: errorText 
+      });
     }
 
     const data = await response.json();
