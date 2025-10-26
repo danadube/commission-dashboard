@@ -775,53 +775,86 @@ const EnhancedRealEstateDashboard = () => {
         </div>
 
         {/* Filters */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 mb-6 transition-colors">
-          <div className="flex items-center gap-3 flex-wrap">
-            <Filter className="w-5 h-5 text-gray-600" />
-            
-            <select
-              value={filterYear}
-              onChange={(e) => setFilterYear(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="all">All Years</option>
-              {[...new Set(transactions.map(t => t.closingDate ? new Date(t.closingDate).getFullYear() : null))].filter(Boolean).sort((a, b) => b - a).map(year => (
-                <option key={year} value={year}>{year}</option>
-              ))}
-            </select>
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-6 transition-colors border border-gray-200 dark:border-gray-700">
+          <div className="flex items-center gap-2 mb-4">
+            <Filter className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Filter Transactions</h3>
+            <div className="ml-auto text-sm font-medium text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 px-3 py-1 rounded-full">
+              {filteredTransactions.length} of {transactions.length} shown
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* Year Filter */}
+            <div>
+              <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2">
+                📅 Closing Year
+              </label>
+              <select
+                value={filterYear}
+                onChange={(e) => setFilterYear(e.target.value)}
+                className="w-full px-4 py-2.5 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors font-medium"
+              >
+                <option value="all">All Years</option>
+                {[...new Set(transactions.map(t => t.closingDate ? new Date(t.closingDate).getFullYear() : null))].filter(Boolean).sort((a, b) => b - a).map(year => (
+                  <option key={year} value={year}>{year}</option>
+                ))}
+              </select>
+            </div>
 
-            <select
-              value={filterClientType}
-              onChange={(e) => setFilterClientType(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="all">All Types</option>
-              <option value="Buyer">Buyer</option>
-              <option value="Seller">Seller</option>
-            </select>
+            {/* Client Type Filter */}
+            <div>
+              <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2">
+                👥 Transaction Type
+              </label>
+              <select
+                value={filterClientType}
+                onChange={(e) => setFilterClientType(e.target.value)}
+                className="w-full px-4 py-2.5 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors font-medium"
+              >
+                <option value="all">Buyers & Sellers</option>
+                <option value="Buyer">🔵 Buyers Only</option>
+                <option value="Seller">⭐ Sellers Only</option>
+              </select>
+            </div>
 
-            <select
-              value={filterBrokerage}
-              onChange={(e) => setFilterBrokerage(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="all">All Brokerages</option>
-              <option value="KW">Keller Williams</option>
-              <option value="BDH">Bennion Deville Homes</option>
-            </select>
+            {/* Brokerage Filter */}
+            <div>
+              <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2">
+                🏢 Brokerage
+              </label>
+              <select
+                value={filterBrokerage}
+                onChange={(e) => setFilterBrokerage(e.target.value)}
+                className="w-full px-4 py-2.5 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors font-medium"
+              >
+                <option value="all">All Brokerages</option>
+                <option value="KW">Keller Williams</option>
+                <option value="BDH">Bennion Deville Homes</option>
+              </select>
+            </div>
 
-            <select
-              value={filterPropertyType}
-              onChange={(e) => setFilterPropertyType(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="all">All Property Types</option>
-              <option value="Residential">Residential</option>
-              <option value="Commercial">Commercial</option>
-              <option value="Land">Land</option>
-            </select>
+            {/* Property Type Filter */}
+            <div>
+              <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2">
+                🏠 Property Type
+              </label>
+              <select
+                value={filterPropertyType}
+                onChange={(e) => setFilterPropertyType(e.target.value)}
+                className="w-full px-4 py-2.5 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors font-medium"
+              >
+                <option value="all">All Property Types</option>
+                <option value="Residential">Residential</option>
+                <option value="Commercial">Commercial</option>
+                <option value="Land">Land</option>
+              </select>
+            </div>
+          </div>
 
-            {(filterYear !== 'all' || filterClientType !== 'all' || filterBrokerage !== 'all' || filterPropertyType !== 'all') && (
+          {/* Clear Filters Button */}
+          {(filterYear !== 'all' || filterClientType !== 'all' || filterBrokerage !== 'all' || filterPropertyType !== 'all') && (
+            <div className="mt-4 flex items-center justify-center">
               <button
                 onClick={() => {
                   setFilterYear('all');
@@ -829,16 +862,12 @@ const EnhancedRealEstateDashboard = () => {
                   setFilterBrokerage('all');
                   setFilterPropertyType('all');
                 }}
-                className="px-4 py-2 text-sm text-blue-600 hover:text-blue-700"
+                className="px-6 py-2 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-100 dark:hover:bg-blue-900/50 rounded-lg transition-all border-2 border-blue-200 dark:border-blue-700"
               >
-                Clear Filters
+                ✕ Clear All Filters
               </button>
-            )}
-
-            <div className="ml-auto text-sm text-gray-600">
-              Showing {filteredTransactions.length} of {transactions.length} transactions
             </div>
-          </div>
+          )}
         </div>
 
         {/* Metrics Cards */}
@@ -846,8 +875,9 @@ const EnhancedRealEstateDashboard = () => {
           <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg shadow-lg p-6 text-white">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-purple-100 text-sm font-medium">Gross Commission Income (GCI)</p>
+                <p className="text-purple-100 text-sm font-medium">Gross Commission Income</p>
                 <p className="text-3xl font-bold mt-2">${metrics.totalGCI.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                <p className="text-purple-200 text-xs mt-1">Total earned before fees</p>
               </div>
               <DollarSign className="w-12 h-12 text-purple-200" />
             </div>
@@ -856,8 +886,9 @@ const EnhancedRealEstateDashboard = () => {
           <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-lg shadow-lg p-6 text-white">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-green-100 text-sm font-medium">Net Commission Income (NCI)</p>
+                <p className="text-green-100 text-sm font-medium">Net Commission Income</p>
                 <p className="text-3xl font-bold mt-2">${metrics.totalNCI.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                <p className="text-green-200 text-xs mt-1">Your take-home pay</p>
               </div>
               <TrendingUp className="w-12 h-12 text-green-200" />
             </div>
@@ -866,8 +897,9 @@ const EnhancedRealEstateDashboard = () => {
           <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg shadow-lg p-6 text-white">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-blue-100 text-sm font-medium">Total Volume</p>
+                <p className="text-blue-100 text-sm font-medium">Total Sales Volume</p>
                 <p className="text-3xl font-bold mt-2">${metrics.totalVolume.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                <p className="text-blue-200 text-xs mt-1">Combined property value</p>
               </div>
               <Home className="w-12 h-12 text-blue-200" />
             </div>
@@ -1710,13 +1742,13 @@ const EnhancedRealEstateDashboard = () => {
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg border border-purple-200 dark:border-purple-800">
-                      <label className="text-xs font-semibold text-purple-700 dark:text-purple-300 uppercase">GCI</label>
+                      <label className="text-xs font-semibold text-purple-700 dark:text-purple-300 uppercase">Gross Commission</label>
                       <p className="text-purple-900 dark:text-purple-100 font-bold text-xl">
                         ${parseFloat(viewingTransaction.gci || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}
                       </p>
                     </div>
                     <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border border-blue-200 dark:border-blue-800">
-                      <label className="text-xs font-semibold text-blue-700 dark:text-blue-300 uppercase">Adjusted GCI</label>
+                      <label className="text-xs font-semibold text-blue-700 dark:text-blue-300 uppercase">After Referrals</label>
                       <p className="text-blue-900 dark:text-blue-100 font-bold text-xl">
                         ${parseFloat(viewingTransaction.adjustedGci || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}
                       </p>
@@ -1728,7 +1760,7 @@ const EnhancedRealEstateDashboard = () => {
                       </p>
                     </div>
                     <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg border-2 border-green-500 dark:border-green-700">
-                      <label className="text-xs font-semibold text-green-700 dark:text-green-300 uppercase">NCI</label>
+                      <label className="text-xs font-semibold text-green-700 dark:text-green-300 uppercase">Net Commission Income</label>
                       <p className="text-green-900 dark:text-green-100 font-bold text-2xl">
                         ${parseFloat(viewingTransaction.nci || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}
                       </p>
