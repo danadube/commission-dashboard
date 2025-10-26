@@ -141,6 +141,9 @@ const EnhancedRealEstateDashboard = () => {
   const sortOrder = sortState.order;
   const sortVersion = sortState.version;
   
+  // Debug: Log every render
+  console.log('🎨 RENDER - sortOrder:', sortOrder, 'sortVersion:', sortVersion);
+  
   // Logo State
   const [customLogo, setCustomLogo] = useState(() => {
     return localStorage.getItem('customLogo') || '/assets/logos/app-logo-default.png';
