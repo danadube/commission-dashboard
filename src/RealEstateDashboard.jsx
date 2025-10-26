@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { DollarSign, TrendingUp, Home, Calendar, Edit2, Trash2, X, Plus, Filter, Download, Upload, RefreshCw, LogOut, Cloud, CloudOff } from 'lucide-react';
 import * as GoogleSheetsService from './googleSheetsService';
+import ThemeToggle from './ThemeToggle';
 
 /**
  * Enhanced Real Estate Commission Dashboard v3.2
@@ -604,16 +605,19 @@ const EnhancedRealEstateDashboard = () => {
   // ==================== RENDER ====================
   
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-4 transition-colors duration-200">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
-          <div className="flex items-center justify-between mb-4">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-6 transition-colors">
+          <div className="flex items-center justify-between mb-4 flex-wrap gap-4">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Real Estate Commission Dashboard</h1>
-              <p className="text-gray-600 mt-1">Track and analyze your commission income</p>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Real Estate Commission Dashboard</h1>
+              <p className="text-gray-600 dark:text-gray-300 mt-1">Track and analyze your commission income</p>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 flex-wrap">
+              {/* Theme Toggle */}
+              <ThemeToggle />
+              
               {/* Google Sheets Sync Status */}
               {isGoogleSheetsEnabled && isGoogleSheetsAuthorized && (
                 <div className="flex items-center gap-2 bg-green-50 px-4 py-2 rounded-lg border border-green-200">
@@ -711,7 +715,7 @@ const EnhancedRealEstateDashboard = () => {
         </div>
 
         {/* Filters */}
-        <div className="bg-white rounded-lg shadow-lg p-4 mb-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 mb-6 transition-colors">
           <div className="flex items-center gap-3 flex-wrap">
             <Filter className="w-5 h-5 text-gray-600" />
             
@@ -842,8 +846,8 @@ const EnhancedRealEstateDashboard = () => {
 
         {/* Charts */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <h3 className="text-lg font-semibold mb-4">Monthly Income Trend</h3>
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 transition-colors">
+            <h3 className="text-lg font-semibold mb-4 dark:text-white">Monthly Income Trend</h3>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={chartData}>
                 <CartesianGrid strokeDasharray="3 3" />
@@ -861,8 +865,8 @@ const EnhancedRealEstateDashboard = () => {
             </ResponsiveContainer>
           </div>
 
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <h3 className="text-lg font-semibold mb-4">Transactions by Month</h3>
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 transition-colors">
+            <h3 className="text-lg font-semibold mb-4 dark:text-white">Transactions by Month</h3>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={chartData}>
                 <CartesianGrid strokeDasharray="3 3" />
@@ -879,8 +883,8 @@ const EnhancedRealEstateDashboard = () => {
             </ResponsiveContainer>
           </div>
 
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <h3 className="text-lg font-semibold mb-4">Client Type Distribution</h3>
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 transition-colors">
+            <h3 className="text-lg font-semibold mb-4 dark:text-white">Client Type Distribution</h3>
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie
@@ -905,8 +909,8 @@ const EnhancedRealEstateDashboard = () => {
             </ResponsiveContainer>
           </div>
 
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <h3 className="text-lg font-semibold mb-4">Income by Brokerage</h3>
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 transition-colors">
+            <h3 className="text-lg font-semibold mb-4 dark:text-white">Income by Brokerage</h3>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={brokerageData}>
                 <CartesianGrid strokeDasharray="3 3" />
@@ -925,8 +929,8 @@ const EnhancedRealEstateDashboard = () => {
         </div>
 
         {/* Transactions List */}
-        <div className="bg-white rounded-lg shadow-lg p-6">
-          <h2 className="text-xl font-bold mb-4">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 transition-colors">
+          <h2 className="text-xl font-bold mb-4 dark:text-white">
             Filtered Transactions
             {filteredTransactions.length > 0 && (
               <span className="text-gray-500 font-normal ml-2">
@@ -1010,10 +1014,10 @@ const EnhancedRealEstateDashboard = () => {
         {/* Transaction Form Modal */}
         {showForm && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-y-auto">
-            <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full my-8">
-              <div className="p-6 border-b border-gray-200">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-4xl w-full my-8 transition-colors">
+              <div className="p-6 border-b border-gray-200 dark:border-gray-700">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-2xl font-bold text-gray-900">
+                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
                     {editingId ? 'Edit Transaction' : 'Add New Transaction'}
                   </h2>
                   <button
