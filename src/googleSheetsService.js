@@ -1,7 +1,22 @@
 /**
- * Google Sheets Service - FIXED VERSION 2.0
- * Uses proper OAuth 2.0 implicit flow with full-page redirect
- * NO POPUPS - NO COOP ISSUES
+ * Google Sheets Service
+ * 
+ * Handles all Google Sheets API interactions with OAuth 2.0 authentication.
+ * 
+ * Features:
+ * - OAuth 2.0 Implicit Flow (full-page redirect, no COOP issues)
+ * - Read/Write/Update/Delete operations
+ * - Token management and persistence
+ * - Auto-sync on all CRUD operations
+ * 
+ * Column Mapping (A-W, 22 columns):
+ * A: Property Type, B: Client Type, C: Source, D: Address, E: City,
+ * F: List Price, G: Commission %, H: List Date, I: Closing Date, J: Brokerage,
+ * K: Net Volume, L: Closed Price, M: GCI, N: Referral %, O: Referral $,
+ * P: Adjusted GCI, Q: Pre-split Deduction, R: Brokerage Split,
+ * S: Admin Fees/Other Deductions, T: NCI, U: Status, V: Assistant Bonus, W: Buyer's Agent Split
+ * 
+ * @version 3.3.2
  */
 
 const SCOPES = 'https://www.googleapis.com/auth/spreadsheets';

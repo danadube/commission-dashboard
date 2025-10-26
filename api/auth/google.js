@@ -1,6 +1,20 @@
 /**
  * Vercel Serverless Function - Google OAuth Handler
- * This handles OAuth authentication server-side to bypass browser COOP restrictions
+ * 
+ * ⚠️ NOTE: This file is currently NOT IN USE
+ * 
+ * The dashboard uses client-side OAuth (Implicit Flow) via googleSheetsService.js
+ * This serverless function is kept as a backup for potential future server-side OAuth implementation.
+ * 
+ * Current OAuth Flow:
+ * - Client-side full-page redirect to Google OAuth
+ * - Token stored in localStorage
+ * - See: src/googleSheetsService.js for active implementation
+ * 
+ * To activate this (if needed in future):
+ * 1. Add GOOGLE_CLIENT_SECRET to Vercel environment variables
+ * 2. Update googleSheetsService.js to use this endpoint
+ * 3. Change OAuth flow from Implicit to Authorization Code
  */
 
 const { google } = require('googleapis');

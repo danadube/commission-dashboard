@@ -5,27 +5,48 @@ import * as GoogleSheetsService from './googleSheetsService';
 import ThemeToggle from './ThemeToggle';
 
 /**
- * Enhanced Real Estate Commission Dashboard v3.2
+ * Janice Glaab Real Estate Commission Dashboard
  * 
- * NEW in v3.2:
- * - Full Google Sheets integration
+ * @version 3.3.2
+ * @description Professional dashboard for tracking real estate commissions with Google Sheets integration
+ * 
+ * ✨ KEY FEATURES:
+ * 
+ * 🔄 Google Sheets Integration:
  * - Two-way sync (dashboard ↔ sheets)
- * - OAuth authentication
- * - Cloud backup and multi-device access
- * - Auto-sync on changes
+ * - OAuth 2.0 authentication
+ * - Auto-sync on all CRUD operations
+ * - Offline mode with localStorage
  * - Manual sync button
- * - Sync status indicators
  * 
- * Features from v3.1:
- * - Horizontal filters at top
- * - Compact horizontal transaction cards
- * - Full CRUD operations (Create, Read, Update, Delete)
- * - Proper KW & BDH commission calculations
- * - Assistant Bonus as FYI only
- * - Multiple visualization charts
- * - Export to CSV
+ * 📊 Analytics & Visualizations:
+ * - Commission calculations (GCI, Adjusted GCI, NCI)
+ * - Interactive charts (Line, Bar, Pie)
+ * - Year-over-year tracking
+ * - Real-time metrics
  * 
- * Total Lines: ~1,450
+ * 🎨 Modern UI/UX:
+ * - Color-coded buyer (blue) / seller (gold) cards
+ * - Dark/Light/System theme support
+ * - Transaction detail modal (click to view)
+ * - Chronological sorting with toggle
+ * - Responsive design
+ * 
+ * 📝 Transaction Management:
+ * - Full CRUD operations
+ * - 22-field comprehensive tracking
+ * - KW & BDH brokerage support
+ * - Data validation
+ * 
+ * 🎯 Advanced Features:
+ * - Multi-filter system (Year, Client Type, Brokerage, Property Type)
+ * - CSV export
+ * - Emoji indicators for quick scanning
+ * - ESC key shortcuts
+ * - Persistent preferences
+ * 
+ * @author Dana Dube
+ * @for Janice Glaab Real Estate
  */
 
 const EnhancedRealEstateDashboard = () => {
@@ -1089,8 +1110,8 @@ const EnhancedRealEstateDashboard = () => {
         </div>
 
         {/* Footer */}
-        <div className="mt-6 text-center text-sm text-gray-500">
-          Real Estate Commission Dashboard v3.2 with Google Sheets Integration
+        <div className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
+          Janice Glaab Real Estate Dashboard v3.3.2 • Built with ❤️ by Dana Dube
         </div>
 
         {/* Transaction Form Modal */}
