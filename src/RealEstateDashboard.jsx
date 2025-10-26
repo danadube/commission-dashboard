@@ -130,12 +130,16 @@ const EnhancedRealEstateDashboard = () => {
   const [filterPriceRange, setFilterPriceRange] = useState('all');
   
   // Sort order - newest or oldest first
-  const [sortOrder, setSortOrder] = useState(() => {
-    return localStorage.getItem('transactionSortOrder') || 'newest';
+  // Sort State - combined into single object to avoid state sync issues
+  const [sortState, setSortState] = useState(() => {
+    return {
+      order: localStorage.getItem('transactionSortOrder') || 'newest',
+      version: 0
+    };
   });
   
-  // Force re-render counter
-  const [sortVersion, setSortVersion] = useState(0);
+  const sortOrder = sortState.order;
+  const sortVersion = sortState.version;
   
   // Logo State
   const [customLogo, setCustomLogo] = useState(() => {
@@ -878,8 +882,13 @@ const EnhancedRealEstateDashboard = () => {
   // Toggle sort order function
   const toggleSortOrder = () => {
     const newOrder = sortOrder === 'newest' ? 'oldest' : 'newest';
-    setSortVersion(v => v + 1);
-    setSortOrder(newOrder);
+    
+    // Update BOTH order and version in a single state update
+    setSortState(prev => ({
+      order: newOrder,
+      version: prev.version + 1
+    }));
+    
     localStorage.setItem('transactionSortOrder', newOrder);
   };
 
