@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { DollarSign, TrendingUp, Home, Calendar, Edit2, Trash2, X, Plus, Filter, Download, Upload, RefreshCw, LogOut, Cloud, CloudOff } from 'lucide-react';
+import { DollarSign, TrendingUp, Home, Calendar, Edit2, Trash2, X, Plus, Filter, Download, Upload, RefreshCw, LogOut, Cloud, CloudOff, Settings } from 'lucide-react';
 import * as GoogleSheetsService from './googleSheetsService';
 import ThemeToggle from './ThemeToggle';
 
 /**
  * Janice Glaab Real Estate Commission Dashboard
  * 
- * @version 3.6.0
+ * @version 3.7.0
  * @description Professional dashboard for tracking real estate commissions with Google Sheets integration
  * 
  * ✨ KEY FEATURES:
@@ -110,6 +110,7 @@ const EnhancedRealEstateDashboard = () => {
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [viewingTransaction, setViewingTransaction] = useState(null);
+  const [showSettings, setShowSettings] = useState(false);
   
   // Loading State
   const [isInitialLoading, setIsInitialLoading] = useState(true);
@@ -224,6 +225,7 @@ const EnhancedRealEstateDashboard = () => {
       if (e.key === 'Escape') {
         closeViewModal();
         resetForm();
+        setShowSettings(false);
       }
     };
     
@@ -1028,143 +1030,78 @@ const EnhancedRealEstateDashboard = () => {
     <div className="min-h-screen mesh-gradient bg-gray-50/50 dark:bg-gray-900/80 p-6 transition-all duration-700">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="glass-morphism bg-white/70 dark:bg-gray-800/70 rounded-2xl shadow-2xl p-8 mb-8 border border-white/20 dark:border-gray-700/30 backdrop-blur-3xl">
-          <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
+        <div className="glass-morphism bg-white/70 dark:bg-gray-800/70 rounded-2xl shadow-2xl p-6 mb-8 border border-white/20 dark:border-gray-700/30 backdrop-blur-3xl">
+          <div className="flex items-center justify-between">
+            {/* Left: Logo & Title */}
             <div className="flex items-center gap-4">
-              {/* Logo */}
               {customLogo && (
-                <div className="relative group">
-                  <img 
-                    src={customLogo} 
-                    alt="Dashboard Logo" 
-                    className="w-24 h-24 rounded-2xl shadow-lg object-cover border-2 border-white/30 dark:border-gray-700/30"
-                  />
-                  <button
-                    onClick={handleLogoRemove}
-                    className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg hover:bg-red-600"
-                    title="Remove logo"
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
-                </div>
+                <img 
+                  src={customLogo} 
+                  alt="Dashboard Logo" 
+                  className="w-16 h-16 rounded-2xl shadow-lg object-cover border-2 border-white/30 dark:border-gray-700/30"
+                />
               )}
-              
               <div>
-                <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 dark:from-purple-400 dark:via-blue-400 dark:to-cyan-400 bg-clip-text text-transparent animate-glow">Real Estate Commission Dashboard</h1>
-                <p className="text-gray-600 dark:text-gray-300 mt-1">Track and analyze your commission income</p>
+                <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 dark:from-purple-400 dark:via-blue-400 dark:to-cyan-400 bg-clip-text text-transparent animate-glow">
+                  Real Estate Commission Dashboard
+                </h1>
+                <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">Track and analyze your commission income</p>
               </div>
             </div>
-            <div className="flex items-center gap-3 flex-wrap">
-              {/* Logo Upload */}
-              <label className="cursor-pointer">
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleLogoUpload}
-                  className="hidden"
-                />
-                <div className="flex items-center gap-2 px-4 py-2 glass-morphism bg-purple-500/80 hover:bg-purple-600/80 text-white rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl border border-white/20 backdrop-blur-xl">
-                  <Upload className="w-4 h-4" />
-                  <span className="font-medium text-sm">{customLogo ? 'Change Logo' : 'Upload Logo'}</span>
-                </div>
-              </label>
-              
-              {/* Theme Toggle */}
-              <ThemeToggle />
-              
-              {/* Google Sheets Sync Status */}
+
+            {/* Right: Actions */}
+            <div className="flex items-center gap-3">
+              {/* Sync Status Indicator */}
               {isGoogleSheetsEnabled && isGoogleSheetsAuthorized && (
-                <div className="flex items-center gap-2 bg-green-50 px-4 py-2 rounded-lg border border-green-200">
-                  <Cloud className="w-4 h-4 text-green-600" />
-                  <span className="text-sm text-green-700 font-medium">
+                <div className="flex items-center gap-2 px-3 py-2 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-700">
+                  <Cloud className="w-4 h-4 text-green-600 dark:text-green-400" />
+                  <span className="text-xs font-medium text-green-700 dark:text-green-300">
                     {isSyncing ? 'Syncing...' : 'Synced'}
                   </span>
-                  {lastSyncTime && (
-                    <span className="text-xs text-green-600">
-                      {lastSyncTime.toLocaleTimeString()}
-                    </span>
-                  )}
                 </div>
               )}
               
               {!isGoogleSheetsEnabled && (
-                <div className="flex items-center gap-2 bg-gray-50 px-4 py-2 rounded-lg border border-gray-200">
-                  <CloudOff className="w-4 h-4 text-gray-500" />
-                  <span className="text-sm text-gray-600 font-medium">Offline Mode</span>
+                <div className="flex items-center gap-2 px-3 py-2 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
+                  <CloudOff className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                  <span className="text-xs font-medium text-gray-600 dark:text-gray-400">Offline</span>
                 </div>
               )}
-            </div>
-          </div>
 
-          {/* Google Sheets Controls */}
-          <div className="flex items-center gap-3 flex-wrap">
-            {!isGoogleSheetsAuthorized ? (
+              {/* Add Transaction Button */}
               <button
-                onClick={enableGoogleSheets}
-                disabled={isSyncing}
-                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:bg-gray-400"
+                onClick={() => setShowForm(true)}
+                className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-black to-yellow-600 text-white rounded-xl hover:from-gray-900 hover:to-yellow-500 transition-all shadow-lg hover:shadow-xl font-medium"
               >
-                <Cloud className="w-4 h-4" />
-                {isSyncing ? 'Connecting...' : 'Enable Google Sheets Sync'}
+                <Plus className="w-5 h-5" />
+                Add Transaction
               </button>
-            ) : (
-              <>
-                <button
-                  onClick={syncNow}
-                  disabled={isSyncing}
-                  className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:bg-gray-400"
-                >
-                  <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin' : ''}`} />
-                  Sync Now
-                </button>
-                <button
-                  onClick={signOutGoogleSheets}
-                  className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
-                >
-                  <LogOut className="w-4 h-4" />
-                  Sign Out
-                </button>
-              </>
-            )}
 
-            <button
-              onClick={() => setShowForm(true)}
-              className="flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-black to-yellow-600 text-white rounded-lg hover:from-gray-900 hover:to-yellow-500 transition-all"
-            >
-              <Plus className="w-5 h-5" />
-              Add Transaction
-            </button>
+              {/* Theme Toggle */}
+              <ThemeToggle />
 
-            <button
-              onClick={exportToCSV}
-              className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
-            >
-              <Download className="w-4 h-4" />
-              Export CSV
-            </button>
+              {/* Settings Button */}
+              <button
+                onClick={() => setShowSettings(true)}
+                className="p-3 glass-morphism bg-gray-100/80 hover:bg-gray-200/80 dark:bg-gray-700/80 dark:hover:bg-gray-600/80 rounded-xl transition-all shadow-lg hover:shadow-xl border border-white/20 dark:border-gray-600/30 backdrop-blur-xl"
+                title="Settings"
+              >
+                <Settings className="w-5 h-5 text-gray-700 dark:text-gray-200" />
+              </button>
+            </div>
           </div>
 
           {/* Sync Error Display */}
           {syncError && (
-            <div className="mt-4 flex items-center justify-between p-2 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+            <div className="mt-3 flex items-center justify-between p-2 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
               <p className="text-xs text-red-700 dark:text-red-300 font-medium">{syncError}</p>
               <button
                 onClick={() => setSyncError(null)}
-                className="text-xs text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 ml-3"
+                className="text-xs text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300"
                 title="Dismiss"
               >
                 <X className="w-4 h-4" />
               </button>
-            </div>
-          )}
-
-          {/* Info Panel */}
-          {isGoogleSheetsAuthorized && (
-            <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-              <p className="text-sm text-blue-700">
-                <strong>Google Sheets sync is active!</strong> Your transactions are automatically synced with your Google Sheet. 
-                Changes in either location will be synchronized.
-              </p>
             </div>
           )}
         </div>
@@ -2527,6 +2464,228 @@ const EnhancedRealEstateDashboard = () => {
                     Edit Transaction
                   </button>
                 </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Settings Modal */}
+        {showSettings && (
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+            <div className="glass-morphism bg-white/95 dark:bg-gray-800/95 rounded-3xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-hidden border-2 border-white/30 dark:border-gray-700/30 backdrop-blur-3xl animate-[fadeIn_0.3s_ease-out]">
+              {/* Header */}
+              <div className="p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="p-3 bg-gradient-to-br from-purple-500 to-blue-500 rounded-xl shadow-lg">
+                      <Settings className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Settings</h2>
+                      <p className="text-sm text-gray-600 dark:text-gray-300">Manage your dashboard preferences</p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setShowSettings(false)}
+                    className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors p-2"
+                  >
+                    <X className="w-6 h-6" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Content */}
+              <div className="p-6 max-h-[calc(90vh-200px)] overflow-y-auto space-y-6">
+                
+                {/* Appearance Section */}
+                <div className="glass-morphism bg-white/60 dark:bg-gray-700/60 rounded-2xl p-6 border border-white/30 dark:border-gray-600/30 backdrop-blur-xl">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="text-2xl">🎨</div>
+                    <h3 className="text-lg font-bold text-gray-900 dark:text-white">Appearance</h3>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    {/* Theme */}
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Theme Preference</label>
+                      <div className="flex items-center gap-3">
+                        <ThemeToggle />
+                        <span className="text-xs text-gray-600 dark:text-gray-400">Choose your preferred color scheme</span>
+                      </div>
+                    </div>
+
+                    {/* Logo Management */}
+                    <div className="pt-4 border-t border-gray-200 dark:border-gray-600">
+                      <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Dashboard Logo</label>
+                      <div className="flex items-center gap-4">
+                        {customLogo && (
+                          <div className="relative group">
+                            <img 
+                              src={customLogo} 
+                              alt="Logo Preview" 
+                              className="w-20 h-20 rounded-xl shadow-lg object-cover border-2 border-white/30 dark:border-gray-700/30"
+                            />
+                            <button
+                              onClick={handleLogoRemove}
+                              className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg hover:bg-red-600"
+                              title="Remove logo"
+                            >
+                              <X className="w-4 h-4" />
+                            </button>
+                          </div>
+                        )}
+                        <label className="cursor-pointer">
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleLogoUpload}
+                            className="hidden"
+                          />
+                          <div className="flex items-center gap-2 px-4 py-2.5 glass-morphism bg-purple-500/80 hover:bg-purple-600/80 text-white rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl border border-white/20 backdrop-blur-xl">
+                            <Upload className="w-4 h-4" />
+                            <span className="font-medium text-sm">{customLogo ? 'Change Logo' : 'Upload Logo'}</span>
+                          </div>
+                        </label>
+                      </div>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">PNG, JPG, or WebP • Max 5MB • Recommended: 512x512px</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Google Sheets Integration */}
+                <div className="glass-morphism bg-white/60 dark:bg-gray-700/60 rounded-2xl p-6 border border-white/30 dark:border-gray-600/30 backdrop-blur-xl">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="text-2xl">☁️</div>
+                    <h3 className="text-lg font-bold text-gray-900 dark:text-white">Google Sheets Sync</h3>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    {/* Status */}
+                    <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800/50 rounded-xl">
+                      <div className="flex items-center gap-3">
+                        {isGoogleSheetsEnabled && isGoogleSheetsAuthorized ? (
+                          <>
+                            <Cloud className="w-5 h-5 text-green-600 dark:text-green-400" />
+                            <div>
+                              <p className="text-sm font-semibold text-gray-900 dark:text-white">Connected</p>
+                              {lastSyncTime && (
+                                <p className="text-xs text-gray-600 dark:text-gray-400">
+                                  Last synced: {lastSyncTime.toLocaleTimeString()}
+                                </p>
+                              )}
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <CloudOff className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                            <div>
+                              <p className="text-sm font-semibold text-gray-900 dark:text-white">Offline Mode</p>
+                              <p className="text-xs text-gray-600 dark:text-gray-400">Not connected to Google Sheets</p>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Actions */}
+                    <div className="flex items-center gap-3 flex-wrap">
+                      {!isGoogleSheetsAuthorized ? (
+                        <button
+                          onClick={enableGoogleSheets}
+                          disabled={isSyncing}
+                          className="flex items-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors disabled:bg-gray-400 shadow-lg font-medium"
+                        >
+                          <Cloud className="w-4 h-4" />
+                          {isSyncing ? 'Connecting...' : 'Connect Google Sheets'}
+                        </button>
+                      ) : (
+                        <>
+                          <button
+                            onClick={syncNow}
+                            disabled={isSyncing}
+                            className="flex items-center gap-2 px-4 py-2.5 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors disabled:bg-gray-400 shadow-lg font-medium"
+                          >
+                            <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin' : ''}`} />
+                            Sync Now
+                          </button>
+                          <button
+                            onClick={signOutGoogleSheets}
+                            className="flex items-center gap-2 px-4 py-2.5 bg-gray-600 text-white rounded-xl hover:bg-gray-700 transition-colors shadow-lg font-medium"
+                          >
+                            <LogOut className="w-4 h-4" />
+                            Disconnect
+                          </button>
+                        </>
+                      )}
+                    </div>
+
+                    {/* Info */}
+                    {isGoogleSheetsAuthorized && (
+                      <div className="p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl">
+                        <p className="text-xs text-blue-700 dark:text-blue-300">
+                          <strong>Two-way sync enabled!</strong> Changes made in the dashboard or Google Sheets will automatically sync.
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Data Management */}
+                <div className="glass-morphism bg-white/60 dark:bg-gray-700/60 rounded-2xl p-6 border border-white/30 dark:border-gray-600/30 backdrop-blur-xl">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="text-2xl">💾</div>
+                    <h3 className="text-lg font-bold text-gray-900 dark:text-white">Data Management</h3>
+                  </div>
+                  
+                  <div className="space-y-3">
+                    <button
+                      onClick={exportToCSV}
+                      className="w-full flex items-center justify-between px-4 py-3 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-xl transition-colors group"
+                    >
+                      <div className="flex items-center gap-3">
+                        <Download className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                        <div className="text-left">
+                          <p className="text-sm font-semibold text-gray-900 dark:text-white">Export to CSV</p>
+                          <p className="text-xs text-gray-600 dark:text-gray-400">Download all transactions as CSV file</p>
+                        </div>
+                      </div>
+                      <div className="text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300">→</div>
+                    </button>
+
+                    <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl">
+                      <p className="text-xs text-yellow-700 dark:text-yellow-300">
+                        <strong>Filtered Export:</strong> Only currently filtered transactions will be exported.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* About */}
+                <div className="glass-morphism bg-white/60 dark:bg-gray-700/60 rounded-2xl p-6 border border-white/30 dark:border-gray-600/30 backdrop-blur-xl">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="text-2xl">ℹ️</div>
+                    <h3 className="text-lg font-bold text-gray-900 dark:text-white">About</h3>
+                  </div>
+                  
+                  <div className="space-y-2 text-sm text-gray-600 dark:text-gray-300">
+                    <p><strong>Version:</strong> v3.7.0 - Settings Panel</p>
+                    <p><strong>Features:</strong> AI Scanner • Referral Tracking • Two-way Sync</p>
+                    <p><strong>Total Transactions:</strong> {transactions.length}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-3">
+                      Built for Janice Glaab Real Estate
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Footer */}
+              <div className="p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 flex items-center justify-end">
+                <button
+                  onClick={() => setShowSettings(false)}
+                  className="px-6 py-3 bg-gradient-to-r from-black to-yellow-600 text-white rounded-xl hover:from-gray-900 hover:to-yellow-500 transition-all font-medium shadow-lg"
+                >
+                  Done
+                </button>
               </div>
             </div>
           </div>
