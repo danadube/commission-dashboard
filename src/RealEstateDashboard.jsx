@@ -833,7 +833,7 @@ const EnhancedRealEstateDashboard = () => {
                   <img 
                     src={customLogo} 
                     alt="Dashboard Logo" 
-                    className="w-16 h-16 rounded-2xl shadow-lg object-cover border-2 border-white/30 dark:border-gray-700/30"
+                    className="w-24 h-24 rounded-2xl shadow-lg object-cover border-2 border-white/30 dark:border-gray-700/30"
                   />
                   <button
                     onClick={handleLogoRemove}
@@ -942,13 +942,14 @@ const EnhancedRealEstateDashboard = () => {
 
           {/* Sync Error Display */}
           {syncError && (
-            <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
-              <p className="text-sm text-red-700">{syncError}</p>
+            <div className="mt-4 flex items-center justify-between p-2 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+              <p className="text-xs text-red-700 dark:text-red-300 font-medium">{syncError}</p>
               <button
                 onClick={() => setSyncError(null)}
-                className="text-xs text-red-600 underline mt-1"
+                className="text-xs text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 ml-3"
+                title="Dismiss"
               >
-                Dismiss
+                <X className="w-4 h-4" />
               </button>
             </div>
           )}
