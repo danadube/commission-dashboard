@@ -770,7 +770,7 @@ const EnhancedRealEstateDashboard = () => {
   const brokerageData = [
     { name: 'KW', value: filteredTransactions.filter(t => t.brokerage === 'KW').reduce((sum, t) => sum + (parseFloat(t.nci) || 0), 0) },
     { name: 'BDH', value: filteredTransactions.filter(t => t.brokerage === 'BDH').reduce((sum, t) => sum + (parseFloat(t.nci) || 0), 0) }
-  ];
+  ].filter(item => item.value > 0); // Only show brokerages with data
 
   const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444'];
 
@@ -1243,24 +1243,36 @@ const EnhancedRealEstateDashboard = () => {
 
           <div className="glass-morphism bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-2xl p-8 transition-all duration-700 border border-white/30 dark:border-gray-700/30 backdrop-blur-3xl">
             <h3 className="text-lg font-semibold mb-4 dark:text-white">Income by Brokerage</h3>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={brokerageData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
-                <XAxis 
-                  dataKey="name" 
-                  tick={{ fontSize: 14, fill: '#9CA3AF' }} 
-                  stroke="#9CA3AF"
-                />
-                <YAxis 
-                  tick={{ fontSize: 12, fill: '#9CA3AF' }} 
-                  stroke="#9CA3AF"
-                  tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`}
-                />
-                <Tooltip content={<TahoeTooltip />} />
-                <Legend />
-                <Bar dataKey="value" fill="#10b981" name="Net Commission Income" radius={[8, 8, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
+            {brokerageData.length > 0 ? (
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={brokerageData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+                  <XAxis 
+                    dataKey="name" 
+                    tick={{ fontSize: 14, fill: '#9CA3AF' }} 
+                    stroke="#9CA3AF"
+                  />
+                  <YAxis 
+                    tick={{ fontSize: 12, fill: '#9CA3AF' }} 
+                    stroke="#9CA3AF"
+                    tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`}
+                  />
+                  <Tooltip content={<TahoeTooltip />} />
+                  <Legend wrapperStyle={{ paddingTop: '10px' }} />
+                  <Bar 
+                    dataKey="value" 
+                    fill="#10b981" 
+                    name="Net Commission Income" 
+                    radius={[8, 8, 0, 0]}
+                    label={{ position: 'top', fill: '#9CA3AF', fontSize: 12 }}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="h-[300px] flex items-center justify-center text-gray-500 dark:text-gray-400">
+                <p className="text-sm">No brokerage data available</p>
+              </div>
+            )}
           </div>
         </div>
 
