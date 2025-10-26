@@ -7,7 +7,7 @@ import ThemeToggle from './ThemeToggle';
 /**
  * Janice Glaab Real Estate Commission Dashboard
  * 
- * @version 3.3.5
+ * @version 3.4.0
  * @description Professional dashboard for tracking real estate commissions with Google Sheets integration
  * 
  * ✨ KEY FEATURES:
@@ -68,6 +68,41 @@ const TahoeTooltip = ({ active, payload, label }) => {
   return null;
 };
 
+// Skeleton Loader Components for Initial Loading States
+const SkeletonMetricCard = () => (
+  <div className="glass-morphism bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-2xl p-6 border border-white/30 dark:border-gray-700/30 backdrop-blur-3xl animate-pulse">
+    <div className="flex items-center justify-between mb-4">
+      <div className="w-12 h-12 bg-gray-300 dark:bg-gray-600 rounded-xl"></div>
+    </div>
+    <div className="h-8 bg-gray-300 dark:bg-gray-600 rounded-lg mb-2 w-3/4"></div>
+    <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-1/2"></div>
+  </div>
+);
+
+const SkeletonChart = () => (
+  <div className="glass-morphism bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-2xl p-8 border border-white/30 dark:border-gray-700/30 backdrop-blur-3xl animate-pulse">
+    <div className="h-6 bg-gray-300 dark:bg-gray-600 rounded-lg mb-6 w-1/3"></div>
+    <div className="h-[300px] bg-gray-200 dark:bg-gray-700 rounded-xl"></div>
+  </div>
+);
+
+const SkeletonTransactionCard = () => (
+  <div className="glass-morphism bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-xl p-6 border-2 border-white/30 dark:border-gray-700/30 backdrop-blur-2xl animate-pulse">
+    <div className="flex justify-between items-start mb-4">
+      <div className="h-6 bg-gray-300 dark:bg-gray-600 rounded-lg w-1/2"></div>
+      <div className="h-6 bg-gray-300 dark:bg-gray-600 rounded-full w-20"></div>
+    </div>
+    <div className="space-y-3">
+      <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-3/4"></div>
+      <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-2/3"></div>
+      <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-1/2"></div>
+    </div>
+    <div className="mt-4 pt-4 border-t border-gray-300 dark:border-gray-600">
+      <div className="h-8 bg-gray-300 dark:bg-gray-600 rounded-lg w-1/3"></div>
+    </div>
+  </div>
+);
+
 const EnhancedRealEstateDashboard = () => {
   // ==================== STATE MANAGEMENT ====================
   
@@ -75,6 +110,9 @@ const EnhancedRealEstateDashboard = () => {
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [viewingTransaction, setViewingTransaction] = useState(null);
+  
+  // Loading State
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
   
   // Google Sheets State
   const [isGoogleSheetsEnabled, setIsGoogleSheetsEnabled] = useState(false);
@@ -218,6 +256,9 @@ const EnhancedRealEstateDashboard = () => {
       console.error('Failed to initialize app:', error);
       setSyncError('Failed to initialize: ' + error.message);
       loadFromLocalStorage();
+    } finally {
+      // End loading state after data is loaded
+      setTimeout(() => setIsInitialLoading(false), 500); // Small delay for smooth transition
     }
   };
 
@@ -1063,8 +1104,19 @@ const EnhancedRealEstateDashboard = () => {
 
         {/* Metrics Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+          {isInitialLoading ? (
+            <>
+              <SkeletonMetricCard />
+              <SkeletonMetricCard />
+              <SkeletonMetricCard />
+              <SkeletonMetricCard />
+              <SkeletonMetricCard />
+              <SkeletonMetricCard />
+            </>
+          ) : (
+            <>
           {/* Gross Commission Income */}
-          <div className="relative overflow-hidden bg-gradient-to-br from-purple-500 via-purple-600 to-indigo-600 rounded-3xl shadow-2xl hover:shadow-3xl p-8 text-white transform hover:-translate-y-2 hover:scale-105 transition-all duration-700 border-2 border-white/20 backdrop-blur-sm group">
+          <div className="relative overflow-hidden bg-gradient-to-br from-purple-500 via-purple-600 to-indigo-600 rounded-3xl shadow-2xl hover:shadow-3xl p-8 text-white transform hover:-translate-y-2 hover:scale-105 transition-all duration-700 border-2 border-white/20 backdrop-blur-sm group animate-[fadeIn_0.6s_ease-out]">
             <div className="flex items-center justify-between">
               <div className="flex-1">
                 <p className="text-purple-100 text-sm font-semibold uppercase tracking-wide">💰 Gross Commission</p>
@@ -1134,7 +1186,7 @@ const EnhancedRealEstateDashboard = () => {
           </div>
 
           {/* Referral Fees */}
-          <div className="relative overflow-hidden bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 rounded-3xl shadow-2xl hover:shadow-3xl p-8 text-white transform hover:-translate-y-2 hover:scale-105 transition-all duration-700 border-2 border-white/20 backdrop-blur-sm group">
+          <div className="relative overflow-hidden bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 rounded-3xl shadow-2xl hover:shadow-3xl p-8 text-white transform hover:-translate-y-2 hover:scale-105 transition-all duration-700 border-2 border-white/20 backdrop-blur-sm group animate-[fadeIn_0.6s_ease-out]">
             <div className="flex items-center justify-between">
               <div className="flex-1">
                 <p className="text-orange-100 text-sm font-semibold uppercase tracking-wide">🤝 Referral Fees</p>
@@ -1146,6 +1198,8 @@ const EnhancedRealEstateDashboard = () => {
               </div>
             </div>
           </div>
+            </>
+          )}
         </div>
 
         {/* Smart Insights */}
@@ -1183,7 +1237,16 @@ const EnhancedRealEstateDashboard = () => {
 
         {/* Charts */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-          <div className="glass-morphism bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-2xl p-8 transition-all duration-700 border border-white/30 dark:border-gray-700/30 backdrop-blur-3xl">
+          {isInitialLoading ? (
+            <>
+              <SkeletonChart />
+              <SkeletonChart />
+              <SkeletonChart />
+              <SkeletonChart />
+            </>
+          ) : (
+            <>
+          <div className="glass-morphism bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-2xl p-8 transition-all duration-700 border border-white/30 dark:border-gray-700/30 backdrop-blur-3xl animate-[fadeIn_0.7s_ease-out]">
             <h3 className="text-lg font-semibold mb-4 dark:text-white">Monthly Income Trend</h3>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={chartData}>
@@ -1274,6 +1337,8 @@ const EnhancedRealEstateDashboard = () => {
               </div>
             )}
           </div>
+            </>
+          )}
         </div>
 
         {/* Transactions List */}
@@ -1299,7 +1364,13 @@ const EnhancedRealEstateDashboard = () => {
             )}
           </div>
 
-          {filteredTransactions.length === 0 ? (
+          {isInitialLoading ? (
+            <div className="space-y-4">
+              <SkeletonTransactionCard />
+              <SkeletonTransactionCard />
+              <SkeletonTransactionCard />
+            </div>
+          ) : filteredTransactions.length === 0 ? (
             <div className="text-center py-12">
               <Home className="w-16 h-16 text-gray-300 mx-auto mb-4" />
               <p className="text-gray-500 text-lg">No transactions found</p>
@@ -1310,7 +1381,7 @@ const EnhancedRealEstateDashboard = () => {
               </p>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-4 animate-[fadeIn_0.8s_ease-out]">
               {filteredTransactions.map(transaction => {
                 const isBuyer = transaction.clientType === 'Buyer';
                 return (
@@ -1399,7 +1470,7 @@ const EnhancedRealEstateDashboard = () => {
 
         {/* Footer */}
         <div className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
-          Janice Glaab Real Estate Dashboard v3.3.5 • Built with ❤️ by Dana Dube
+          Janice Glaab Real Estate Dashboard v3.4.0 • Built with ❤️ by Dana Dube
         </div>
 
         {/* Transaction Form Modal */}

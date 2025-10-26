@@ -89,6 +89,18 @@
         animation: ambient-glow 4s ease-in-out infinite;
       }
       
+      /* Fade In Animation */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      
       /* Mesh Gradient Support */
       .mesh-gradient {
         background: 
