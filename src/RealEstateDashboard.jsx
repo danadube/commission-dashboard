@@ -665,13 +665,13 @@ const EnhancedRealEstateDashboard = () => {
   // ==================== RENDER ====================
   
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-4 transition-colors duration-200">
+    <div className="min-h-screen mesh-gradient bg-gray-50/50 dark:bg-gray-900/80 p-6 transition-all duration-700">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-6 transition-colors">
-          <div className="flex items-center justify-between mb-4 flex-wrap gap-4">
+        <div className="glass-morphism bg-white/70 dark:bg-gray-800/70 rounded-2xl shadow-2xl p-8 mb-8 border border-white/20 dark:border-gray-700/30 backdrop-blur-3xl">
+          <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Real Estate Commission Dashboard</h1>
+              <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 dark:from-purple-400 dark:via-blue-400 dark:to-cyan-400 bg-clip-text text-transparent animate-glow">Real Estate Commission Dashboard</h1>
               <p className="text-gray-600 dark:text-gray-300 mt-1">Track and analyze your commission income</p>
             </div>
             <div className="flex items-center gap-3 flex-wrap">
@@ -775,7 +775,7 @@ const EnhancedRealEstateDashboard = () => {
         </div>
 
         {/* Filters */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-6 transition-colors border border-gray-200 dark:border-gray-700">
+        <div className="glass-morphism bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-2xl p-8 mb-8 transition-all duration-700 border border-white/30 dark:border-gray-700/30 backdrop-blur-3xl hover:shadow-3xl">
           <div className="flex items-center gap-2 mb-4">
             <Filter className="w-5 h-5 text-blue-600 dark:text-blue-400" />
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Filter Transactions</h3>
@@ -873,7 +873,7 @@ const EnhancedRealEstateDashboard = () => {
         {/* Metrics Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
           {/* Gross Commission Income */}
-          <div className="bg-gradient-to-br from-purple-500 via-purple-600 to-indigo-600 rounded-xl shadow-xl hover:shadow-2xl p-6 text-white transform hover:-translate-y-1 transition-all duration-300 border-2 border-purple-400/30">
+          <div className="relative overflow-hidden bg-gradient-to-br from-purple-500 via-purple-600 to-indigo-600 rounded-3xl shadow-2xl hover:shadow-3xl p-8 text-white transform hover:-translate-y-2 hover:scale-105 transition-all duration-700 border-2 border-white/20 backdrop-blur-sm group">
             <div className="flex items-center justify-between">
               <div className="flex-1">
                 <p className="text-purple-100 text-sm font-semibold uppercase tracking-wide">💰 Gross Commission</p>
@@ -887,7 +887,7 @@ const EnhancedRealEstateDashboard = () => {
           </div>
 
           {/* Net Commission Income */}
-          <div className="bg-gradient-to-br from-green-500 via-green-600 to-emerald-600 rounded-xl shadow-xl hover:shadow-2xl p-6 text-white transform hover:-translate-y-1 transition-all duration-300 border-2 border-green-400/30">
+          <div className="relative overflow-hidden bg-gradient-to-br from-green-500 via-green-600 to-emerald-600 rounded-3xl shadow-2xl hover:shadow-3xl p-8 text-white transform hover:-translate-y-2 hover:scale-105 transition-all duration-700 border-2 border-white/20 backdrop-blur-sm group">
             <div className="flex items-center justify-between">
               <div className="flex-1">
                 <p className="text-green-100 text-sm font-semibold uppercase tracking-wide">✅ Net Commission</p>
@@ -901,7 +901,7 @@ const EnhancedRealEstateDashboard = () => {
           </div>
 
           {/* Total Sales Volume */}
-          <div className="bg-gradient-to-br from-blue-500 via-blue-600 to-cyan-600 rounded-xl shadow-xl hover:shadow-2xl p-6 text-white transform hover:-translate-y-1 transition-all duration-300 border-2 border-blue-400/30">
+          <div className="relative overflow-hidden bg-gradient-to-br from-blue-500 via-blue-600 to-cyan-600 rounded-3xl shadow-2xl hover:shadow-3xl p-8 text-white transform hover:-translate-y-2 hover:scale-105 transition-all duration-700 border-2 border-white/20 backdrop-blur-sm group">
             <div className="flex items-center justify-between">
               <div className="flex-1">
                 <p className="text-blue-100 text-sm font-semibold uppercase tracking-wide">🏘️ Total Sales Volume</p>
@@ -915,7 +915,7 @@ const EnhancedRealEstateDashboard = () => {
           </div>
 
           {/* Average Commission */}
-          <div className="bg-gradient-to-br from-pink-500 via-pink-600 to-rose-600 rounded-xl shadow-xl hover:shadow-2xl p-6 text-white transform hover:-translate-y-1 transition-all duration-300 border-2 border-pink-400/30">
+          <div className="relative overflow-hidden bg-gradient-to-br from-pink-500 via-pink-600 to-rose-600 rounded-3xl shadow-2xl hover:shadow-3xl p-8 text-white transform hover:-translate-y-2 hover:scale-105 transition-all duration-700 border-2 border-white/20 backdrop-blur-sm group">
             <div className="flex items-center justify-between">
               <div className="flex-1">
                 <p className="text-pink-100 text-sm font-semibold uppercase tracking-wide">📊 Average Per Deal</p>
@@ -929,7 +929,7 @@ const EnhancedRealEstateDashboard = () => {
           </div>
 
           {/* Total Transactions */}
-          <div className="bg-gradient-to-br from-amber-500 via-orange-500 to-yellow-500 rounded-xl shadow-xl hover:shadow-2xl p-6 text-white transform hover:-translate-y-1 transition-all duration-300 border-2 border-amber-400/30">
+          <div className="relative overflow-hidden bg-gradient-to-br from-amber-500 via-orange-500 to-yellow-500 rounded-3xl shadow-2xl hover:shadow-3xl p-8 text-white transform hover:-translate-y-2 hover:scale-105 transition-all duration-700 border-2 border-white/20 backdrop-blur-sm group">
             <div className="flex items-center justify-between">
               <div className="flex-1">
                 <p className="text-amber-100 text-sm font-semibold uppercase tracking-wide">🎯 Total Transactions</p>
@@ -943,7 +943,7 @@ const EnhancedRealEstateDashboard = () => {
           </div>
 
           {/* Referral Fees */}
-          <div className="bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 rounded-xl shadow-xl hover:shadow-2xl p-6 text-white transform hover:-translate-y-1 transition-all duration-300 border-2 border-orange-400/30">
+          <div className="relative overflow-hidden bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 rounded-3xl shadow-2xl hover:shadow-3xl p-8 text-white transform hover:-translate-y-2 hover:scale-105 transition-all duration-700 border-2 border-white/20 backdrop-blur-sm group">
             <div className="flex items-center justify-between">
               <div className="flex-1">
                 <p className="text-orange-100 text-sm font-semibold uppercase tracking-wide">🤝 Referral Fees</p>
@@ -958,8 +958,8 @@ const EnhancedRealEstateDashboard = () => {
         </div>
 
         {/* Charts */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 transition-colors">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          <div className="glass-morphism bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-2xl p-8 transition-all duration-700 border border-white/30 dark:border-gray-700/30 backdrop-blur-3xl">
             <h3 className="text-lg font-semibold mb-4 dark:text-white">Monthly Income Trend</h3>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={chartData}>
@@ -978,7 +978,7 @@ const EnhancedRealEstateDashboard = () => {
             </ResponsiveContainer>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 transition-colors">
+          <div className="glass-morphism bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-2xl p-8 transition-all duration-700 border border-white/30 dark:border-gray-700/30 backdrop-blur-3xl">
             <h3 className="text-lg font-semibold mb-4 dark:text-white">Transactions by Month</h3>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={chartData}>
@@ -996,7 +996,7 @@ const EnhancedRealEstateDashboard = () => {
             </ResponsiveContainer>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 transition-colors">
+          <div className="glass-morphism bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-2xl p-8 transition-all duration-700 border border-white/30 dark:border-gray-700/30 backdrop-blur-3xl">
             <h3 className="text-lg font-semibold mb-4 dark:text-white">Client Type Distribution</h3>
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
@@ -1022,7 +1022,7 @@ const EnhancedRealEstateDashboard = () => {
             </ResponsiveContainer>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 transition-colors">
+          <div className="glass-morphism bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-2xl p-8 transition-all duration-700 border border-white/30 dark:border-gray-700/30 backdrop-blur-3xl">
             <h3 className="text-lg font-semibold mb-4 dark:text-white">Income by Brokerage</h3>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={brokerageData}>
@@ -1042,7 +1042,7 @@ const EnhancedRealEstateDashboard = () => {
         </div>
 
         {/* Transactions List */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 transition-colors">
+        <div className="glass-morphism bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-2xl p-8 transition-all duration-700 border border-white/30 dark:border-gray-700/30 backdrop-blur-3xl">
           <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
             <h2 className="text-xl font-bold dark:text-white">
               Filtered Transactions
@@ -1170,7 +1170,7 @@ const EnhancedRealEstateDashboard = () => {
         {/* Transaction Form Modal */}
         {showForm && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-y-auto">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-4xl w-full my-8 transition-colors">
+            <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-3xl max-w-4xl backdrop-blur-3xl w-full my-8 transition-colors">
               <div className="p-6 border-b border-gray-200 dark:border-gray-700">
                 <div className="flex items-center justify-between">
                   <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
@@ -1672,7 +1672,7 @@ const EnhancedRealEstateDashboard = () => {
         {/* Transaction Detail View Modal */}
         {viewingTransaction && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-y-auto">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-4xl w-full my-8 transition-colors">
+            <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-3xl max-w-4xl backdrop-blur-3xl w-full my-8 transition-colors">
               {/* Header */}
               <div className="p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20">
                 <div className="flex items-center justify-between">
