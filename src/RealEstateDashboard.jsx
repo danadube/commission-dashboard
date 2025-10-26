@@ -862,13 +862,24 @@ const EnhancedRealEstateDashboard = () => {
       const timeA = isNaN(dateA.getTime()) ? 0 : dateA.getTime();
       const timeB = isNaN(dateB.getTime()) ? 0 : dateB.getTime();
       
+      // DEBUG: Log first comparison
+      if (filtered.length > 1) {
+        console.log('🧮 Sort comparison example:', {
+          a: { date: a.closingDate, parsed: dateA.toString(), time: timeA },
+          b: { date: b.closingDate, parsed: dateB.toString(), time: timeB },
+          sortOrder,
+          result: sortOrder === 'newest' ? timeB - timeA : timeA - timeB
+        });
+      }
+      
       // Newest first (descending) or oldest first (ascending)
       return sortOrder === 'newest' ? timeB - timeA : timeA - timeB;
     });
     
-    console.log('🔧 useMemo RESULT - first 3:', sorted.slice(0, 3).map(t => ({ 
-      address: t.address?.substring(0, 15), 
-      date: t.closingDate 
+    console.log('🔧 useMemo RESULT - first 5:', sorted.slice(0, 5).map(t => ({ 
+      address: t.address?.substring(0, 20), 
+      date: t.closingDate,
+      parsed: new Date(t.closingDate).toISOString()
     })));
     
     return sorted;
