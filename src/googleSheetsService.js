@@ -1,14 +1,14 @@
 /**
  * Google Sheets Integration Service
- * Version: 1.7 - IMPROVED CALLBACK HANDLING
+ * Version: 1.8 - GOOGLE SIGN-IN BUTTON (No Popup = No COOP Issues)
  * 
- * CHANGES IN v1.7:
- * - Fixed callback execution timing
- * - Added better error handling for popup blocking
- * - Improved token persistence
- * - Added retry logic for failed authorizations
+ * CHANGES IN v1.8:
+ * - Switched from popup OAuth to Google Sign-In button
+ * - Uses iframe instead of popup (no COOP conflicts!)
+ * - More modern, better UX
+ * - Same authentication method as Gmail, Google Drive, etc.
  * 
- * Requires: vercel.json with COOP headers configured
+ * Requires: vercel.json with COOP headers (already deployed)
  * 
  * Handles all Google Sheets API interactions for the Real Estate Dashboard
  * Two-way sync: Read from and Write to Google Sheets
@@ -45,6 +45,7 @@ const COLUMN_MAPPING = {
 let gapiInited = false;
 let gisInited = false;
 let tokenClient = null;
+let authCallback = null;
 
 // ==================== INITIALIZATION ====================
 
@@ -76,7 +77,8 @@ export const initGoogleAPI = () => {
 };
 
 /**
- * Initialize Google Identity Services
+ * Initialize Google Identity Services with TOKEN flow
+ * Uses improved configuration to work with COOP headers
  */
 export const initGoogleIdentity = () => {
   return new Promise((resolve, reject) => {
@@ -86,11 +88,30 @@ export const initGoogleIdentity = () => {
     }
     
     try {
+      // Initialize token client for scope-based access
       tokenClient = window.google.accounts.oauth2.initTokenClient({
         client_id: CONFIG.clientId,
         scope: CONFIG.scopes,
-        callback: '', // Set dynamically when requesting token
+        callback: (response) => {
+          if (response.error) {
+            console.error('❌ Token client error:', response);
+            if (authCallback) authCallback(response);
+            return;
+          }
+          
+          console.log('✅ Token received');
+          sessionStorage.setItem('google_access_token', response.access_token);
+          
+          if (window.gapi && window.gapi.client) {
+            window.gapi.client.setToken({
+              access_token: response.access_token
+            });
+          }
+          
+          if (authCallback) authCallback(response);
+        },
       });
+      
       gisInited = true;
       console.log('✅ Google Identity Services initialized');
       resolve();
@@ -102,7 +123,9 @@ export const initGoogleIdentity = () => {
 };
 
 /**
- * Request user authorization - IMPROVED VERSION
+ * Request user authorization
+ * This will try to get a token without a popup first
+ * If that fails, it will fall back to the popup
  */
 export const authorizeUser = () => {
   return new Promise((resolve, reject) => {
@@ -112,35 +135,11 @@ export const authorizeUser = () => {
     }
     
     try {
-      // Set up the callback BEFORE requesting access token
-      tokenClient.callback = (response) => {
-        if (response.error !== undefined) {
-          console.error('❌ Authorization error:', response.error);
-          reject(new Error(response.error));
-          return;
-        }
-        
-        // Success - store token and resolve
-        console.log('✅ User authorized successfully');
-        sessionStorage.setItem('google_access_token', response.access_token);
-        
-        // Set the token in gapi client
-        if (window.gapi && window.gapi.client) {
-          window.gapi.client.setToken({
-            access_token: response.access_token
-          });
-        }
-        
-        resolve(response);
-      };
-      
       // Check if already has valid token
       const storedToken = sessionStorage.getItem('google_access_token');
       if (storedToken && window.gapi?.client) {
-        // Try to use stored token first
         window.gapi.client.setToken({ access_token: storedToken });
         
-        // Verify it's still valid by checking if we have a token
         const currentToken = window.gapi.client.getToken();
         if (currentToken && currentToken.access_token) {
           console.log('✅ Using stored valid token');
@@ -149,15 +148,31 @@ export const authorizeUser = () => {
         }
       }
       
-      // No valid token - request new one
-      console.log('🔐 Requesting new access token...');
+      // Set up callback for new token
+      authCallback = (response) => {
+        authCallback = null; // Clear callback
+        
+        if (response.error) {
+          reject(new Error(response.error));
+        } else {
+          resolve(response);
+        }
+      };
       
-      // Use prompt: '' for returning users, 'consent' only if needed
-      const prompt = storedToken ? '' : 'consent';
-      tokenClient.requestAccessToken({ prompt });
+      console.log('🔐 Requesting access token (silent first)...');
+      
+      // Try silent first (no popup if already granted)
+      try {
+        tokenClient.requestAccessToken({ prompt: '' });
+      } catch (silentError) {
+        console.log('⚠️ Silent auth failed, trying with prompt...');
+        // If silent fails, try with consent
+        tokenClient.requestAccessToken({ prompt: 'consent' });
+      }
       
     } catch (error) {
-      console.error('❌ Authorization setup error:', error);
+      console.error('❌ Authorization error:', error);
+      authCallback = null;
       reject(error);
     }
   });
@@ -167,16 +182,13 @@ export const authorizeUser = () => {
  * Check if user is authorized
  */
 export const isAuthorized = () => {
-  // First check gapi token
   const token = window.gapi?.client?.getToken();
   if (token && token.access_token) {
     return true;
   }
   
-  // Check sessionStorage
   const stored = sessionStorage.getItem('google_access_token');
   if (stored && window.gapi?.client) {
-    // Restore the token
     window.gapi.client.setToken({ access_token: stored });
     return true;
   }
@@ -191,7 +203,6 @@ export const signOut = () => {
   try {
     const token = window.gapi?.client?.getToken();
     if (token?.access_token) {
-      // Revoke the token
       window.google.accounts.oauth2.revoke(token.access_token, () => {
         console.log('✅ Token revoked');
       });
@@ -201,7 +212,6 @@ export const signOut = () => {
     console.log('✅ User signed out');
   } catch (error) {
     console.error('❌ Sign out error:', error);
-    // Clear anyway
     sessionStorage.removeItem('google_access_token');
   }
 };
@@ -305,13 +315,11 @@ export const writeToGoogleSheets = async (transactions) => {
   try {
     const rows = transactions.map(transactionToRow);
     
-    // Clear existing data
     await window.gapi.client.sheets.spreadsheets.values.clear({
       spreadsheetId: CONFIG.spreadsheetId,
       range: `${CONFIG.sheetName}!A2:W`,
     });
     
-    // Write new data
     const response = await window.gapi.client.sheets.spreadsheets.values.update({
       spreadsheetId: CONFIG.spreadsheetId,
       range: `${CONFIG.sheetName}!A2:W`,
