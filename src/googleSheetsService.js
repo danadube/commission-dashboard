@@ -236,7 +236,7 @@ export async function readTransactions() {
       referralDollar: parseFloat(row[13]) || 0,
       adjustedGci: parseFloat(row[14]) || 0,
       preSplitDeduction: parseFloat(row[15]) || 0,
-      brokerage: 'KW', // Default to KW if not specified
+      brokerage: 'BDH', // Default to BDH (Bennion Deville Homes)
       totalBrokerageFees: parseFloat(row[16]) || 0,
       companyDollar: parseFloat(row[16]) || 0, // Using brokeragesplit
       otherDeductions: parseFloat(row[17]) || 0,
