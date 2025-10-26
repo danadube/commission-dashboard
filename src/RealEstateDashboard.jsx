@@ -808,7 +808,6 @@ const EnhancedRealEstateDashboard = () => {
   // ==================== FILTERING & SORTING ====================
   
   const filteredTransactions = useMemo(() => {
-    console.log('🔍 Recalculating filteredTransactions with sortOrder:', sortOrder);
     const filtered = transactions.filter(transaction => {
       const year = transaction.closingDate ? new Date(transaction.closingDate).getFullYear().toString() : '';
       
@@ -860,23 +859,12 @@ const EnhancedRealEstateDashboard = () => {
       return result;
     });
     
-    console.log('📅 After sorting:', sortOrder, '- First 3:', sorted.slice(0, 3).map(t => ({ 
-      address: t.address, 
-      date: t.closingDate,
-      timestamp: t.closingDate ? new Date(t.closingDate).getTime() : 0
-    })));
-    
     return sorted;
   }, [transactions, filterYear, filterClientType, filterBrokerage, filterPropertyType, filterPriceRange, sortOrder]);
   
   // Toggle sort order function
   const toggleSortOrder = () => {
     const newOrder = sortOrder === 'newest' ? 'oldest' : 'newest';
-    console.log('🔄 Toggling sort order:', sortOrder, '->', newOrder);
-    console.log('📊 First 3 transactions before sort:', filteredTransactions.slice(0, 3).map(t => ({ 
-      address: t.address, 
-      date: t.closingDate 
-    })));
     setSortOrder(newOrder);
     localStorage.setItem('transactionSortOrder', newOrder);
   };
