@@ -249,6 +249,9 @@ const EnhancedRealEstateDashboard = () => {
         setIsGoogleSheetsEnabled(true);
         setIsGoogleSheetsAuthorized(true);
         localStorage.setItem('googleSheetsEnabled', 'true');
+        
+        // Auto-sync on app open
+        console.log('🔄 Auto-syncing on app startup...');
         await loadFromGoogleSheets();
       } else {
         // Check if Google Sheets was previously enabled
@@ -968,6 +971,13 @@ const EnhancedRealEstateDashboard = () => {
     { name: 'KW', value: filteredTransactions.filter(t => t.brokerage === 'KW').reduce((sum, t) => sum + (parseFloat(t.nci) || 0), 0) },
     { name: 'BDH', value: filteredTransactions.filter(t => t.brokerage === 'BDH').reduce((sum, t) => sum + (parseFloat(t.nci) || 0), 0) }
   ].filter(item => item.value > 0); // Only show brokerages with data
+  
+  // Debug: Log brokerage data for troubleshooting
+  if (filteredTransactions.length > 0 && brokerageData.length === 0) {
+    console.warn('⚠️ No brokerage data found. Checking transaction brokerages:', 
+      filteredTransactions.map(t => ({ address: t.address, brokerage: t.brokerage, nci: t.nci }))
+    );
+  }
 
   const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444'];
 
@@ -1051,14 +1061,25 @@ const EnhancedRealEstateDashboard = () => {
 
             {/* Right: Actions */}
             <div className="flex items-center gap-2 lg:gap-3 flex-shrink-0">
-              {/* Sync Status Indicator */}
+              {/* Sync Status & Button */}
               {isGoogleSheetsEnabled && isGoogleSheetsAuthorized && (
-                <div className="hidden sm:flex items-center gap-2 px-3 py-2 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-700">
-                  <Cloud className="w-4 h-4 text-green-600 dark:text-green-400" />
-                  <span className="text-xs font-medium text-green-700 dark:text-green-300">
-                    {isSyncing ? 'Syncing...' : 'Synced'}
-                  </span>
-                </div>
+                <>
+                  <div className="hidden md:flex items-center gap-2 px-3 py-2 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-700">
+                    <Cloud className="w-4 h-4 text-green-600 dark:text-green-400" />
+                    <span className="text-xs font-medium text-green-700 dark:text-green-300">
+                      {isSyncing ? 'Syncing...' : 'Synced'}
+                    </span>
+                  </div>
+                  <button
+                    onClick={syncNow}
+                    disabled={isSyncing}
+                    className="hidden sm:flex items-center gap-2 px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed shadow-sm"
+                    title="Sync with Google Sheets"
+                  >
+                    <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin' : ''}`} />
+                    <span className="text-xs font-medium hidden lg:inline">Sync</span>
+                  </button>
+                </>
               )}
               
               {!isGoogleSheetsEnabled && (
