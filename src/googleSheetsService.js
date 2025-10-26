@@ -9,14 +9,15 @@
  * - Token management and persistence
  * - Auto-sync on all CRUD operations
  * 
- * Column Mapping (A-W, 22 columns):
+ * Column Mapping (A-Z, 25 columns):
  * A: Property Type, B: Client Type, C: Source, D: Address, E: City,
  * F: List Price, G: Commission %, H: List Date, I: Closing Date, J: Brokerage,
  * K: Net Volume, L: Closed Price, M: GCI, N: Referral %, O: Referral $,
  * P: Adjusted GCI, Q: Pre-split Deduction, R: Brokerage Split,
- * S: Admin Fees/Other Deductions, T: NCI, U: Status, V: Assistant Bonus, W: Buyer's Agent Split
+ * S: Admin Fees/Other Deductions, T: NCI, U: Status, V: Assistant Bonus, W: Buyer's Agent Split,
+ * X: Transaction Type (NEW v3.5), Y: Referring Agent (NEW v3.5), Z: Referral Fee Received (NEW v3.5)
  * 
- * @version 3.3.2
+ * @version 3.5.0
  */
 
 const SCOPES = 'https://www.googleapis.com/auth/spreadsheets';
@@ -221,7 +222,7 @@ export async function readTransactions() {
       throw new Error('Spreadsheet ID not configured');
     }
     
-    const range = 'Transactions!A2:W';
+    const range = 'Transactions!A2:Z';
 
     const response = await window.gapi.client.sheets.spreadsheets.values.get({
       spreadsheetId,
@@ -259,6 +260,9 @@ export async function readTransactions() {
       status: row[20] || 'Closed',
       assistantBonus: parseFloat(row[21]) || 0,
       buyersAgentSplit: parseFloat(row[22]) || 0,
+      transactionType: row[23] || 'Sale', // X: Transaction Type (NEW v3.5)
+      referringAgent: row[24] || '', // Y: Referring Agent (NEW v3.5)
+      referralFeeReceived: parseFloat(row[25]) || 0, // Z: Referral Fee Received (NEW v3.5)
       notes: '',
     }));
   } catch (error) {
@@ -287,7 +291,7 @@ export async function writeTransactions(transactions) {
     console.log('💾 Writing to Google Sheets...');
     
     const spreadsheetId = process.env.REACT_APP_SPREADSHEET_ID;
-    const range = 'Transactions!A2:W';
+    const range = 'Transactions!A2:Z';
 
     const rows = transactions.map(t => [
       t.propertyType || 'Residential',        // A: Property Type
@@ -313,6 +317,9 @@ export async function writeTransactions(transactions) {
       t.status || 'Closed',                   // U: Status
       t.assistantBonus || 0,                  // V: Assistant Bonus
       t.buyersAgentSplit || 0,                // W: Buyer's Agent Split
+      t.transactionType || 'Sale',            // X: Transaction Type (NEW v3.5)
+      t.referringAgent || '',                 // Y: Referring Agent (NEW v3.5)
+      t.referralFeeReceived || 0,             // Z: Referral Fee Received (NEW v3.5)
     ]);
 
     // Clear existing data

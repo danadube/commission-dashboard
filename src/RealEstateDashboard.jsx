@@ -1427,24 +1427,40 @@ const EnhancedRealEstateDashboard = () => {
             <div className="space-y-4 animate-[fadeIn_0.8s_ease-out]">
               {filteredTransactions.map(transaction => {
                 const isBuyer = transaction.clientType === 'Buyer';
+                const isReferralOut = transaction.transactionType === 'Referral Out';
+                const isReferralIn = transaction.transactionType === 'Referral In';
+                const isReferral = isReferralOut || isReferralIn;
+                
                 return (
                 <div
                   key={transaction.id}
                   onClick={() => handleView(transaction)}
                   className={`flex items-center justify-between p-5 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-1 cursor-pointer border-2 ${
-                    isBuyer
-                      ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-300 dark:border-blue-700 hover:border-blue-500 dark:hover:border-blue-500'
-                      : 'bg-amber-50 dark:bg-yellow-900/20 border-amber-300 dark:border-yellow-700 hover:border-amber-500 dark:hover:border-yellow-500'
+                    isReferral
+                      ? 'bg-purple-50 dark:bg-purple-900/20 border-purple-300 dark:border-purple-700 hover:border-purple-500 dark:hover:border-purple-500'
+                      : isBuyer
+                        ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-300 dark:border-blue-700 hover:border-blue-500 dark:hover:border-blue-500'
+                        : 'bg-amber-50 dark:bg-yellow-900/20 border-amber-300 dark:border-yellow-700 hover:border-amber-500 dark:hover:border-yellow-500'
                   }`}
                 >
                   <div className="flex items-center gap-4 flex-1">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-2 flex-wrap">
                         <h3 className={`font-bold text-lg truncate ${
-                          isBuyer 
-                            ? 'text-blue-900 dark:text-blue-100' 
-                            : 'text-amber-900 dark:text-yellow-100'
+                          isReferral
+                            ? 'text-purple-900 dark:text-purple-100'
+                            : isBuyer 
+                              ? 'text-blue-900 dark:text-blue-100' 
+                              : 'text-amber-900 dark:text-yellow-100'
                         }`}>{transaction.address}</h3>
+                        
+                        {/* Referral Badge */}
+                        {isReferral && (
+                          <span className="px-3 py-1 rounded-full text-xs font-bold shadow-md border-2 bg-purple-100 dark:bg-purple-900/50 text-purple-800 dark:text-purple-200 border-purple-300 dark:border-purple-600">
+                            {isReferralOut ? '🤝 Referral Out' : '👥 Referral In'}
+                          </span>
+                        )}
+                        
                         <span className={`px-3 py-1 rounded-full text-xs font-bold shadow-md border-2 ${
                           isBuyer
                             ? 'bg-blue-600 text-white border-blue-700 dark:bg-blue-500 dark:border-blue-400' 
@@ -1478,9 +1494,11 @@ const EnhancedRealEstateDashboard = () => {
                       </div>
                     </div>
                     <div className={`text-right px-4 py-3 rounded-lg shadow-md border-2 ${
-                      isBuyer
-                        ? 'bg-gradient-to-br from-green-50 to-blue-50 dark:from-green-900/50 dark:to-blue-900/50 border-green-300 dark:border-green-600'
-                        : 'bg-gradient-to-br from-green-50 to-amber-50 dark:from-green-900/50 dark:to-yellow-900/50 border-green-300 dark:border-green-600'
+                      isReferral
+                        ? 'bg-gradient-to-br from-green-50 to-purple-50 dark:from-green-900/50 dark:to-purple-900/50 border-green-300 dark:border-green-600'
+                        : isBuyer
+                          ? 'bg-gradient-to-br from-green-50 to-blue-50 dark:from-green-900/50 dark:to-blue-900/50 border-green-300 dark:border-green-600'
+                          : 'bg-gradient-to-br from-green-50 to-amber-50 dark:from-green-900/50 dark:to-yellow-900/50 border-green-300 dark:border-green-600'
                     }`}>
                       <p className="text-xs text-green-700 dark:text-green-300 font-semibold uppercase tracking-wide">💵 NCI</p>
                       <p className="text-xl font-bold text-green-700 dark:text-green-200">
