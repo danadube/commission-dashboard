@@ -1,0 +1,273 @@
+# Commission Dashboard - Product Roadmap
+
+**Current Version:** v3.13.0  
+**Last Updated:** October 2025
+
+---
+
+## ✅ Completed Features (v3.0 - v3.13.0)
+
+### Core Functionality
+- [x] Full CRUD operations for transactions
+- [x] Local storage persistence
+- [x] CSV export functionality
+- [x] Transaction detail modal view
+- [x] Advanced filtering (Year, Client Type, Brokerage, Property Type, Price Range)
+- [x] Chronological sorting (Newest/Oldest first)
+
+### Google Sheets Integration
+- [x] OAuth 2.0 authentication
+- [x] Two-way sync (Dashboard ↔ Sheets)
+- [x] Auto-sync on app open
+- [x] Manual sync button
+- [x] Session management
+- [x] Offline mode fallback
+
+### Design & UX
+- [x] macOS Tahoe 2026 aesthetic
+- [x] Glass morphism UI
+- [x] Spring animations
+- [x] Mesh gradients
+- [x] SF Pro font integration
+- [x] Dark/Light/System themes
+- [x] Dynamic favicon switching
+- [x] Responsive design (mobile-first)
+- [x] Loading states with skeleton loaders
+- [x] Color-coded transaction cards (Buyer/Seller/Referral)
+
+### Analytics & Insights
+- [x] Interactive charts (Line, Bar, Pie)
+- [x] Smart Insights dashboard
+- [x] Metric cards (GCI, NCI, Total Transactions, Avg Commission)
+- [x] "Best Month" analysis
+- [x] "Top Property Type" analysis
+- [x] "Average Days to Close" calculation
+- [x] "Stronger Side" (Buyer vs Seller) indicator
+- [x] "Biggest Deal" highlighting
+
+### Advanced Features
+- [x] Referral tracking system
+  - Transaction types: Sale, Referral Out, Referral In
+  - Conditional form fields
+  - Referral fee calculations
+  - Visual badges on cards
+- [x] AI Commission Sheet Scanner
+  - OpenAI Vision API integration
+  - Auto-fill from screenshots
+  - Confidence scoring
+  - Serverless function for security
+
+### Customization
+- [x] Agent name personalization
+- [x] Company/Brokerage personalization
+- [x] Custom logo upload
+- [x] Settings modal
+- [x] Persistent preferences
+
+---
+
+## 🚧 In Progress / Bug Fixes
+
+### Design System
+- [ ] Complete 8-point spacing audit
+  - Ensure all padding/margin uses multiples of 8px (8, 16, 24, 32, etc.)
+  - Update Tailwind spacing classes
+  - Document spacing scale
+
+---
+
+## 🎯 v3.14.0 - UX Polish (Next Release)
+
+### High Priority
+- [ ] **8-Point Grid System**
+  - Audit all spacing values
+  - Replace non-compliant spacing with 8px multiples
+  - Create spacing utility documentation
+  
+- [ ] **Keyboard Shortcuts**
+  - `Cmd/Ctrl + K` - Add Transaction
+  - `Cmd/Ctrl + S` - Sync
+  - `Cmd/Ctrl + ,` - Settings
+  - `Esc` - Close modals
+  - `/` - Focus search/filter
+  
+- [ ] **Search Functionality**
+  - Search by address
+  - Search by client name
+  - Search by city
+  - Fuzzy search support
+
+### Medium Priority
+- [ ] **Undo/Redo System**
+  - Transaction deletion undo
+  - Edit undo
+  - Toast notifications for actions
+
+- [ ] **Bulk Operations**
+  - Select multiple transactions
+  - Bulk delete
+  - Bulk edit (change brokerage, property type, etc.)
+  - Bulk export
+
+- [ ] **Data Validation**
+  - Field validation rules
+  - Required field indicators
+  - Error messages
+  - Duplicate detection
+
+---
+
+## 🔮 v3.15.0 - Advanced Analytics
+
+### Data Visualization
+- [ ] **Custom Date Range Selector**
+  - Quarter view
+  - Custom range picker
+  - Comparison mode (YoY, MoM)
+
+- [ ] **New Chart Types**
+  - Commission trend by month
+  - NCI vs GCI comparison
+  - Funnel chart (List → Close conversion)
+  - Geographic heat map (if city data)
+
+- [ ] **Export Enhancements**
+  - PDF report generation
+  - Chart export as images
+  - Customizable report templates
+  - Email reports
+
+### Insights
+- [ ] **Predictive Analytics**
+  - Projected annual income
+  - Seasonal trends
+  - Average deal size trends
+  - Commission rate optimization suggestions
+
+- [ ] **Goals & Targets**
+  - Set annual/monthly GCI goals
+  - Progress tracking
+  - Visual goal indicators
+  - Motivational prompts
+
+---
+
+## 🌟 v4.0.0 - Multi-Agent Platform (Future)
+
+### Platform Features
+- [ ] **User Authentication**
+  - Email/password auth
+  - Social login (Google, Microsoft)
+  - Password reset flow
+  - Email verification
+
+- [ ] **Team/Brokerage Features**
+  - Team dashboard
+  - Multi-agent support
+  - Brokerage admin panel
+  - Team analytics
+  - Commission splits tracking
+
+- [ ] **Cloud Storage**
+  - PostgreSQL / MongoDB backend
+  - Real-time sync across devices
+  - Data backup & recovery
+  - API development
+
+### Business Model
+- [ ] **Subscription Tiers**
+  - Free: Basic features, 50 transactions/year
+  - Pro: Unlimited transactions, advanced analytics, AI scanner
+  - Team: Multi-agent support, team analytics
+  - Enterprise: White-label, custom branding, priority support
+
+- [ ] **Payment Integration**
+  - Stripe integration
+  - Subscription management
+  - Invoice generation
+  - Free trial (14 days)
+
+---
+
+## 💡 Feature Backlog (Prioritized by User Feedback)
+
+### High Impact, Low Effort
+1. **Quick Add** - Fast transaction entry with minimal fields
+2. **Duplicate Transaction** - Clone existing transaction
+3. **Transaction Notes** - Add custom notes to deals
+4. **Tags System** - Custom tags for organization
+5. **Commission Split Calculator** - Team split calculations
+
+### High Impact, High Effort
+1. **Mobile App** - Native iOS/Android app
+2. **Email Reminders** - Upcoming closings, follow-ups
+3. **Client CRM** - Basic client management
+4. **Document Storage** - Attach contracts, sheets to transactions
+5. **Automated Reports** - Weekly/monthly email summaries
+
+### Nice to Have
+1. **Dark Mode Enhancements** - More theme options, custom colors
+2. **Animation Preferences** - Reduce motion option
+3. **Accessibility** - Screen reader support, keyboard navigation
+4. **Multi-Language Support** - Spanish, French, etc.
+5. **Integrations** - Zapier, MLS systems, CRM platforms
+
+---
+
+## 🐛 Known Issues & Technical Debt
+
+### Minor
+- [ ] Commission sheet scanner doesn't support PDFs (only images)
+- [ ] Large datasets (500+ transactions) may have performance issues
+- [ ] No data validation on manual edits in Google Sheets
+
+### Technical Debt
+- [ ] Migrate from sessionStorage to more secure token management
+- [ ] Add comprehensive error boundaries
+- [ ] Implement logging/monitoring (Sentry)
+- [ ] Add unit tests for core calculations
+- [ ] Add E2E tests for critical flows
+
+---
+
+## 📊 Success Metrics
+
+### User Engagement
+- Daily active users
+- Average session duration
+- Transactions added per user
+- Sync frequency
+
+### Performance
+- Page load time < 2s
+- Chart render time < 500ms
+- Sync time < 3s (100 transactions)
+
+### Business
+- User retention (30-day, 90-day)
+- Upgrade rate (Free → Pro)
+- Customer satisfaction (NPS)
+
+---
+
+## 🤝 Contributing
+
+We welcome feature requests and bug reports! Please:
+1. Check if the feature/bug is already in this roadmap
+2. Open a GitHub issue with detailed description
+3. Tag appropriately (`feature-request`, `bug`, `enhancement`)
+
+---
+
+## 📝 Change Request Process
+
+1. **Community Voting** - Upvote features on GitHub Issues
+2. **Quarterly Review** - Team reviews top-voted items
+3. **Prioritization** - Balance impact vs. effort
+4. **Development** - Added to sprint planning
+5. **Release** - Included in next version
+
+---
+
+**Questions or suggestions?** Contact: [dana@danadube.com](mailto:dana@danadube.com)
+
