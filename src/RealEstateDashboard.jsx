@@ -2358,17 +2358,17 @@ const EnhancedRealEstateDashboard = () => {
                 </div>
 
                 {/* Form Actions */}
-                <div className="flex items-center gap-3 pt-4 border-t border-gray-200">
+                <div className="flex items-center gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
                   <button
                     type="submit"
-                    className="flex-1 px-6 py-3 bg-gradient-to-r from-black to-yellow-600 text-white rounded-lg hover:from-gray-900 hover:to-yellow-500 transition-all font-medium"
+                    className="flex-1 px-6 py-3 bg-primary-500 hover:bg-primary-600 text-white rounded-lg transition-colors font-medium shadow-sm"
                   >
                     {editingId ? 'Update Transaction' : 'Add Transaction'}
                   </button>
                   <button
                     type="button"
                     onClick={resetForm}
-                    className="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors font-medium"
+                    className="px-6 py-3 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors font-medium"
                   >
                     Cancel
                   </button>
@@ -2577,13 +2577,13 @@ const EnhancedRealEstateDashboard = () => {
                 <div className="flex items-center gap-3">
                   <button
                     onClick={() => handleDelete(viewingTransaction.id)}
-                    className="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium shadow-sm"
+                    className="px-6 py-3 bg-danger-600 hover:bg-danger-700 text-white rounded-lg transition-colors font-medium shadow-sm"
                   >
                     Delete
                   </button>
                   <button
                     onClick={() => handleEdit(viewingTransaction)}
-                    className="px-6 py-3 bg-gradient-to-r from-black to-yellow-600 text-white rounded-lg hover:from-gray-900 hover:to-yellow-500 transition-all font-medium shadow-sm"
+                    className="px-6 py-3 bg-primary-500 hover:bg-primary-600 text-white rounded-lg transition-colors font-medium shadow-sm"
                   >
                     Edit Transaction
                   </button>
