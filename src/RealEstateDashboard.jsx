@@ -141,9 +141,6 @@ const EnhancedRealEstateDashboard = () => {
   const sortOrder = sortState.order;
   const sortVersion = sortState.version;
   
-  // Debug: Log every render
-  console.log('🎨 RENDER - sortOrder:', sortOrder, 'sortVersion:', sortVersion);
-  
   // Logo State
   const [customLogo, setCustomLogo] = useState(() => {
     return localStorage.getItem('customLogo') || '/assets/logos/app-logo-default.png';
@@ -817,9 +814,8 @@ const EnhancedRealEstateDashboard = () => {
 
   // ==================== FILTERING & SORTING ====================
   
-  // Compute filtered and sorted transactions - NO useMemo to avoid stale closures
+  // Compute filtered and sorted transactions
   const computeFilteredTransactions = () => {
-    console.log('🔧 Computing with sortOrder:', sortOrder, 'sortVersion:', sortVersion);
     const filtered = transactions.filter(transaction => {
       const year = transaction.closingDate ? new Date(transaction.closingDate).getFullYear().toString() : '';
       
@@ -873,9 +869,6 @@ const EnhancedRealEstateDashboard = () => {
       // Newest first (descending) or oldest first (ascending)
       return sortOrder === 'newest' ? timeB - timeA : timeA - timeB;
     });
-    
-    console.log('✅ FINAL RESULT - sortOrder:', sortOrder, 'sortVersion:', sortVersion, 'First 3:', 
-      sorted.slice(0, 3).map(t => ({ addr: t.address?.substring(0, 15), date: t.closingDate })));
     
     return sorted;
   };
@@ -1573,7 +1566,7 @@ const EnhancedRealEstateDashboard = () => {
               Filtered Transactions
               {filteredTransactions.length > 0 && (
                 <span className="text-gray-500 dark:text-gray-400 font-normal ml-2">
-                  ({filteredTransactions.length} total) [v{sortVersion}] [First: {filteredTransactions[0]?.address?.substring(0, 15)}]
+                  ({filteredTransactions.length} total)
                 </span>
               )}
             </h2>
