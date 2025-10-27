@@ -1706,7 +1706,7 @@ const EnhancedRealEstateDashboard = () => {
                         </span>
                       </div>
                     </div>
-                    <div className={`text-right px-4 py-4 rounded-lg shadow-md border-2 ${
+                    <div className={`text-right px-4 py-4 rounded-lg shadow-md border-2 min-w-[140px] ${
                       isReferral
                         ? 'bg-gradient-to-br from-success-50 to-referral-50 dark:from-success-900/50 dark:to-referral-900/50 border-success-300 dark:border-success-600'
                         : isBuyer
