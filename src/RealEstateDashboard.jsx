@@ -1133,12 +1133,6 @@ const EnhancedRealEstateDashboard = () => {
               {/* Sync Status & Button */}
               {isGoogleSheetsEnabled && isGoogleSheetsAuthorized && (
                 <>
-                  <div className="hidden md:flex items-center gap-2 px-3 py-2 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-700">
-                    <Cloud className="w-4 h-4 text-green-600 dark:text-green-400" />
-                    <span className="text-xs font-medium text-green-700 dark:text-green-300">
-                      {isSyncing ? 'Syncing...' : 'Synced'}
-                    </span>
-                  </div>
                   <button
                     onClick={syncNow}
                     disabled={isSyncing}
