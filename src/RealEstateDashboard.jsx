@@ -2501,7 +2501,7 @@ const EnhancedRealEstateDashboard = () => {
                 {/* Dates & Status */}
                 <div className="mb-6">
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
-                    <Calendar className="w-5 h-5 text-indigo-500" />
+                    <Calendar className="w-5 h-5 text-primary-500" />
                     Dates & Status
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg">
@@ -2527,7 +2527,7 @@ const EnhancedRealEstateDashboard = () => {
                 </div>
 
                 {/* Additional Information */}
-                {(viewingTransaction.source || viewingTransaction.referralPct || viewingTransaction.assistantBonus || viewingTransaction.buyersAgentSplit) && (
+                {(viewingTransaction.source || viewingTransaction.referralPct > 0 || viewingTransaction.assistantBonus > 0 || viewingTransaction.buyersAgentSplit > 0) && (
                   <div className="mb-4">
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Additional Information</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg">
