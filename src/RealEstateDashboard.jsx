@@ -70,37 +70,37 @@ const TahoeTooltip = ({ active, payload, label }) => {
   return null;
 };
 
-// Skeleton Loader Components for Initial Loading States
+// Skeleton Loader Components for Initial Loading States with Brand Colors
 const SkeletonMetricCard = () => (
   <div className="glass-morphism bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-2xl p-6 border border-white/30 dark:border-gray-700/30 backdrop-blur-3xl animate-pulse">
     <div className="flex items-center justify-between mb-4">
-      <div className="w-12 h-12 bg-gray-300 dark:bg-gray-600 rounded-xl"></div>
+      <div className="w-12 h-12 bg-gradient-to-br from-primary-200 to-primary-300 dark:from-primary-700 dark:to-primary-800 rounded-xl"></div>
     </div>
-    <div className="h-8 bg-gray-300 dark:bg-gray-600 rounded-lg mb-2 w-3/4"></div>
-    <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-1/2"></div>
+    <div className="h-8 bg-gradient-to-r from-gray-300 to-gray-200 dark:from-gray-600 dark:to-gray-700 rounded-lg mb-2 w-3/4"></div>
+    <div className="h-4 bg-gradient-to-r from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-600 rounded w-1/2"></div>
   </div>
 );
 
 const SkeletonChart = () => (
   <div className="glass-morphism bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-2xl p-8 border border-white/30 dark:border-gray-700/30 backdrop-blur-3xl animate-pulse">
-    <div className="h-6 bg-gray-300 dark:bg-gray-600 rounded-lg mb-6 w-1/3"></div>
-    <div className="h-[300px] bg-gray-200 dark:bg-gray-700 rounded-xl"></div>
+    <div className="h-6 bg-gradient-to-r from-primary-200 to-primary-300 dark:from-primary-700 dark:to-primary-800 rounded-lg mb-6 w-1/3"></div>
+    <div className="h-[300px] bg-gradient-to-br from-gray-200 via-gray-100 to-gray-200 dark:from-gray-700 dark:via-gray-800 dark:to-gray-700 rounded-xl"></div>
   </div>
 );
 
 const SkeletonTransactionCard = () => (
   <div className="glass-morphism bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-xl p-6 border-2 border-white/30 dark:border-gray-700/30 backdrop-blur-2xl animate-pulse">
     <div className="flex justify-between items-start mb-4">
-      <div className="h-6 bg-gray-300 dark:bg-gray-600 rounded-lg w-1/2"></div>
-      <div className="h-6 bg-gray-300 dark:bg-gray-600 rounded-full w-20"></div>
+      <div className="h-6 bg-gradient-to-r from-primary-200 to-primary-300 dark:from-primary-700 dark:to-primary-800 rounded-lg w-1/2"></div>
+      <div className="h-6 bg-gradient-to-r from-info-200 to-warning-200 dark:from-info-700 dark:to-warning-700 rounded-full w-20"></div>
     </div>
     <div className="space-y-4">
-      <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-3/4"></div>
-      <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-2/3"></div>
-      <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-1/2"></div>
+      <div className="h-4 bg-gradient-to-r from-gray-300 to-gray-200 dark:from-gray-600 dark:to-gray-700 rounded w-3/4"></div>
+      <div className="h-4 bg-gradient-to-r from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-600 rounded w-2/3"></div>
+      <div className="h-4 bg-gradient-to-r from-gray-300 to-gray-200 dark:from-gray-600 dark:to-gray-700 rounded w-1/2"></div>
     </div>
     <div className="mt-4 pt-4 border-t border-gray-300 dark:border-gray-600">
-      <div className="h-8 bg-gray-300 dark:bg-gray-600 rounded-lg w-1/3"></div>
+      <div className="h-8 bg-gradient-to-r from-success-200 to-success-300 dark:from-success-700 dark:to-success-800 rounded-lg w-1/3"></div>
     </div>
   </div>
 );
