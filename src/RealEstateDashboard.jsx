@@ -1128,14 +1128,14 @@ const EnhancedRealEstateDashboard = () => {
                 <img 
                   src={customLogo} 
                   alt="Dashboard Logo" 
-                  className="w-14 h-14 rounded-xl shadow-lg object-cover border-2 border-white/30 dark:border-gray-700/30 flex-shrink-0"
+                  className="w-16 h-16 lg:w-20 lg:h-20 rounded-xl shadow-xl object-cover border-2 border-white/50 dark:border-gray-700/50 flex-shrink-0"
                 />
               )}
               <div className="min-w-0">
-                <h1 className="text-2xl lg:text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent animate-glow truncate">
+                <h1 className="text-3xl lg:text-4xl font-bold bg-gradient-primary bg-clip-text text-transparent animate-glow truncate">
                   Commission Dashboard
                 </h1>
-                <p className="text-xs lg:text-sm text-gray-600 dark:text-gray-300 mt-2">
+                <p className="text-sm lg:text-base text-gray-600 dark:text-gray-300 mt-2 font-medium">
                   {agentName && agentCompany ? `${agentName} • ${agentCompany}` : agentName ? agentName : agentCompany ? agentCompany : 'Manage your real estate commissions'}
                 </p>
               </div>
@@ -1168,9 +1168,9 @@ const EnhancedRealEstateDashboard = () => {
               {/* Add Transaction Button */}
               <button
                 onClick={() => setShowForm(true)}
-                className="flex items-center gap-2 px-4 lg:px-6 py-3 bg-primary-500 hover:bg-primary-600 text-white rounded-xl transition-all shadow-lg hover:shadow-xl font-medium"
+                className="flex items-center gap-2 px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg transition-all shadow-sm hover:shadow-md font-medium text-sm"
               >
-                <Plus className="w-4 h-4 lg:w-5 lg:h-5" />
+                <Plus className="w-4 h-4" />
                 <span className="hidden sm:inline">Add Transaction</span>
                 <span className="sm:hidden">Add</span>
               </button>
@@ -1178,10 +1178,10 @@ const EnhancedRealEstateDashboard = () => {
               {/* Settings Button */}
               <button
                 onClick={() => setShowSettings(true)}
-                className="p-3 glass-morphism bg-gray-100/80 hover:bg-gray-200/80 dark:bg-gray-700/80 dark:hover:bg-gray-600/80 rounded-xl transition-all shadow-lg hover:shadow-xl border border-white/20 dark:border-gray-600/30 backdrop-blur-xl"
+                className="p-2 bg-gray-100/60 hover:bg-gray-200/80 dark:bg-gray-700/60 dark:hover:bg-gray-600/80 rounded-lg transition-all border border-gray-200 dark:border-gray-600"
                 title="Settings"
               >
-                <Settings className="w-5 h-5 text-gray-700 dark:text-gray-200" />
+                <Settings className="w-4 h-4 text-gray-600 dark:text-gray-300" />
               </button>
             </div>
           </div>
