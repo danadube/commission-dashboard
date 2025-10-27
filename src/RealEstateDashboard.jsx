@@ -7,7 +7,7 @@ import ThemeToggle from './ThemeToggle';
 /**
  * Real Estate Commission Dashboard
  * 
- * @version 3.13.0
+ * @version 3.15.0
  * @description Professional dashboard for tracking real estate commissions with Google Sheets integration
  * 
  * ✨ KEY FEATURES:
@@ -31,6 +31,8 @@ import ThemeToggle from './ThemeToggle';
  * - Transaction detail modal (click to view)
  * - Chronological sorting with toggle
  * - Responsive design
+ * - 8-point grid spacing system
+ * - HSB color system with proper contrast ✨ NEW
  * 
  * 📝 Transaction Management:
  * - Full CRUD operations
@@ -92,7 +94,7 @@ const SkeletonTransactionCard = () => (
       <div className="h-6 bg-gray-300 dark:bg-gray-600 rounded-lg w-1/2"></div>
       <div className="h-6 bg-gray-300 dark:bg-gray-600 rounded-full w-20"></div>
     </div>
-    <div className="space-y-3">
+    <div className="space-y-4">
       <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-3/4"></div>
       <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-2/3"></div>
       <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-1/2"></div>
@@ -944,7 +946,7 @@ const EnhancedRealEstateDashboard = () => {
         label: 'Best Month',
         value: bestMonth.month,
         subtext: `$${bestMonth.nci.toLocaleString('en-US', { minimumFractionDigits: 2 })} earned`,
-        color: 'from-yellow-500 to-orange-500'
+        color: 'from-warning-400 to-warning-600'
       });
     }
     
@@ -960,7 +962,7 @@ const EnhancedRealEstateDashboard = () => {
         label: 'Top Property Type',
         value: topProperty[0],
         subtext: `$${topProperty[1].toLocaleString('en-US', { minimumFractionDigits: 2 })} in commissions`,
-        color: 'from-blue-500 to-cyan-500'
+        color: 'from-info-400 to-info-600'
       });
     }
     
@@ -981,7 +983,7 @@ const EnhancedRealEstateDashboard = () => {
         label: 'Avg Days to Close',
         value: `${avgDays} days`,
         subtext: `Based on ${daysToClose.length} transactions`,
-        color: 'from-purple-500 to-pink-500'
+        color: 'from-primary-400 to-referral-500'
       });
     }
     
@@ -996,7 +998,7 @@ const EnhancedRealEstateDashboard = () => {
       label: 'Stronger Side',
       value: strongerSide,
       subtext: `${percentage}% of total income`,
-      color: strongerSide === 'Buyers' ? 'from-blue-500 to-indigo-500' : 'from-amber-500 to-yellow-500'
+      color: strongerSide === 'Buyers' ? 'from-info-400 to-info-600' : 'from-warning-400 to-warning-600'
     });
     
     // Highest single commission
@@ -1007,7 +1009,7 @@ const EnhancedRealEstateDashboard = () => {
         label: 'Biggest Deal',
         value: `$${parseFloat(highestDeal.nci).toLocaleString('en-US', { minimumFractionDigits: 2 })}`,
         subtext: highestDeal.address,
-        color: 'from-green-500 to-emerald-500'
+        color: 'from-success-400 to-success-600'
       });
     }
     
@@ -1130,24 +1132,24 @@ const EnhancedRealEstateDashboard = () => {
                 />
               )}
               <div className="min-w-0">
-                <h1 className="text-2xl lg:text-3xl font-bold bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 dark:from-purple-400 dark:via-blue-400 dark:to-cyan-400 bg-clip-text text-transparent animate-glow truncate">
+                <h1 className="text-2xl lg:text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent animate-glow truncate">
                   Commission Dashboard
                 </h1>
-                <p className="text-xs lg:text-sm text-gray-600 dark:text-gray-300 mt-1">
+                <p className="text-xs lg:text-sm text-gray-600 dark:text-gray-300 mt-2">
                   {agentName && agentCompany ? `${agentName} • ${agentCompany}` : agentName ? agentName : agentCompany ? agentCompany : 'Manage your real estate commissions'}
                 </p>
               </div>
             </div>
 
             {/* Right: Actions */}
-            <div className="flex items-center gap-2 lg:gap-3 flex-shrink-0">
+            <div className="flex items-center gap-2 lg:gap-4 flex-shrink-0">
               {/* Sync Status & Button */}
               {isGoogleSheetsEnabled && isGoogleSheetsAuthorized && (
                 <>
                   <button
                     onClick={syncNow}
                     disabled={isSyncing}
-                    className="hidden sm:flex items-center gap-2 px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed shadow-sm"
+                    className="hidden sm:flex items-center gap-2 px-4 py-2 bg-success-600 hover:bg-success-700 text-white rounded-lg transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed shadow-sm"
                     title="Sync with Google Sheets"
                   >
                     <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin' : ''}`} />
@@ -1157,7 +1159,7 @@ const EnhancedRealEstateDashboard = () => {
               )}
               
               {!isGoogleSheetsEnabled && (
-                <div className="hidden sm:flex items-center gap-2 px-3 py-2 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
+                <div className="hidden sm:flex items-center gap-2 px-4 py-2 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
                   <CloudOff className="w-4 h-4 text-gray-500 dark:text-gray-400" />
                   <span className="text-xs font-medium text-gray-600 dark:text-gray-400">Offline</span>
                 </div>
@@ -1166,7 +1168,7 @@ const EnhancedRealEstateDashboard = () => {
               {/* Add Transaction Button */}
               <button
                 onClick={() => setShowForm(true)}
-                className="flex items-center gap-2 px-4 lg:px-5 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-xl transition-all shadow-lg hover:shadow-xl font-medium"
+                className="flex items-center gap-2 px-4 lg:px-6 py-3 bg-primary-500 hover:bg-primary-600 text-white rounded-xl transition-all shadow-lg hover:shadow-xl font-medium"
               >
                 <Plus className="w-4 h-4 lg:w-5 lg:h-5" />
                 <span className="hidden sm:inline">Add Transaction</span>
@@ -1176,7 +1178,7 @@ const EnhancedRealEstateDashboard = () => {
               {/* Settings Button */}
               <button
                 onClick={() => setShowSettings(true)}
-                className="p-2.5 lg:p-3 glass-morphism bg-gray-100/80 hover:bg-gray-200/80 dark:bg-gray-700/80 dark:hover:bg-gray-600/80 rounded-xl transition-all shadow-lg hover:shadow-xl border border-white/20 dark:border-gray-600/30 backdrop-blur-xl"
+                className="p-3 glass-morphism bg-gray-100/80 hover:bg-gray-200/80 dark:bg-gray-700/80 dark:hover:bg-gray-600/80 rounded-xl transition-all shadow-lg hover:shadow-xl border border-white/20 dark:border-gray-600/30 backdrop-blur-xl"
                 title="Settings"
               >
                 <Settings className="w-5 h-5 text-gray-700 dark:text-gray-200" />
@@ -1186,20 +1188,20 @@ const EnhancedRealEstateDashboard = () => {
 
           {/* Sync Error Display */}
           {syncError && (
-            <div className="mt-3 flex items-center justify-between gap-3 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-              <p className="text-xs text-red-700 dark:text-red-300 font-medium flex-1">{syncError}</p>
+            <div className="mt-4 flex items-center justify-between gap-4 p-4 bg-danger-50 dark:bg-danger-900/20 border border-danger-200 dark:border-danger-800 rounded-lg">
+              <p className="text-xs text-danger-700 dark:text-danger-300 font-medium flex-1">{syncError}</p>
               <div className="flex items-center gap-2">
                 {syncError.includes('Session expired') && (
                   <button
                     onClick={enableGoogleSheets}
-                    className="text-xs bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg font-medium transition-colors"
+                    className="text-xs bg-info-600 hover:bg-info-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
                   >
                     Sign In Again
                   </button>
                 )}
                 <button
                   onClick={() => setSyncError(null)}
-                  className="text-xs text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300"
+                  className="text-xs text-danger-600 dark:text-danger-400 hover:text-danger-700 dark:hover:text-danger-300"
                   title="Dismiss"
                 >
                   <X className="w-4 h-4" />
@@ -1212,9 +1214,9 @@ const EnhancedRealEstateDashboard = () => {
         {/* Filters */}
         <div className="glass-morphism bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-2xl p-8 mb-8 transition-all duration-700 border border-white/30 dark:border-gray-700/30 backdrop-blur-3xl hover:shadow-3xl">
           <div className="flex items-center gap-2 mb-4">
-            <Filter className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+            <Filter className="w-5 h-5 text-primary-600 dark:text-primary-400" />
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Filter Transactions</h3>
-            <div className="ml-auto text-sm font-medium text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 px-3 py-1 rounded-full">
+            <div className="ml-auto text-sm font-medium text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-full">
               {filteredTransactions.length} of {transactions.length} shown
             </div>
           </div>
@@ -1228,7 +1230,7 @@ const EnhancedRealEstateDashboard = () => {
               <select
                 value={filterYear}
                 onChange={(e) => setFilterYear(e.target.value)}
-                className="w-full px-4 py-2.5 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors font-medium"
+                className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors font-medium"
               >
                 <option value="all">All Years</option>
                 {[...new Set(transactions.map(t => t.closingDate ? new Date(t.closingDate).getFullYear() : null))].filter(Boolean).sort((a, b) => b - a).map(year => (
@@ -1245,7 +1247,7 @@ const EnhancedRealEstateDashboard = () => {
               <select
                 value={filterClientType}
                 onChange={(e) => setFilterClientType(e.target.value)}
-                className="w-full px-4 py-2.5 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors font-medium"
+                className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors font-medium"
               >
                 <option value="all">Buyers & Sellers</option>
                 <option value="Buyer">🔵 Buyers Only</option>
@@ -1261,7 +1263,7 @@ const EnhancedRealEstateDashboard = () => {
               <select
                 value={filterBrokerage}
                 onChange={(e) => setFilterBrokerage(e.target.value)}
-                className="w-full px-4 py-2.5 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors font-medium"
+                className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors font-medium"
               >
                 <option value="all">All Brokerages</option>
                 <option value="KW">Keller Williams</option>
@@ -1277,7 +1279,7 @@ const EnhancedRealEstateDashboard = () => {
               <select
                 value={filterPropertyType}
                 onChange={(e) => setFilterPropertyType(e.target.value)}
-                className="w-full px-4 py-2.5 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors font-medium"
+                className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors font-medium"
               >
                 <option value="all">All Property Types</option>
                 <option value="Residential">Residential</option>
@@ -1294,7 +1296,7 @@ const EnhancedRealEstateDashboard = () => {
               <select
                 value={filterPriceRange}
                 onChange={(e) => setFilterPriceRange(e.target.value)}
-                className="w-full px-4 py-2.5 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors font-medium"
+                className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors font-medium"
               >
                 <option value="all">All Prices</option>
                 <option value="under500k">Under $500K</option>
@@ -1316,7 +1318,7 @@ const EnhancedRealEstateDashboard = () => {
                   setFilterPropertyType('all');
                   setFilterPriceRange('all');
                 }}
-                className="px-6 py-2 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-100 dark:hover:bg-blue-900/50 rounded-lg transition-all border-2 border-blue-200 dark:border-blue-700"
+                className="px-6 py-2 text-sm font-semibold text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 bg-primary-50 dark:bg-primary-900/30 hover:bg-primary-100 dark:hover:bg-primary-900/50 rounded-lg transition-all border-2 border-primary-200 dark:border-primary-700"
               >
                 ✕ Clear All Filters
               </button>
@@ -1338,12 +1340,12 @@ const EnhancedRealEstateDashboard = () => {
           ) : (
             <>
           {/* Gross Commission Income */}
-          <div className="relative overflow-hidden bg-gradient-to-br from-purple-500 via-purple-600 to-indigo-600 rounded-3xl shadow-2xl hover:shadow-3xl p-8 text-white transform hover:-translate-y-2 hover:scale-105 transition-all duration-700 border-2 border-white/20 backdrop-blur-sm group animate-[fadeIn_0.6s_ease-out]">
+          <div className="relative overflow-hidden bg-gradient-primary rounded-3xl shadow-2xl hover:shadow-3xl p-8 text-white transform hover:-translate-y-2 hover:scale-105 transition-all duration-700 border-2 border-white/20 backdrop-blur-sm group animate-[fadeIn_0.6s_ease-out]">
             <div className="flex items-center justify-between">
               <div className="flex-1">
-                <p className="text-purple-100 text-sm font-semibold uppercase tracking-wide">💰 Gross Commission</p>
-                <p className="text-4xl font-bold mt-2 mb-1">${metrics.totalGCI.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                <p className="text-purple-200 text-xs font-medium">Total earned before fees</p>
+                <p className="text-white/90 text-sm font-semibold uppercase tracking-wide">💰 Gross Commission</p>
+                <p className="text-4xl font-bold mt-2 mb-2">${metrics.totalGCI.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                <p className="text-white/80 text-xs font-medium">Total earned before fees</p>
               </div>
               <div className="bg-white/20 p-4 rounded-full backdrop-blur-sm">
                 <DollarSign className="w-8 h-8 text-white" />
@@ -1352,12 +1354,12 @@ const EnhancedRealEstateDashboard = () => {
           </div>
 
           {/* Net Commission Income */}
-          <div className="relative overflow-hidden bg-gradient-to-br from-green-500 via-green-600 to-emerald-600 rounded-3xl shadow-2xl hover:shadow-3xl p-8 text-white transform hover:-translate-y-2 hover:scale-105 transition-all duration-700 border-2 border-white/20 backdrop-blur-sm group">
+          <div className="relative overflow-hidden bg-success-500 rounded-3xl shadow-2xl hover:shadow-3xl p-8 text-white transform hover:-translate-y-2 hover:scale-105 transition-all duration-700 border-2 border-white/20 backdrop-blur-sm group">
             <div className="flex items-center justify-between">
               <div className="flex-1">
-                <p className="text-green-100 text-sm font-semibold uppercase tracking-wide">✅ Net Commission</p>
-                <p className="text-4xl font-bold mt-2 mb-1">${metrics.totalNCI.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                <p className="text-green-200 text-xs font-medium">Your take-home pay</p>
+                <p className="text-white/90 text-sm font-semibold uppercase tracking-wide">✅ Net Commission</p>
+                <p className="text-4xl font-bold mt-2 mb-2">${metrics.totalNCI.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                <p className="text-white/80 text-xs font-medium">Your take-home pay</p>
               </div>
               <div className="bg-white/20 p-4 rounded-full backdrop-blur-sm">
                 <TrendingUp className="w-8 h-8 text-white" />
@@ -1366,12 +1368,12 @@ const EnhancedRealEstateDashboard = () => {
           </div>
 
           {/* Total Sales Volume */}
-          <div className="relative overflow-hidden bg-gradient-to-br from-blue-500 via-blue-600 to-cyan-600 rounded-3xl shadow-2xl hover:shadow-3xl p-8 text-white transform hover:-translate-y-2 hover:scale-105 transition-all duration-700 border-2 border-white/20 backdrop-blur-sm group">
+          <div className="relative overflow-hidden bg-gradient-info-depth rounded-3xl shadow-2xl hover:shadow-3xl p-8 text-white transform hover:-translate-y-2 hover:scale-105 transition-all duration-700 border-2 border-white/20 backdrop-blur-sm group">
             <div className="flex items-center justify-between">
               <div className="flex-1">
-                <p className="text-blue-100 text-sm font-semibold uppercase tracking-wide">🏘️ Total Sales Volume</p>
-                <p className="text-4xl font-bold mt-2 mb-1">${metrics.totalVolume.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                <p className="text-blue-200 text-xs font-medium">Combined property value</p>
+                <p className="text-white/90 text-sm font-semibold uppercase tracking-wide">🏘️ Total Sales Volume</p>
+                <p className="text-4xl font-bold mt-2 mb-2">${metrics.totalVolume.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                <p className="text-white/80 text-xs font-medium">Combined property value</p>
               </div>
               <div className="bg-white/20 p-4 rounded-full backdrop-blur-sm">
                 <Home className="w-8 h-8 text-white" />
@@ -1380,12 +1382,12 @@ const EnhancedRealEstateDashboard = () => {
           </div>
 
           {/* Average Commission */}
-          <div className="relative overflow-hidden bg-gradient-to-br from-pink-500 via-pink-600 to-rose-600 rounded-3xl shadow-2xl hover:shadow-3xl p-8 text-white transform hover:-translate-y-2 hover:scale-105 transition-all duration-700 border-2 border-white/20 backdrop-blur-sm group">
+          <div className="relative overflow-hidden bg-primary-500 rounded-3xl shadow-2xl hover:shadow-3xl p-8 text-white transform hover:-translate-y-2 hover:scale-105 transition-all duration-700 border-2 border-white/20 backdrop-blur-sm group">
             <div className="flex items-center justify-between">
               <div className="flex-1">
-                <p className="text-pink-100 text-sm font-semibold uppercase tracking-wide">📊 Average Per Deal</p>
-                <p className="text-4xl font-bold mt-2 mb-1">${metrics.avgCommission.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                <p className="text-pink-200 text-xs font-medium">Average commission earned</p>
+                <p className="text-white/90 text-sm font-semibold uppercase tracking-wide">📊 Average Per Deal</p>
+                <p className="text-4xl font-bold mt-2 mb-2">${metrics.avgCommission.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                <p className="text-white/80 text-xs font-medium">Average commission earned</p>
               </div>
               <div className="bg-white/20 p-4 rounded-full backdrop-blur-sm">
                 <TrendingUp className="w-8 h-8 text-white" />
@@ -1394,26 +1396,26 @@ const EnhancedRealEstateDashboard = () => {
           </div>
 
           {/* Total Transactions */}
-          <div className="relative overflow-hidden bg-gradient-to-br from-amber-500 via-orange-500 to-yellow-500 rounded-3xl shadow-2xl hover:shadow-3xl p-8 text-white transform hover:-translate-y-2 hover:scale-105 transition-all duration-700 border-2 border-white/20 backdrop-blur-sm group">
+          <div className="relative overflow-hidden bg-warning-500 rounded-3xl shadow-2xl hover:shadow-3xl p-8 text-gray-900 transform hover:-translate-y-2 hover:scale-105 transition-all duration-700 border-2 border-white/20 backdrop-blur-sm group">
             <div className="flex items-center justify-between">
               <div className="flex-1">
-                <p className="text-amber-100 text-sm font-semibold uppercase tracking-wide">🎯 Total Transactions</p>
-                <p className="text-4xl font-bold mt-2 mb-1">{metrics.totalTransactions}</p>
-                <p className="text-amber-200 text-xs font-medium">Deals closed successfully</p>
+                <p className="text-gray-900/90 text-sm font-semibold uppercase tracking-wide">🎯 Total Transactions</p>
+                <p className="text-4xl font-bold mt-2 mb-2">{metrics.totalTransactions}</p>
+                <p className="text-gray-900/80 text-xs font-medium">Deals closed successfully</p>
               </div>
-              <div className="bg-white/20 p-4 rounded-full backdrop-blur-sm">
-                <Calendar className="w-8 h-8 text-white" />
+              <div className="bg-gray-900/20 p-4 rounded-full backdrop-blur-sm">
+                <Calendar className="w-8 h-8 text-gray-900" />
               </div>
             </div>
           </div>
 
           {/* Referral Fees */}
-          <div className="relative overflow-hidden bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 rounded-3xl shadow-2xl hover:shadow-3xl p-8 text-white transform hover:-translate-y-2 hover:scale-105 transition-all duration-700 border-2 border-white/20 backdrop-blur-sm group animate-[fadeIn_0.6s_ease-out]">
+          <div className="relative overflow-hidden bg-referral-500 rounded-3xl shadow-2xl hover:shadow-3xl p-8 text-white transform hover:-translate-y-2 hover:scale-105 transition-all duration-700 border-2 border-white/20 backdrop-blur-sm group animate-[fadeIn_0.6s_ease-out]">
             <div className="flex items-center justify-between">
               <div className="flex-1">
-                <p className="text-orange-100 text-sm font-semibold uppercase tracking-wide">🤝 Referral Fees</p>
-                <p className="text-4xl font-bold mt-2 mb-1">${metrics.totalReferralFees.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                <p className="text-orange-200 text-xs font-medium">Paid to referral partners</p>
+                <p className="text-white/90 text-sm font-semibold uppercase tracking-wide">🤝 Referral Fees</p>
+                <p className="text-4xl font-bold mt-2 mb-2">${metrics.totalReferralFees.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                <p className="text-white/80 text-xs font-medium">Paid to referral partners</p>
               </div>
               <div className="bg-white/20 p-4 rounded-full backdrop-blur-sm">
                 <DollarSign className="w-8 h-8 text-white" />
@@ -1534,8 +1536,8 @@ const EnhancedRealEstateDashboard = () => {
         {/* Smart Insights */}
         {smartInsights.length > 0 && (
           <div className="glass-morphism bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-2xl p-8 mb-8 transition-all duration-700 border border-white/30 dark:border-gray-700/30 backdrop-blur-3xl animate-[fadeIn_0.8s_ease-out]">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="bg-gradient-to-r from-purple-500 to-blue-500 p-3 rounded-xl">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="bg-gradient-primary p-4 rounded-xl">
                 <TrendingUp className="w-6 h-6 text-white" />
               </div>
               <div>
@@ -1550,8 +1552,8 @@ const EnhancedRealEstateDashboard = () => {
                   key={index}
                   className={`relative overflow-hidden bg-gradient-to-br ${insight.color} rounded-2xl shadow-xl p-6 text-white transform hover:-translate-y-1 hover:scale-105 transition-all duration-500 border-2 border-white/30`}
                 >
-                  <div className="text-4xl mb-3">{insight.icon}</div>
-                  <div className="space-y-1">
+                  <div className="text-4xl mb-4">{insight.icon}</div>
+                  <div className="space-y-2">
                     <p className="text-xs font-semibold uppercase tracking-wider opacity-90">{insight.label}</p>
                     <p className="text-xl font-bold leading-tight">{insight.value}</p>
                     <p className="text-xs opacity-80 font-medium">{insight.subtext}</p>
@@ -1566,7 +1568,7 @@ const EnhancedRealEstateDashboard = () => {
 
         {/* Transactions List */}
         <div key={`transaction-list-${sortVersion}`} className="glass-morphism bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-2xl p-8 transition-all duration-700 border border-white/30 dark:border-gray-700/30 backdrop-blur-3xl">
-          <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
+          <div className="flex items-center justify-between mb-4 flex-wrap gap-4">
             <h2 className="text-xl font-bold dark:text-white">
               Filtered Transactions
               {filteredTransactions.length > 0 && (
@@ -1579,7 +1581,7 @@ const EnhancedRealEstateDashboard = () => {
             {filteredTransactions.length > 0 && (
               <button
                 onClick={toggleSortOrder}
-                className="flex items-center gap-2 px-4 py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-all font-medium border border-blue-200 dark:border-blue-800 shadow-sm"
+                className="flex items-center gap-2 px-4 py-2 bg-info-50 dark:bg-info-900/30 text-info-700 dark:text-info-300 rounded-lg hover:bg-info-100 dark:hover:bg-info-900/50 transition-all font-medium border border-info-200 dark:border-info-800 shadow-sm"
               >
                 <Calendar className="w-4 h-4" />
                 <span>{sortOrder === 'newest' ? 'Newest First ↓' : 'Oldest First ↑'}</span>
@@ -1615,12 +1617,12 @@ const EnhancedRealEstateDashboard = () => {
                 <div
                   key={transaction._displayKey}
                   onClick={() => handleView(transaction)}
-                  className={`flex items-center justify-between p-5 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-1 cursor-pointer border-2 ${
+                  className={`flex items-center justify-between p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-1 cursor-pointer border-2 ${
                     isReferral
-                      ? 'bg-purple-50 dark:bg-purple-900/20 border-purple-300 dark:border-purple-700 hover:border-purple-500 dark:hover:border-purple-500'
+                      ? 'bg-referral-50 dark:bg-referral-950 border-referral-300 dark:border-referral-700 hover:border-referral-500 dark:hover:border-referral-500'
                       : isBuyer
-                        ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-300 dark:border-blue-700 hover:border-blue-500 dark:hover:border-blue-500'
-                        : 'bg-amber-50 dark:bg-yellow-900/20 border-amber-300 dark:border-yellow-700 hover:border-amber-500 dark:hover:border-yellow-500'
+                        ? 'bg-info-50 dark:bg-info-950 border-info-300 dark:border-info-700 hover:border-info-500 dark:hover:border-info-500'
+                        : 'bg-warning-50 dark:bg-warning-950 border-warning-300 dark:border-warning-700 hover:border-warning-500 dark:hover:border-warning-500'
                   }`}
                 >
                   <div className="flex items-center gap-4 flex-1">
@@ -1628,60 +1630,60 @@ const EnhancedRealEstateDashboard = () => {
                       <div className="flex items-center gap-2 mb-2 flex-wrap">
                         <h3 className={`font-bold text-lg truncate ${
                           isReferral
-                            ? 'text-purple-900 dark:text-purple-100'
+                            ? 'text-referral-900 dark:text-referral-100'
                             : isBuyer 
-                              ? 'text-blue-900 dark:text-blue-100' 
-                              : 'text-amber-900 dark:text-yellow-100'
+                              ? 'text-info-900 dark:text-info-100' 
+                              : 'text-warning-900 dark:text-warning-100'
                         }`}>{transaction.address}</h3>
                         
                         {/* Referral Badge */}
                         {isReferral && (
-                          <span className="px-3 py-1 rounded-full text-xs font-bold shadow-md border-2 bg-purple-100 dark:bg-purple-900/50 text-purple-800 dark:text-purple-200 border-purple-300 dark:border-purple-600">
+                          <span className="px-4 py-2 rounded-full text-xs font-bold shadow-md border-2 bg-referral-100 dark:bg-referral-900/50 text-referral-800 dark:text-referral-200 border-referral-300 dark:border-referral-600">
                             {isReferralOut ? '🤝 Referral Out' : '👥 Referral In'}
                           </span>
                         )}
                         
-                        <span className={`px-3 py-1 rounded-full text-xs font-bold shadow-md border-2 ${
+                        <span className={`px-4 py-2 rounded-full text-xs font-bold shadow-md border-2 ${
                           isBuyer
-                            ? 'bg-blue-600 text-white border-blue-700 dark:bg-blue-500 dark:border-blue-400' 
-                            : 'bg-amber-500 text-white border-amber-600 dark:bg-yellow-500 dark:border-yellow-400'
+                            ? 'bg-info-600 text-white border-info-700 dark:bg-info-500 dark:border-info-400' 
+                            : 'bg-warning-600 text-gray-900 border-warning-700 dark:bg-warning-500 dark:border-warning-400'
                         }`}>
                           {isBuyer ? '🔵 ' : '⭐ '}{transaction.clientType}
                         </span>
-                        <span className={`px-3 py-1 rounded-full text-xs font-bold shadow-sm border ${
+                        <span className={`px-4 py-2 rounded-full text-xs font-bold shadow-sm border ${
                           isBuyer
-                            ? 'bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-100 border-blue-300 dark:border-blue-600'
-                            : 'bg-amber-100 dark:bg-yellow-800 text-amber-800 dark:text-yellow-100 border-amber-300 dark:border-yellow-600'
+                            ? 'bg-info-100 dark:bg-info-800 text-info-800 dark:text-info-100 border-info-300 dark:border-info-600'
+                            : 'bg-warning-100 dark:bg-warning-800 text-warning-900 dark:text-warning-100 border-warning-300 dark:border-warning-600'
                         }`}>
                           {transaction.brokerage === 'KW' || transaction.brokerage === 'Keller Williams' ? 'Keller Williams' : 'Bennion Deville Homes'}
                         </span>
                       </div>
                       <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-300 font-medium">
-                        <span className="flex items-center gap-1">
+                        <span className="flex items-center gap-2">
                           <span className="text-gray-400 dark:text-gray-500">📍</span>
                           {transaction.city}
                         </span>
                         <span className="text-gray-400 dark:text-gray-500">•</span>
-                        <span className="flex items-center gap-1">
+                        <span className="flex items-center gap-2">
                           <span className="text-gray-400 dark:text-gray-500">💰</span>
                           ${parseFloat(transaction.closedPrice || 0).toLocaleString()}
                         </span>
                         <span className="text-gray-400 dark:text-gray-500">•</span>
-                        <span className="flex items-center gap-1">
+                        <span className="flex items-center gap-2">
                           <span className="text-gray-400 dark:text-gray-500">📅</span>
                           {new Date(transaction.closingDate).toLocaleDateString()}
                         </span>
                       </div>
                     </div>
-                    <div className={`text-right px-4 py-3 rounded-lg shadow-md border-2 ${
+                    <div className={`text-right px-4 py-4 rounded-lg shadow-md border-2 ${
                       isReferral
-                        ? 'bg-gradient-to-br from-green-50 to-purple-50 dark:from-green-900/50 dark:to-purple-900/50 border-green-300 dark:border-green-600'
+                        ? 'bg-gradient-to-br from-success-50 to-referral-50 dark:from-success-900/50 dark:to-referral-900/50 border-success-300 dark:border-success-600'
                         : isBuyer
-                          ? 'bg-gradient-to-br from-green-50 to-blue-50 dark:from-green-900/50 dark:to-blue-900/50 border-green-300 dark:border-green-600'
-                          : 'bg-gradient-to-br from-green-50 to-amber-50 dark:from-green-900/50 dark:to-yellow-900/50 border-green-300 dark:border-green-600'
+                          ? 'bg-gradient-to-br from-success-50 to-info-50 dark:from-success-900/50 dark:to-info-900/50 border-success-300 dark:border-success-600'
+                          : 'bg-gradient-to-br from-success-50 to-warning-50 dark:from-success-900/50 dark:to-warning-900/50 border-success-300 dark:border-success-600'
                     }`}>
-                      <p className="text-xs text-green-700 dark:text-green-300 font-semibold uppercase tracking-wide">💵 NCI</p>
-                      <p className="text-xl font-bold text-green-700 dark:text-green-200">
+                      <p className="text-xs text-success-700 dark:text-success-300 font-semibold uppercase tracking-wide">💵 NCI</p>
+                      <p className="text-xl font-bold text-success-700 dark:text-success-200">
                         ${parseFloat(transaction.nci || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </p>
                     </div>
@@ -1689,14 +1691,14 @@ const EnhancedRealEstateDashboard = () => {
                   <div className="flex items-center gap-2 ml-4" onClick={(e) => e.stopPropagation()}>
                     <button
                       onClick={() => handleEdit(transaction)}
-                      className="p-3 text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-100 dark:hover:bg-blue-900/50 rounded-lg transition-all shadow-sm hover:shadow-md"
+                      className="p-4 text-info-600 dark:text-info-400 bg-info-50 dark:bg-info-900/30 hover:bg-info-100 dark:hover:bg-info-900/50 rounded-lg transition-all shadow-sm hover:shadow-md"
                       title="Edit"
                     >
                       <Edit2 className="w-5 h-5" />
                     </button>
                     <button
                       onClick={() => handleDelete(transaction.id)}
-                      className="p-3 text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/30 hover:bg-red-100 dark:hover:bg-red-900/50 rounded-lg transition-all shadow-sm hover:shadow-md"
+                      className="p-4 text-danger-600 dark:text-danger-400 bg-danger-50 dark:bg-danger-900/30 hover:bg-danger-100 dark:hover:bg-danger-900/50 rounded-lg transition-all shadow-sm hover:shadow-md"
                       title="Delete"
                     >
                       <Trash2 className="w-5 h-5" />
@@ -1711,7 +1713,7 @@ const EnhancedRealEstateDashboard = () => {
 
         {/* Footer */}
         <div className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
-          Commission Dashboard v3.13.0 • Built with ❤️ by Dana Dube
+          Commission Dashboard v3.15.0 • Built with ❤️ by Dana Dube
         </div>
 
         {/* Transaction Form Modal */}
@@ -1734,16 +1736,16 @@ const EnhancedRealEstateDashboard = () => {
 
               <form onSubmit={handleSubmit} className="p-6 max-h-[calc(100vh-200px)] overflow-y-auto">
                 {/* AI Commission Sheet Scanner */}
-                <div className="mb-6 p-6 bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-2xl border-2 border-purple-200 dark:border-purple-700">
-                  <div className="flex items-center gap-3 mb-3">
+                <div className="mb-6 p-6 bg-gradient-to-r from-primary-50 to-info-50 dark:from-primary-900/20 dark:to-info-900/20 rounded-2xl border-2 border-primary-200 dark:border-primary-700">
+                  <div className="flex items-center gap-4 mb-4">
                     <div className="text-3xl">🤖</div>
                     <div className="flex-1">
-                      <h3 className="text-lg font-bold text-purple-900 dark:text-purple-100">AI Commission Sheet Scanner</h3>
-                      <p className="text-sm text-purple-700 dark:text-purple-300">Upload a screenshot or image to auto-fill this form</p>
+                      <h3 className="text-lg font-bold text-primary-900 dark:text-primary-100">AI Commission Sheet Scanner</h3>
+                      <p className="text-sm text-primary-700 dark:text-primary-300">Upload a screenshot or image to auto-fill this form</p>
                     </div>
                   </div>
                   
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-4">
                     <label className="flex-1">
                       <input
                         type="file"
@@ -1753,10 +1755,10 @@ const EnhancedRealEstateDashboard = () => {
                         className="hidden"
                         id="commission-sheet-upload"
                       />
-                      <div className={`flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all cursor-pointer ${
+                      <div className={`flex items-center justify-center gap-2 px-6 py-4 rounded-xl font-semibold transition-all cursor-pointer ${
                         isScanning
                           ? 'bg-gray-400 cursor-not-allowed'
-                          : 'bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white shadow-lg hover:shadow-xl transform hover:scale-105'
+                          : 'bg-gradient-primary hover:opacity-90 text-white shadow-lg hover:shadow-xl transform hover:scale-105'
                       }`}>
                         {isScanning ? (
                           <>
@@ -1774,15 +1776,15 @@ const EnhancedRealEstateDashboard = () => {
                   </div>
                   
                   {scanError && (
-                    <div className="mt-3 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-                      <p className="text-sm text-red-700 dark:text-red-300">❌ {scanError}</p>
+                    <div className="mt-4 p-4 bg-danger-50 dark:bg-danger-900/20 border border-danger-200 dark:border-danger-800 rounded-lg">
+                      <p className="text-sm text-danger-700 dark:text-danger-300">❌ {scanError}</p>
                     </div>
                   )}
                   
-                  <div className="mt-3 text-xs text-purple-600 dark:text-purple-400">
+                  <div className="mt-4 text-xs text-primary-600 dark:text-primary-400">
                     <p>✨ Supports: KW & BDH commission sheets • JPG, PNG, WebP • Max 20MB</p>
-                    <p className="mt-1">🎯 Auto-detects: Transaction type, amounts, dates, and all fields</p>
-                    <p className="mt-1">💡 Tip: For PDFs, take a screenshot first (Cmd+Shift+4 on Mac)</p>
+                    <p className="mt-2">🎯 Auto-detects: Transaction type, amounts, dates, and all fields</p>
+                    <p className="mt-2">💡 Tip: For PDFs, take a screenshot first (Cmd+Shift+4 on Mac)</p>
                   </div>
                 </div>
 
@@ -1791,13 +1793,13 @@ const EnhancedRealEstateDashboard = () => {
                   <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Basic Information</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Property Type *</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Property Type *</label>
                       <select
                         name="propertyType"
                         value={formData.propertyType}
                         onChange={handleInputChange}
                         required
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       >
                         <option value="Residential">Residential</option>
                         <option value="Commercial">Commercial</option>
@@ -1806,13 +1808,13 @@ const EnhancedRealEstateDashboard = () => {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Client Type *</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Client Type *</label>
                       <select
                         name="clientType"
                         value={formData.clientType}
                         onChange={handleInputChange}
                         required
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       >
                         <option value="Buyer">Buyer</option>
                         <option value="Seller">Seller</option>
@@ -1820,13 +1822,13 @@ const EnhancedRealEstateDashboard = () => {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Transaction Type *</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Transaction Type *</label>
                       <select
                         name="transactionType"
                         value={formData.transactionType}
                         onChange={handleInputChange}
                         required
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       >
                         <option value="Sale">💼 Regular Sale</option>
                         <option value="Referral Out">🤝 Referral Out (You refer TO another agent)</option>
@@ -1840,14 +1842,14 @@ const EnhancedRealEstateDashboard = () => {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Source</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Source</label>
                       <input
                         type="text"
                         name="source"
                         value={formData.source}
                         onChange={handleInputChange}
                         placeholder="e.g., Referral, Zillow, Sign Call"
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       />
                     </div>
 
@@ -1855,7 +1857,7 @@ const EnhancedRealEstateDashboard = () => {
                     {(formData.transactionType === 'Referral Out' || formData.transactionType === 'Referral In') && (
                       <>
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                             {formData.transactionType === 'Referral Out' ? 'Referring Agent (Who you sent client to)' : 'Referring Agent (Who sent you the client)'}
                           </label>
                           <input
@@ -1864,13 +1866,13 @@ const EnhancedRealEstateDashboard = () => {
                             value={formData.referringAgent}
                             onChange={handleInputChange}
                             placeholder="Agent Name"
-                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                           />
                         </div>
 
                         {formData.transactionType === 'Referral Out' && (
                           <div>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                               Referral Fee Received *
                               <span className="text-xs text-gray-500 dark:text-gray-400 ml-2">(Total fee you receive)</span>
                             </label>
@@ -1882,7 +1884,7 @@ const EnhancedRealEstateDashboard = () => {
                               step="0.01"
                               placeholder="0.00"
                               required={formData.transactionType === 'Referral Out'}
-                              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                             />
                           </div>
                         )}
@@ -1890,13 +1892,13 @@ const EnhancedRealEstateDashboard = () => {
                     )}
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Brokerage *</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Brokerage *</label>
                       <select
                         name="brokerage"
                         value={formData.brokerage}
                         onChange={handleInputChange}
                         required
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       >
                         <option value="Keller Williams">Keller Williams (KW)</option>
                         <option value="Bennion Deville Homes">Bennion Deville Homes (BDH)</option>
@@ -1904,7 +1906,7 @@ const EnhancedRealEstateDashboard = () => {
                     </div>
 
                     <div className="md:col-span-2">
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Address *</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Address *</label>
                       <input
                         type="text"
                         name="address"
@@ -1912,12 +1914,12 @@ const EnhancedRealEstateDashboard = () => {
                         onChange={handleInputChange}
                         required
                         placeholder="123 Main St"
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">City *</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">City *</label>
                       <input
                         type="text"
                         name="city"
@@ -1925,7 +1927,7 @@ const EnhancedRealEstateDashboard = () => {
                         onChange={handleInputChange}
                         required
                         placeholder="Palm Desert"
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       />
                     </div>
 
@@ -1933,7 +1935,7 @@ const EnhancedRealEstateDashboard = () => {
                     {formData.transactionType === 'Sale' && (
                       <>
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">List Price</label>
+                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">List Price</label>
                           <input
                             type="number"
                             name="listPrice"
@@ -1941,12 +1943,12 @@ const EnhancedRealEstateDashboard = () => {
                             onChange={handleInputChange}
                             step="0.01"
                             placeholder="0.00"
-                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                           />
                         </div>
 
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Closed Price *</label>
+                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Closed Price *</label>
                           <input
                             type="number"
                             name="closedPrice"
@@ -1955,7 +1957,7 @@ const EnhancedRealEstateDashboard = () => {
                             required
                             step="0.01"
                             placeholder="0.00"
-                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                           />
                         </div>
                       </>
@@ -1965,7 +1967,7 @@ const EnhancedRealEstateDashboard = () => {
                     {formData.transactionType === 'Referral In' && (
                       <>
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">List Price</label>
+                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">List Price</label>
                           <input
                             type="number"
                             name="listPrice"
@@ -1973,12 +1975,12 @@ const EnhancedRealEstateDashboard = () => {
                             onChange={handleInputChange}
                             step="0.01"
                             placeholder="0.00"
-                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                           />
                         </div>
 
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Closed Price *</label>
+                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Closed Price *</label>
                           <input
                             type="number"
                             name="closedPrice"
@@ -1987,32 +1989,32 @@ const EnhancedRealEstateDashboard = () => {
                             required
                             step="0.01"
                             placeholder="0.00"
-                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                           />
                         </div>
                       </>
                     )}
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">List Date</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">List Date</label>
                       <input
                         type="date"
                         name="listDate"
                         value={formData.listDate}
                         onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Closing Date *</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Closing Date *</label>
                       <input
                         type="date"
                         name="closingDate"
                         value={formData.closingDate}
                         onChange={handleInputChange}
                         required
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       />
                     </div>
                   </div>
@@ -2023,7 +2025,7 @@ const EnhancedRealEstateDashboard = () => {
                   <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Commission Details</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Commission % *</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Commission % *</label>
                       <input
                         type="number"
                         name="commissionPct"
@@ -2032,12 +2034,12 @@ const EnhancedRealEstateDashboard = () => {
                         required
                         step="0.01"
                         placeholder="3.00"
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Referral %</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Referral %</label>
                       <input
                         type="number"
                         name="referralPct"
@@ -2045,12 +2047,12 @@ const EnhancedRealEstateDashboard = () => {
                         onChange={handleInputChange}
                         step="0.01"
                         placeholder="0.00"
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                         Gross Commission Income (GCI)
                         <span className="text-xs text-blue-500 dark:text-blue-400 ml-2">✏️ Editable - auto-calculates Commission %</span>
                       </label>
@@ -2061,12 +2063,12 @@ const EnhancedRealEstateDashboard = () => {
                         onChange={handleInputChange}
                         step="0.01"
                         placeholder="0.00"
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                         Referral Fee Paid ($)
                         <span className="text-xs text-blue-500 dark:text-blue-400 ml-2">✏️ Editable - auto-calculates Referral %</span>
                       </label>
@@ -2077,12 +2079,12 @@ const EnhancedRealEstateDashboard = () => {
                         onChange={handleInputChange}
                         step="0.01"
                         placeholder="0.00"
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Adjusted GCI</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Adjusted GCI</label>
                       <input
                         type="text"
                         value={`$${formData.adjustedGci}`}
@@ -2099,7 +2101,7 @@ const EnhancedRealEstateDashboard = () => {
                     <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Keller Williams Deductions</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Errors & Omissions (E&O)</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Errors & Omissions (E&O)</label>
                         <input
                           type="number"
                           name="eo"
@@ -2107,12 +2109,12 @@ const EnhancedRealEstateDashboard = () => {
                           onChange={handleInputChange}
                           step="0.01"
                           placeholder="0.00"
-                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                          className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Royalty (6% - Auto)</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Royalty (6% - Auto)</label>
                         <input
                           type="text"
                           value={`$${formData.royalty}`}
@@ -2122,7 +2124,7 @@ const EnhancedRealEstateDashboard = () => {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Company Dollar (10% - Auto)</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Company Dollar (10% - Auto)</label>
                         <input
                           type="text"
                           value={`$${formData.companyDollar}`}
@@ -2132,7 +2134,7 @@ const EnhancedRealEstateDashboard = () => {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">HOA Transfer</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">HOA Transfer</label>
                         <input
                           type="number"
                           name="hoaTransfer"
@@ -2140,12 +2142,12 @@ const EnhancedRealEstateDashboard = () => {
                           onChange={handleInputChange}
                           step="0.01"
                           placeholder="0.00"
-                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                          className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Home Warranty</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Home Warranty</label>
                         <input
                           type="number"
                           name="homeWarranty"
@@ -2153,12 +2155,12 @@ const EnhancedRealEstateDashboard = () => {
                           onChange={handleInputChange}
                           step="0.01"
                           placeholder="0.00"
-                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                          className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">KW Cares</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">KW Cares</label>
                         <input
                           type="number"
                           name="kwCares"
@@ -2166,12 +2168,12 @@ const EnhancedRealEstateDashboard = () => {
                           onChange={handleInputChange}
                           step="0.01"
                           placeholder="0.00"
-                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                          className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">NEXT GEN</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">NEXT GEN</label>
                         <input
                           type="number"
                           name="kwNextGen"
@@ -2179,12 +2181,12 @@ const EnhancedRealEstateDashboard = () => {
                           onChange={handleInputChange}
                           step="0.01"
                           placeholder="0.00"
-                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                          className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">BOLD Scholarship</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">BOLD Scholarship</label>
                         <input
                           type="number"
                           name="boldScholarship"
@@ -2192,12 +2194,12 @@ const EnhancedRealEstateDashboard = () => {
                           onChange={handleInputChange}
                           step="0.01"
                           placeholder="0.00"
-                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                          className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">TC/Concierge</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">TC/Concierge</label>
                         <input
                           type="number"
                           name="tcConcierge"
@@ -2205,12 +2207,12 @@ const EnhancedRealEstateDashboard = () => {
                           onChange={handleInputChange}
                           step="0.01"
                           placeholder="0.00"
-                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                          className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Jelmberg Team</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Jelmberg Team</label>
                         <input
                           type="number"
                           name="jelmbergTeam"
@@ -2218,7 +2220,7 @@ const EnhancedRealEstateDashboard = () => {
                           onChange={handleInputChange}
                           step="0.01"
                           placeholder="0.00"
-                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                          className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         />
                       </div>
                     </div>
@@ -2230,7 +2232,7 @@ const EnhancedRealEstateDashboard = () => {
                     <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Bennion Deville Homes Deductions</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">BDH Split % (Default: 94%)</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">BDH Split % (Default: 94%)</label>
                         <input
                           type="number"
                           name="bdhSplitPct"
@@ -2238,12 +2240,12 @@ const EnhancedRealEstateDashboard = () => {
                           onChange={handleInputChange}
                           step="0.01"
                           placeholder="94.00"
-                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                          className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Pre-Split Deduction (6% - Auto)</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Pre-Split Deduction (6% - Auto)</label>
                         <input
                           type="text"
                           value={`$${formData.preSplitDeduction}`}
@@ -2253,7 +2255,7 @@ const EnhancedRealEstateDashboard = () => {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Agent Services Fee (ASF)</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Agent Services Fee (ASF)</label>
                         <input
                           type="number"
                           name="asf"
@@ -2261,12 +2263,12 @@ const EnhancedRealEstateDashboard = () => {
                           onChange={handleInputChange}
                           step="0.01"
                           placeholder="0.00"
-                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                          className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Foundation10</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Foundation10</label>
                         <input
                           type="number"
                           name="foundation10"
@@ -2274,12 +2276,12 @@ const EnhancedRealEstateDashboard = () => {
                           onChange={handleInputChange}
                           step="0.01"
                           placeholder="0.00"
-                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                          className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Admin Fee</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Admin Fee</label>
                         <input
                           type="number"
                           name="adminFee"
@@ -2287,7 +2289,7 @@ const EnhancedRealEstateDashboard = () => {
                           onChange={handleInputChange}
                           step="0.01"
                           placeholder="0.00"
-                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                          className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         />
                       </div>
                     </div>
@@ -2299,7 +2301,7 @@ const EnhancedRealEstateDashboard = () => {
                   <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Additional Deductions</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Other Deductions</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Other Deductions</label>
                       <input
                         type="number"
                         name="otherDeductions"
@@ -2307,12 +2309,12 @@ const EnhancedRealEstateDashboard = () => {
                         onChange={handleInputChange}
                         step="0.01"
                         placeholder="0.00"
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Buyer's Agent Split</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Buyer's Agent Split</label>
                       <input
                         type="number"
                         name="buyersAgentSplit"
@@ -2320,12 +2322,12 @@ const EnhancedRealEstateDashboard = () => {
                         onChange={handleInputChange}
                         step="0.01"
                         placeholder="0.00"
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Assistant Bonus (FYI only)</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Assistant Bonus (FYI only)</label>
                       <input
                         type="number"
                         name="assistantBonus"
@@ -2333,7 +2335,7 @@ const EnhancedRealEstateDashboard = () => {
                         onChange={handleInputChange}
                         step="0.01"
                         placeholder="0.00"
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       />
                       <p className="text-xs text-gray-500 mt-1">Not included in NCI calculation</p>
                     </div>

@@ -1,11 +1,11 @@
 # Commission Dashboard - Product Roadmap
 
-**Current Version:** v3.13.0  
+**Current Version:** v3.14.0  
 **Last Updated:** October 2025
 
 ---
 
-## ✅ Completed Features (v3.0 - v3.13.0)
+## ✅ Completed Features (v3.0 - v3.14.0)
 
 ### Core Functionality
 - [x] Full CRUD operations for transactions
@@ -34,6 +34,7 @@
 - [x] Responsive design (mobile-first)
 - [x] Loading states with skeleton loaders
 - [x] Color-coded transaction cards (Buyer/Seller/Referral)
+- [x] 8-point grid spacing system (v3.14.0)
 
 ### Analytics & Insights
 - [x] Interactive charts (Line, Bar, Pie)
@@ -69,20 +70,20 @@
 ## 🚧 In Progress / Bug Fixes
 
 ### Design System
-- [ ] Complete 8-point spacing audit
-  - Ensure all padding/margin uses multiples of 8px (8, 16, 24, 32, etc.)
-  - Update Tailwind spacing classes
-  - Document spacing scale
+- [x] Complete 8-point spacing audit ✅
+  - ✅ Ensure all padding/margin uses multiples of 8px (8, 16, 24, 32, etc.)
+  - ✅ Update Tailwind spacing classes
+  - ✅ Document spacing scale (see SPACING_GUIDE.md)
 
 ---
 
 ## 🎯 v3.14.0 - UX Polish (Next Release)
 
 ### High Priority
-- [ ] **8-Point Grid System**
-  - Audit all spacing values
-  - Replace non-compliant spacing with 8px multiples
-  - Create spacing utility documentation
+- [x] **8-Point Grid System** ✅ COMPLETED
+  - ✅ Audit all spacing values
+  - ✅ Replace non-compliant spacing with 8px multiples
+  - ✅ Create spacing utility documentation (SPACING_GUIDE.md)
   
 - [ ] **Keyboard Shortcuts**
   - `Cmd/Ctrl + K` - Add Transaction
