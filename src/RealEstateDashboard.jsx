@@ -826,61 +826,54 @@ const EnhancedRealEstateDashboard = () => {
   // ==================== METRIC CARD INTERACTIONS ====================
   
   const handleMetricCardClick = (metricType) => {
+    // Clear all filters first
+    setFilterYear('all');
+    setFilterClientType('all');
+    setFilterBrokerage('all');
+    setFilterPropertyType('all');
+    setFilterPriceRange('all');
+    
+    // Apply specific action based on card type
     switch (metricType) {
       case 'gci':
-        // Clear all filters to show full picture
-        setFilterYear('all');
-        setFilterClientType('all');
-        setFilterBrokerage('all');
-        setFilterPropertyType('all');
-        setFilterPriceRange('all');
-        setSortState(prev => ({ ...prev, order: 'newest' }));
+        // Show all transactions, newest first
+        setSortState(prev => ({ ...prev, order: 'newest', version: prev.version + 1 }));
         break;
       case 'nci':
-        // Show only deals with positive NCI (closed deals)
-        setFilterYear('all');
-        setFilterClientType('all');
-        setFilterBrokerage('all');
-        setFilterPropertyType('all');
-        setFilterPriceRange('all');
+        // Show all transactions, newest first
+        setSortState(prev => ({ ...prev, order: 'newest', version: prev.version + 1 }));
         break;
       case 'volume':
-        // Clear filters and sort by highest volume
-        setFilterYear('all');
-        setFilterClientType('all');
-        setFilterBrokerage('all');
-        setFilterPropertyType('all');
-        setFilterPriceRange('all');
+        // Show all transactions, newest first
+        setSortState(prev => ({ ...prev, order: 'newest', version: prev.version + 1 }));
         break;
       case 'average':
-        // Clear filters
-        setFilterYear('all');
-        setFilterClientType('all');
-        setFilterBrokerage('all');
-        setFilterPropertyType('all');
-        setFilterPriceRange('all');
+        // Show all transactions, newest first
+        setSortState(prev => ({ ...prev, order: 'newest', version: prev.version + 1 }));
         break;
       case 'transactions':
-        // Clear filters and sort by newest
-        setFilterYear('all');
-        setFilterClientType('all');
-        setFilterBrokerage('all');
-        setFilterPropertyType('all');
-        setFilterPriceRange('all');
-        setSortState(prev => ({ ...prev, order: 'newest' }));
+        // Toggle sort order
+        setSortState(prev => ({ 
+          ...prev, 
+          order: prev.order === 'newest' ? 'oldest' : 'newest',
+          version: prev.version + 1 
+        }));
         break;
       case 'referrals':
-        // Filter to show only referral transactions
-        setFilterYear('all');
-        setFilterClientType('all');
-        setFilterBrokerage('all');
-        setFilterPropertyType('all');
-        setFilterPriceRange('all');
-        // We'll need to filter by referralPct > 0 in the filter logic
+        // Show all transactions, newest first
+        setSortState(prev => ({ ...prev, order: 'newest', version: prev.version + 1 }));
         break;
       default:
         break;
     }
+    
+    // Scroll to transactions list
+    setTimeout(() => {
+      const transactionsList = document.querySelector('[class*="Filtered Transactions"]')?.parentElement;
+      if (transactionsList) {
+        transactionsList.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 100);
   };
 
   // ==================== FILTERING & SORTING ====================
