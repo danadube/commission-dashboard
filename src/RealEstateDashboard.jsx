@@ -46,7 +46,7 @@ import ThemeToggle from './ThemeToggle';
  * - Persistent preferences
  * 
  * @author Dana Dube
- * @for Janice Glaab Real Estate
+ * @for Real Estate Commission Tracking
  */
 
 // Custom Tahoe-style Tooltip Component

@@ -1,4 +1,4 @@
-# Janice Dashboard - Complete Feature Status
+# Real Estate Commission Dashboard - Complete Feature Status
 
 **Current Version:** v3.3.3  
 **Last Updated:** October 26, 2025  

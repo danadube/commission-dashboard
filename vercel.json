@@ -1,5 +1,18 @@
 {
-     "buildCommand": "npm run build",
-     "outputDirectory": "build",
-     "framework": "create-react-app"
-   }
+  "buildCommand": "npm run build",
+  "outputDirectory": "build",
+  "framework": "create-react-app",
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "janice-dashboard.vercel.app"
+        }
+      ],
+      "destination": "https://realestate-commission-dashboard.vercel.app/:path*",
+      "permanent": true
+    }
+  ]
+}

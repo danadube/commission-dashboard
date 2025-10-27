@@ -1,8 +1,8 @@
-# Janice Glaab Real Estate Commission Dashboard
+# Real Estate Commission Dashboard
 
 Professional real estate performance dashboard with automatic Google Sheets synchronization, beautiful UI, and comprehensive analytics.
 
-**Live App:** [https://janice-dashboard.vercel.app](https://janice-dashboard.vercel.app)
+**Live App:** [https://realestate-commission-dashboard.vercel.app](https://realestate-commission-dashboard.vercel.app)
 
 ---
 
@@ -49,7 +49,7 @@ Professional real estate performance dashboard with automatic Google Sheets sync
 ## 🚀 Quick Start
 
 ### **For Users:**
-1. Visit [https://janice-dashboard.vercel.app](https://janice-dashboard.vercel.app)
+1. Visit [https://realestate-commission-dashboard.vercel.app](https://realestate-commission-dashboard.vercel.app)
 2. Toggle **"Enable Google Sheets Sync"** ON
 3. Click **"Connect to Google Sheets"** and authorize
 4. Your data syncs automatically!
@@ -58,8 +58,8 @@ Professional real estate performance dashboard with automatic Google Sheets sync
 
 ```bash
 # Clone the repository
-git clone https://github.com/danadube/janice-dashboard.git
-cd janice-dashboard
+git clone https://github.com/danadube/commission-dashboard.git
+cd commission-dashboard
 
 # Install dependencies
 npm install
@@ -145,10 +145,11 @@ Your Google Sheet should have these columns (A-W):
 ## 📄 Project Structure
 
 ```
-janice-dashboard/
+commission-dashboard/
 ├── public/
 │   ├── index.html          # Main HTML file
-│   └── janice-logo.png     # App logo
+│   └── assets/
+│       └── logos/          # App logos
 ├── src/
 │   ├── RealEstateDashboard.jsx  # Main dashboard component
 │   ├── googleSheetsService.js   # Google Sheets API service
@@ -178,7 +179,7 @@ janice-dashboard/
 
 ## 🤝 Contributing
 
-This is a private dashboard for Janice Glaab's real estate business. For feature requests or issues, please contact the development team.
+This is a real estate commission tracking dashboard. For feature requests or issues, please contact the development team.
 
 ---
 
@@ -233,7 +234,7 @@ This is a private dashboard for Janice Glaab's real estate business. For feature
 
 For technical support or questions:
 - **Developer:** Dana Dube
-- **Repository:** [github.com/danadube/janice-dashboard](https://github.com/danadube/janice-dashboard)
+- **Repository:** [github.com/danadube/commission-dashboard](https://github.com/danadube/commission-dashboard)
 
 ---
 
