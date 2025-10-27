@@ -2381,9 +2381,9 @@ const EnhancedRealEstateDashboard = () => {
         {/* Transaction Detail View Modal */}
         {viewingTransaction && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-y-auto">
-            <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-3xl max-w-4xl backdrop-blur-3xl w-full my-8 transition-colors">
+            <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-3xl max-w-4xl w-full my-8 transition-colors overflow-hidden">
               {/* Header */}
-              <div className="p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20">
+              <div className="p-6 border-b border-gray-200 dark:border-gray-700">
                 <div className="flex items-center justify-between">
                   <div>
                     <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
@@ -2407,7 +2407,7 @@ const EnhancedRealEstateDashboard = () => {
                 {/* Property Information */}
                 <div className="mb-6">
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
-                    <Home className="w-5 h-5 text-blue-500" />
+                    <Home className="w-5 h-5 text-primary-500" />
                     Property Information
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg">
@@ -2424,11 +2424,11 @@ const EnhancedRealEstateDashboard = () => {
                       <p className="text-gray-900 dark:text-white font-medium">{viewingTransaction.propertyType}</p>
                     </div>
                     <div>
-                      <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Client Type</label>
+                      <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase block mb-1">Client Type</label>
                       <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold ${
                         viewingTransaction.clientType === 'Buyer' 
-                          ? 'bg-blue-500 text-white' 
-                          : 'bg-gold-500 text-white'
+                          ? 'bg-info-600 text-white' 
+                          : 'bg-warning-600 text-gray-900'
                       }`}>
                         {viewingTransaction.clientType}
                       </span>
