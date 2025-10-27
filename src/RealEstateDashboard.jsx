@@ -1145,7 +1145,7 @@ const EnhancedRealEstateDashboard = () => {
                 />
               )}
               <div className="min-w-0">
-                <h1 className="text-3xl lg:text-4xl font-bold bg-gradient-primary bg-clip-text text-transparent animate-glow truncate">
+                <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white truncate">
                   Commission Dashboard
                 </h1>
                 <p className="text-sm lg:text-base text-gray-600 dark:text-gray-300 mt-2 font-medium">
