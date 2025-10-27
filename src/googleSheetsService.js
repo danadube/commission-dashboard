@@ -107,9 +107,6 @@ function handleOAuthCallback() {
       
       // Notify app
       window.dispatchEvent(new CustomEvent('googleAuthSuccess'));
-      
-      // Show success message
-      alert('✅ Google Sheets connected successfully!');
     }
   } else {
     // Check for stored token
