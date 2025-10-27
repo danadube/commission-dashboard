@@ -5,9 +5,9 @@ import * as GoogleSheetsService from './googleSheetsService';
 import ThemeToggle from './ThemeToggle';
 
 /**
- * Janice Glaab Real Estate Commission Dashboard
+ * Real Estate Commission Dashboard
  * 
- * @version 3.7.0
+ * @version 3.13.0
  * @description Professional dashboard for tracking real estate commissions with Google Sheets integration
  * 
  * ✨ KEY FEATURES:
@@ -144,6 +144,15 @@ const EnhancedRealEstateDashboard = () => {
   // Logo State
   const [customLogo, setCustomLogo] = useState(() => {
     return localStorage.getItem('customLogo') || '/assets/logos/app-logo-default.png';
+  });
+  
+  // Agent Customization State
+  const [agentName, setAgentName] = useState(() => {
+    return localStorage.getItem('agentName') || '';
+  });
+  
+  const [agentCompany, setAgentCompany] = useState(() => {
+    return localStorage.getItem('agentCompany') || '';
   });
   
   // Commission Sheet Scanner State
@@ -1122,9 +1131,11 @@ const EnhancedRealEstateDashboard = () => {
               )}
               <div className="min-w-0">
                 <h1 className="text-2xl lg:text-3xl font-bold bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 dark:from-purple-400 dark:via-blue-400 dark:to-cyan-400 bg-clip-text text-transparent animate-glow truncate">
-                  Real Estate Commission Dashboard
+                  Commission Dashboard
                 </h1>
-                <p className="text-xs lg:text-sm text-gray-600 dark:text-gray-300 mt-1">Track and analyze your commission income</p>
+                <p className="text-xs lg:text-sm text-gray-600 dark:text-gray-300 mt-1">
+                  {agentName && agentCompany ? `${agentName} • ${agentCompany}` : agentName ? agentName : agentCompany ? agentCompany : 'Manage your real estate commissions'}
+                </p>
               </div>
             </div>
 
@@ -1700,7 +1711,7 @@ const EnhancedRealEstateDashboard = () => {
 
         {/* Footer */}
         <div className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
-          Janice Glaab Real Estate Dashboard v3.6.0 • Built with ❤️ by Dana Dube
+          Commission Dashboard v3.13.0 • Built with ❤️ by Dana Dube
         </div>
 
         {/* Transaction Form Modal */}
@@ -2608,6 +2619,52 @@ const EnhancedRealEstateDashboard = () => {
               {/* Content */}
               <div className="p-6 max-h-[calc(90vh-200px)] overflow-y-auto space-y-6">
                 
+                {/* Personalization Section */}
+                <div className="glass-morphism bg-white/60 dark:bg-gray-700/60 rounded-2xl p-6 border border-white/30 dark:border-gray-600/30 backdrop-blur-xl">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="text-2xl">👤</div>
+                    <h3 className="text-lg font-bold text-gray-900 dark:text-white">Personalization</h3>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                        Agent Name
+                      </label>
+                      <input
+                        type="text"
+                        value={agentName}
+                        onChange={(e) => {
+                          setAgentName(e.target.value);
+                          localStorage.setItem('agentName', e.target.value);
+                        }}
+                        placeholder="Your name"
+                        className="w-full px-4 py-2 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                        Company / Brokerage
+                      </label>
+                      <input
+                        type="text"
+                        value={agentCompany}
+                        onChange={(e) => {
+                          setAgentCompany(e.target.value);
+                          localStorage.setItem('agentCompany', e.target.value);
+                        }}
+                        placeholder="Your company name"
+                        className="w-full px-4 py-2 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                      />
+                    </div>
+                    
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      This will appear in the header subtitle
+                    </p>
+                  </div>
+                </div>
+                
                 {/* Appearance Section */}
                 <div className="glass-morphism bg-white/60 dark:bg-gray-700/60 rounded-2xl p-6 border border-white/30 dark:border-gray-600/30 backdrop-blur-xl">
                   <div className="flex items-center gap-3 mb-4">
@@ -2779,11 +2836,11 @@ const EnhancedRealEstateDashboard = () => {
                   </div>
                   
                   <div className="space-y-2 text-sm text-gray-600 dark:text-gray-300">
-                    <p><strong>Version:</strong> v3.7.0 - Settings Panel</p>
+                    <p><strong>Version:</strong> v3.13.0</p>
                     <p><strong>Features:</strong> AI Scanner • Referral Tracking • Two-way Sync</p>
                     <p><strong>Total Transactions:</strong> {transactions.length}</p>
                     <p className="text-xs text-gray-500 dark:text-gray-400 mt-3">
-                      Built for Janice Glaab Real Estate
+                      Professional real estate commission tracking
                     </p>
                   </div>
                 </div>

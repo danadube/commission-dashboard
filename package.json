@@ -1,7 +1,7 @@
 {
   "name": "enhanced-real-estate-dashboard",
-  "version": "3.2.0",
-  "description": "Commission tracking dashboard for Janice Glaab Real Estate with KW and BDH brokerage support",
+  "version": "3.13.0",
+  "description": "Professional real estate commission tracking dashboard with Google Sheets integration and AI-powered features",
   "private": true,
   "dependencies": {
     "react": "^18.2.0",
@@ -47,7 +47,7 @@
     "bdh",
     "google-sheets"
   ],
-  "author": "Janice Glaab",
+  "author": "Dana Dube",
   "repository": {
     "type": "git",
     "url": "https://github.com/danadube/janice-dashboard"
