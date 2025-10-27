@@ -834,7 +834,7 @@ const EnhancedRealEstateDashboard = () => {
         setFilterBrokerage('all');
         setFilterPropertyType('all');
         setFilterPriceRange('all');
-        setSortOrder('newest');
+        setSortState(prev => ({ ...prev, order: 'newest' }));
         break;
       case 'nci':
         // Show only deals with positive NCI (closed deals)
@@ -867,7 +867,7 @@ const EnhancedRealEstateDashboard = () => {
         setFilterBrokerage('all');
         setFilterPropertyType('all');
         setFilterPriceRange('all');
-        setSortOrder('newest');
+        setSortState(prev => ({ ...prev, order: 'newest' }));
         break;
       case 'referrals':
         // Filter to show only referral transactions
