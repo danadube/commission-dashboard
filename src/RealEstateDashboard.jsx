@@ -241,21 +241,64 @@ const EnhancedRealEstateDashboard = () => {
       }
     };
     
-    // Handle ESC key to close modals
-    const handleEscKey = (e) => {
+    // Handle keyboard shortcuts
+    const handleKeyboardShortcuts = (e) => {
+      // Don't trigger shortcuts if user is typing in an input field
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') {
+        return;
+      }
+      
+      const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+      const cmdKey = isMac ? e.metaKey : e.ctrlKey;
+      
+      // Cmd/Ctrl + K: Add Transaction
+      if (cmdKey && e.key === 'k') {
+        e.preventDefault();
+        resetForm();
+        setShowAddTransaction(true);
+        return;
+      }
+      
+      // Cmd/Ctrl + S: Sync
+      if (cmdKey && e.key === 's') {
+        e.preventDefault();
+        if (isGoogleSheetsEnabled) {
+          handleGoogleSheetsSync();
+        }
+        return;
+      }
+      
+      // Cmd/Ctrl + ,: Settings
+      if (cmdKey && e.key === ',') {
+        e.preventDefault();
+        setShowSettings(true);
+        return;
+      }
+      
+      // Esc: Close modals
       if (e.key === 'Escape') {
         closeViewModal();
         resetForm();
         setShowSettings(false);
+        return;
+      }
+      
+      // /: Focus search/filter (placeholder for future search functionality)
+      if (e.key === '/' && !cmdKey) {
+        e.preventDefault();
+        // For now, just show a console message that search is coming soon
+        // In the future, this will focus a search input
+        console.log('🔍 Search functionality coming soon! Use filters for now.');
+        return;
       }
     };
     
     window.addEventListener('googleAuthSuccess', handleOAuthSuccess);
-    window.addEventListener('keydown', handleEscKey);
+    window.addEventListener('keydown', handleKeyboardShortcuts);
     
     return () => {
       window.removeEventListener('googleAuthSuccess', handleOAuthSuccess);
-      window.removeEventListener('keydown', handleEscKey);
+      window.removeEventListener('keydown', handleKeyboardShortcuts);
     };
   }, []);
 
@@ -1270,10 +1313,11 @@ const EnhancedRealEstateDashboard = () => {
                     onClick={syncNow}
                     disabled={isSyncing}
                     className="hidden sm:flex items-center gap-2 px-4 py-2 bg-success-600 hover:bg-success-700 text-white rounded-lg transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed shadow-sm"
-                    title="Sync with Google Sheets"
+                    title="Sync with Google Sheets (⌘S)"
                   >
                     <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin' : ''}`} />
                     <span className="text-xs font-medium hidden lg:inline">Sync</span>
+                    <span className="hidden lg:inline text-xs opacity-75 ml-1">⌘S</span>
                   </button>
                 </>
               )}
@@ -1289,17 +1333,19 @@ const EnhancedRealEstateDashboard = () => {
               <button
                 onClick={() => setShowForm(true)}
                 className="flex items-center gap-2 px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg transition-all shadow-sm hover:shadow-md font-medium text-sm"
+                title="Add Transaction (⌘K)"
               >
                 <Plus className="w-4 h-4" />
                 <span className="hidden sm:inline">Add Transaction</span>
                 <span className="sm:hidden">Add</span>
+                <span className="hidden lg:inline text-xs opacity-75 ml-1">⌘K</span>
               </button>
 
               {/* Settings Button */}
               <button
                 onClick={() => setShowSettings(true)}
                 className="p-2 bg-gray-100/60 hover:bg-gray-200/80 dark:bg-gray-700/60 dark:hover:bg-gray-600/80 rounded-lg transition-all border border-gray-200 dark:border-gray-600"
-                title="Settings"
+                title="Settings (⌘,)"
               >
                 <Settings className="w-4 h-4 text-gray-600 dark:text-gray-300" />
               </button>
