@@ -131,6 +131,7 @@ const EnhancedRealEstateDashboard = () => {
   const [filterPropertyType, setFilterPropertyType] = useState('all');
   const [filterPriceRange, setFilterPriceRange] = useState('all');
   const [filterDateRange, setFilterDateRange] = useState('all');
+  const [filterReferralType, setFilterReferralType] = useState('all');
   
   // Sort order - newest or oldest first
   // Sort State - combined into single object to avoid state sync issues
@@ -167,7 +168,7 @@ const EnhancedRealEstateDashboard = () => {
     // Basic Info
     propertyType: 'Residential',
     clientType: 'Seller',
-    transactionType: 'Sale', // NEW: Sale, Referral Out, Referral In
+    transactionType: 'Sale', // NEW: Sale, Referral $ Received, Referral $ Paid
     source: '',
     address: '',
     city: '',
@@ -179,7 +180,7 @@ const EnhancedRealEstateDashboard = () => {
     
     // Referral Fields (NEW)
     referringAgent: '', // Name of agent you referred to/from
-    referralFeeReceived: '', // For Referral Out - fee you receive
+    referralFeeReceived: '', // For Referral $ Received - fee you receive
     
     // Commission Fields
     brokerage: 'Keller Williams',
@@ -418,7 +419,7 @@ const EnhancedRealEstateDashboard = () => {
       closedPrice = 0,
       commissionPct = 0,
       referralPct = 0,
-      referralFeeReceived = 0, // NEW: For Referral Out transactions
+      referralFeeReceived = 0, // NEW: For Referral $ Received transactions
       
       // KW fields
       eo = 0,
@@ -452,13 +453,13 @@ const EnhancedRealEstateDashboard = () => {
 
     let gci, referralDollar, adjustedGci;
 
-    // REFERRAL OUT: You refer client to another agent, receive referral fee
-    if (transactionType === 'Referral Out') {
+    // REFERRAL $ RECEIVED: You refer client to another agent, receive referral fee
+    if (transactionType === 'Referral $ Received') {
       gci = refFeeReceived; // GCI is the referral fee itself
       referralDollar = 0; // You're not paying a referral
       adjustedGci = gci; // No adjustment needed
     } 
-    // REGULAR SALE or REFERRAL IN: Calculate from property price
+    // REGULAR SALE or REFERRAL $ PAID: Calculate from property price
     else {
       // Calculate GCI (Gross Commission Income)
       gci = price * (commPct / 100);
@@ -860,9 +861,22 @@ const EnhancedRealEstateDashboard = () => {
 
   // ==================== METRIC CARD INTERACTIONS ====================
   
-  const handleMetricCardClick = () => {
+  const handleMetricCardClick = (metricType) => {
     // Simply scroll to transactions list - don't change state
     // Following "Law of Locality" - guide user's attention, don't manipulate data
+    
+    // Special case: Referral Fees card should filter to show only referral transactions
+    if (metricType === 'referralFees') {
+      // Filter to show only referral transactions
+      setFilterClientType('all');
+      setFilterBrokerage('all');
+      setFilterPropertyType('all');
+      setFilterPriceRange('all');
+      setFilterDateRange('all');
+      setFilterYear('all');
+      setFilterReferralType('referralOnly');
+    }
+    
     setTimeout(() => {
       const transactionsList = document.getElementById('transactions-list');
       if (transactionsList) {
@@ -944,6 +958,24 @@ const EnhancedRealEstateDashboard = () => {
             const lastYearStart = new Date(today.getFullYear() - 1, 0, 1);
             const lastYearEnd = new Date(today.getFullYear() - 1, 11, 31);
             if (closingDate < lastYearStart || closingDate > lastYearEnd) return false;
+            break;
+        }
+      }
+      
+      // Referral type filter
+      if (filterReferralType !== 'all') {
+        switch (filterReferralType) {
+          case 'referralOnly':
+            if (transaction.transactionType === 'Sale') return false;
+            break;
+          case 'referralReceived':
+            if (transaction.transactionType !== 'Referral $ Received') return false;
+            break;
+          case 'referralPaid':
+            if (transaction.transactionType !== 'Referral $ Paid') return false;
+            break;
+          case 'regularOnly':
+            if (transaction.transactionType !== 'Sale') return false;
             break;
         }
       }
@@ -1305,7 +1337,7 @@ const EnhancedRealEstateDashboard = () => {
             </div>
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-4">
             {/* Date Range Filter */}
             <div>
               <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2">
@@ -1408,10 +1440,28 @@ const EnhancedRealEstateDashboard = () => {
                 <option value="over2m">Over $2M</option>
               </select>
             </div>
+
+            {/* Referral Type Filter */}
+            <div>
+              <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2">
+                🤝 Referral Type
+              </label>
+              <select
+                value={filterReferralType}
+                onChange={(e) => setFilterReferralType(e.target.value)}
+                className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors font-medium"
+              >
+                <option value="all">All Transactions</option>
+                <option value="regularOnly">Regular Sales Only</option>
+                <option value="referralOnly">Referral Transactions Only</option>
+                <option value="referralReceived">Referral $ Received</option>
+                <option value="referralPaid">Referral $ Paid</option>
+              </select>
+            </div>
           </div>
 
           {/* Clear Filters Button */}
-          {(filterYear !== 'all' || filterClientType !== 'all' || filterBrokerage !== 'all' || filterPropertyType !== 'all' || filterPriceRange !== 'all' || filterDateRange !== 'all') && (
+          {(filterYear !== 'all' || filterClientType !== 'all' || filterBrokerage !== 'all' || filterPropertyType !== 'all' || filterPriceRange !== 'all' || filterDateRange !== 'all' || filterReferralType !== 'all') && (
             <div className="mt-4 flex items-center justify-center">
               <button
                 onClick={() => {
@@ -1421,6 +1471,7 @@ const EnhancedRealEstateDashboard = () => {
                   setFilterPropertyType('all');
                   setFilterPriceRange('all');
                   setFilterDateRange('all');
+                  setFilterReferralType('all');
                 }}
                 className="px-6 py-2 text-sm font-semibold text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 bg-primary-50 dark:bg-primary-900/30 hover:bg-primary-100 dark:hover:bg-primary-900/50 rounded-lg transition-all border-2 border-primary-200 dark:border-primary-700"
               >
@@ -1530,14 +1581,14 @@ const EnhancedRealEstateDashboard = () => {
 
               {/* Referral Fees */}
               <button
-                onClick={handleMetricCardClick}
+                onClick={() => handleMetricCardClick('referralFees')}
                 className="relative overflow-hidden bg-referral-500 rounded-3xl shadow-2xl hover:shadow-3xl p-8 text-white transform hover:-translate-y-2 hover:scale-105 transition-all duration-700 border-2 border-white/20 backdrop-blur-sm group animate-[fadeIn_0.6s_ease-out] w-full text-left cursor-pointer active:scale-100"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex-1">
                     <p className="text-white/90 text-sm font-semibold uppercase tracking-wide">🤝 Referral Fees</p>
                     <p className="text-4xl font-bold mt-2 mb-2">${metrics.totalReferralFees.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                    <p className="text-white/80 text-xs font-medium">Paid to referral partners • Click to view transactions</p>
+                    <p className="text-white/80 text-xs font-medium">Referral fees paid & received • Click to view referral transactions</p>
                   </div>
                   <div className="bg-white/20 p-4 rounded-full backdrop-blur-sm group-hover:bg-white/30 transition-colors">
                     <DollarSign className="w-8 h-8 text-white" />
@@ -1731,8 +1782,8 @@ const EnhancedRealEstateDashboard = () => {
             <div className="space-y-4 animate-[fadeIn_0.8s_ease-out]">
               {displayTransactions.map((transaction, index) => {
                 const isBuyer = transaction.clientType === 'Buyer';
-                const isReferralOut = transaction.transactionType === 'Referral Out';
-                const isReferralIn = transaction.transactionType === 'Referral In';
+                const isReferralOut = transaction.transactionType === 'Referral $ Received';
+                const isReferralIn = transaction.transactionType === 'Referral $ Paid';
                 const isReferral = isReferralOut || isReferralIn;
                 
                 return (
@@ -1761,7 +1812,7 @@ const EnhancedRealEstateDashboard = () => {
                         {/* Referral Badge */}
                         {isReferral && (
                           <span className="px-4 py-2 rounded-full text-xs font-bold shadow-md border-2 bg-referral-100 dark:bg-referral-900/50 text-referral-800 dark:text-referral-200 border-referral-300 dark:border-referral-600">
-                            {isReferralOut ? '🤝 Referral Out' : '👥 Referral In'}
+                            {isReferralOut ? '💰 Referral $ Received' : '💸 Referral $ Paid'}
                           </span>
                         )}
                         
@@ -1953,13 +2004,13 @@ const EnhancedRealEstateDashboard = () => {
                         className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       >
                         <option value="Sale">💼 Regular Sale</option>
-                        <option value="Referral Out">🤝 Referral Out (You refer TO another agent)</option>
-                        <option value="Referral In">👥 Referral In (You receive FROM another agent)</option>
+                        <option value="Referral $ Received">💰 Referral $ Received (You refer TO another agent)</option>
+                        <option value="Referral $ Paid">💸 Referral $ Paid (You receive FROM another agent)</option>
                       </select>
                       <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                         {formData.transactionType === 'Sale' && '→ Standard buyer/seller transaction'}
-                        {formData.transactionType === 'Referral Out' && '→ You send client to another agent, receive referral fee'}
-                        {formData.transactionType === 'Referral In' && '→ Another agent sends you a client, you pay referral fee'}
+                        {formData.transactionType === 'Referral $ Received' && '→ You send client to another agent, receive referral fee'}
+                        {formData.transactionType === 'Referral $ Paid' && '→ Another agent sends you a client, you pay referral fee'}
                       </p>
                     </div>
 
@@ -1976,11 +2027,11 @@ const EnhancedRealEstateDashboard = () => {
                     </div>
 
                     {/* Referral-Specific Fields */}
-                    {(formData.transactionType === 'Referral Out' || formData.transactionType === 'Referral In') && (
+                    {(formData.transactionType === 'Referral $ Received' || formData.transactionType === 'Referral $ Paid') && (
                       <>
                         <div>
                           <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
-                            {formData.transactionType === 'Referral Out' ? 'Referring Agent (Who you sent client to)' : 'Referring Agent (Who sent you the client)'}
+                            {formData.transactionType === 'Referral $ Received' ? 'Referring Agent (Who you sent client to)' : 'Referring Agent (Who sent you the client)'}
                           </label>
                           <input
                             type="text"
@@ -1992,7 +2043,7 @@ const EnhancedRealEstateDashboard = () => {
                           />
                         </div>
 
-                        {formData.transactionType === 'Referral Out' && (
+                        {formData.transactionType === 'Referral $ Received' && (
                           <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                               Referral Fee Received *
@@ -2005,7 +2056,7 @@ const EnhancedRealEstateDashboard = () => {
                               onChange={handleInputChange}
                               step="0.01"
                               placeholder="0.00"
-                              required={formData.transactionType === 'Referral Out'}
+                              required={formData.transactionType === 'Referral $ Received'}
                               className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                             />
                           </div>
