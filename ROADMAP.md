@@ -210,7 +210,8 @@ None at this time! 🎉
 2. **Email Reminders** - Upcoming closings, follow-ups
 3. **Client CRM** - Basic client management
 4. **Document Storage** - Attach contracts, sheets to transactions
-5. **Automated Reports** - Weekly/monthly email summaries
+5. **Commission Sheet Image Storage** - Store scanned commission sheet images for audit trail and verification
+6. **Automated Reports** - Weekly/monthly email summaries
 
 ### Nice to Have
 1. **Dark Mode Enhancements** - More theme options, custom colors
