@@ -706,6 +706,11 @@ const EnhancedRealEstateDashboard = () => {
   };
 
   const handleEdit = (transaction) => {
+    // Debug: Log the transaction data to understand date format
+    console.log('Editing transaction:', transaction);
+    console.log('List Date:', transaction.listDate, 'Type:', typeof transaction.listDate);
+    console.log('Closing Date:', transaction.closingDate, 'Type:', typeof transaction.closingDate);
+    
     // Ensure all fields are properly mapped from transaction to form data
     const editFormData = {
       // Basic Info
@@ -717,8 +722,38 @@ const EnhancedRealEstateDashboard = () => {
       city: transaction.city || '',
       listPrice: transaction.listPrice || '',
       closedPrice: transaction.closedPrice || '',
-      listDate: transaction.listDate ? (transaction.listDate.includes('T') ? transaction.listDate.split('T')[0] : transaction.listDate) : '',
-      closingDate: transaction.closingDate ? (transaction.closingDate.includes('T') ? transaction.closingDate.split('T')[0] : transaction.closingDate) : '',
+      listDate: transaction.listDate ? (() => {
+        // Handle various date formats
+        if (typeof transaction.listDate === 'string') {
+          if (transaction.listDate.includes('T')) {
+            return transaction.listDate.split('T')[0];
+          } else if (transaction.listDate.includes('/')) {
+            // Convert MM/DD/YYYY to YYYY-MM-DD
+            const parts = transaction.listDate.split('/');
+            if (parts.length === 3) {
+              return `${parts[2]}-${parts[0].padStart(2, '0')}-${parts[1].padStart(2, '0')}`;
+            }
+          }
+          return transaction.listDate;
+        }
+        return '';
+      })() : '',
+      closingDate: transaction.closingDate ? (() => {
+        // Handle various date formats
+        if (typeof transaction.closingDate === 'string') {
+          if (transaction.closingDate.includes('T')) {
+            return transaction.closingDate.split('T')[0];
+          } else if (transaction.closingDate.includes('/')) {
+            // Convert MM/DD/YYYY to YYYY-MM-DD
+            const parts = transaction.closingDate.split('/');
+            if (parts.length === 3) {
+              return `${parts[2]}-${parts[0].padStart(2, '0')}-${parts[1].padStart(2, '0')}`;
+            }
+          }
+          return transaction.closingDate;
+        }
+        return '';
+      })() : '',
       status: transaction.status || 'Closed',
       
       // Referral Fields
