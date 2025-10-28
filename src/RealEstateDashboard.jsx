@@ -1334,79 +1334,6 @@ const EnhancedRealEstateDashboard = () => {
 
             {/* Right: Actions */}
             <div className="flex items-center gap-2 lg:gap-4 flex-shrink-0">
-              {/* Global Search */}
-              <div className="relative hidden sm:block">
-                <div className="relative">
-                  <input
-                    id="global-search"
-                    type="text"
-                    placeholder="Search transactions..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    onFocus={() => setIsSearchFocused(true)}
-                    onBlur={() => setIsSearchFocused(false)}
-                    className={`w-64 px-4 py-2 pl-10 pr-4 rounded-lg border-2 transition-all duration-200 ${
-                      isSearchFocused 
-                        ? 'border-primary-500 bg-white dark:bg-gray-800 shadow-lg' 
-                        : 'border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800/50 hover:border-gray-400 dark:hover:border-gray-500'
-                    } text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20`}
-                  />
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <div className="w-4 h-4 text-gray-400 dark:text-gray-500">🔍</div>
-                  </div>
-                  {searchQuery && (
-                    <button
-                      onClick={() => setSearchQuery('')}
-                      className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
-                    >
-                      <X className="w-4 h-4" />
-                    </button>
-                  )}
-                </div>
-                {isSearchFocused && (
-                  <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50 p-2">
-                    <p className="text-xs text-gray-500 dark:text-gray-400 px-2 py-1">
-                      Search by address, city, source, referring agent, property type, brokerage, or status
-                    </p>
-                  </div>
-                )}
-              </div>
-
-              {/* Sync Status & Button */}
-              {isGoogleSheetsEnabled && isGoogleSheetsAuthorized && (
-                <>
-                  <button
-                    onClick={syncNow}
-                    disabled={isSyncing}
-                    className="hidden sm:flex items-center gap-2 px-4 py-2 bg-success-600 hover:bg-success-700 text-white rounded-lg transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed shadow-sm"
-                    title="Sync with Google Sheets (⌘R)"
-                  >
-                    <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin' : ''}`} />
-                    <span className="text-xs font-medium hidden lg:inline">Sync</span>
-                    <span className="hidden lg:inline text-xs opacity-75 ml-1">⌘R</span>
-                  </button>
-                </>
-              )}
-              
-              {!isGoogleSheetsEnabled && (
-                <div className="hidden sm:flex items-center gap-2 px-4 py-2 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
-                  <CloudOff className="w-4 h-4 text-gray-500 dark:text-gray-400" />
-                  <span className="text-xs font-medium text-gray-600 dark:text-gray-400">Offline</span>
-                </div>
-              )}
-
-              {/* Add Transaction Button */}
-              <button
-                onClick={() => setShowForm(true)}
-                className="flex items-center gap-2 px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg transition-all shadow-sm hover:shadow-md font-medium text-sm"
-                title="Add Transaction (⌘N)"
-              >
-                <Plus className="w-4 h-4" />
-                <span className="hidden sm:inline">Add Transaction</span>
-                <span className="sm:hidden">Add</span>
-                <span className="hidden lg:inline text-xs opacity-75 ml-1">⌘N</span>
-              </button>
-
               {/* Settings Button */}
               <button
                 onClick={() => setShowSettings(true)}
@@ -1443,46 +1370,121 @@ const EnhancedRealEstateDashboard = () => {
           )}
         </div>
 
-        {/* Filters */}
+        {/* Filters & Actions */}
         <div className="glass-morphism bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-2xl p-8 mb-8 transition-all duration-700 border border-white/30 dark:border-gray-700/30 backdrop-blur-3xl hover:shadow-3xl">
-          <div className="flex items-center gap-2 mb-4">
+          <div className="flex items-center gap-2 mb-6">
             <Filter className="w-5 h-5 text-primary-600 dark:text-primary-400" />
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Filter Transactions</h3>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Filter & Search Transactions</h3>
             <div className="ml-auto text-sm font-medium text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-full">
               {filteredTransactions.length} of {transactions.length} shown
             </div>
           </div>
+
+          {/* Search & Actions Row */}
+          <div className="flex flex-col sm:flex-row gap-4 mb-6">
+            {/* Search Field */}
+            <div className="flex-1 relative">
+              <div className="relative">
+                <input
+                  id="global-search"
+                  type="text"
+                  placeholder="Search transactions..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onFocus={() => setIsSearchFocused(true)}
+                  onBlur={() => setIsSearchFocused(false)}
+                  className={`w-full px-4 py-3 pl-10 pr-4 rounded-lg border-2 transition-all duration-200 ${
+                    isSearchFocused 
+                      ? 'border-primary-500 bg-white dark:bg-gray-800 shadow-lg' 
+                      : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 hover:border-gray-400 dark:hover:border-gray-500'
+                  } text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20`}
+                />
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <div className="w-4 h-4 text-gray-400 dark:text-gray-500">🔍</div>
+                </div>
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
+              {isSearchFocused && (
+                <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50 p-2">
+                  <p className="text-xs text-gray-500 dark:text-gray-400 px-2 py-1">
+                    Search by address, city, source, referring agent, property type, brokerage, or status
+                  </p>
+                </div>
+              )}
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex items-center gap-3">
+              {/* Sync Button */}
+              {isGoogleSheetsEnabled && isGoogleSheetsAuthorized ? (
+                <button
+                  onClick={syncNow}
+                  disabled={isSyncing}
+                  className="flex items-center gap-2 px-4 py-3 bg-success-600 hover:bg-success-700 text-white rounded-lg transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed shadow-sm font-medium"
+                  title="Sync with Google Sheets (⌘R)"
+                >
+                  <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin' : ''}`} />
+                  <span className="hidden sm:inline">Sync</span>
+                  <span className="hidden lg:inline text-xs opacity-75 ml-1">⌘R</span>
+                </button>
+              ) : (
+                <div className="flex items-center gap-2 px-4 py-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
+                  <CloudOff className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                  <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Offline</span>
+                </div>
+              )}
+
+              {/* Add Transaction Button */}
+              <button
+                onClick={() => setShowForm(true)}
+                className="flex items-center gap-2 px-4 py-3 bg-primary-500 hover:bg-primary-600 text-white rounded-lg transition-all shadow-sm hover:shadow-md font-medium"
+                title="Add Transaction (⌘N)"
+              >
+                <Plus className="w-4 h-4" />
+                <span className="hidden sm:inline">Add Transaction</span>
+                <span className="sm:hidden">Add</span>
+                <span className="hidden lg:inline text-xs opacity-75 ml-1">⌘N</span>
+              </button>
+            </div>
+          </div>
           
-          {/* Primary Filters Row */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+          {/* Compact Filters Grid */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
             {/* Date Range Filter */}
             <div>
-              <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2">
-                📊 Date Range
+              <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-1">
+                📊 Date
               </label>
               <select
                 value={filterDateRange}
                 onChange={(e) => setFilterDateRange(e.target.value)}
-                className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors font-medium"
+                className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
               >
                 <option value="all">All Time</option>
-                <option value="3months">Last 3 Months</option>
-                <option value="6months">Last 6 Months</option>
-                <option value="12months">Last 12 Months</option>
-                <option value="ytd">Year to Date</option>
+                <option value="3months">3 Months</option>
+                <option value="6months">6 Months</option>
+                <option value="12months">12 Months</option>
+                <option value="ytd">YTD</option>
                 <option value="lastYear">Last Year</option>
               </select>
             </div>
 
             {/* Year Filter */}
             <div>
-              <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2">
-                📅 Closing Year
+              <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-1">
+                📅 Year
               </label>
               <select
                 value={filterYear}
                 onChange={(e) => setFilterYear(e.target.value)}
-                className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors font-medium"
+                className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
               >
                 <option value="all">All Years</option>
                 {[...new Set(transactions.map(t => t.closingDate ? new Date(t.closingDate).getFullYear() : null))].filter(Boolean).sort((a, b) => b - a).map(year => (
@@ -1493,89 +1495,68 @@ const EnhancedRealEstateDashboard = () => {
 
             {/* Client Type Filter */}
             <div>
-              <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2">
-                👥 Transaction Type
+              <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-1">
+                👥 Type
               </label>
               <select
                 value={filterClientType}
                 onChange={(e) => setFilterClientType(e.target.value)}
-                className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors font-medium"
+                className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
               >
-                <option value="all">Buyers & Sellers</option>
-                <option value="Buyer">🔵 Buyers Only</option>
-                <option value="Seller">⭐ Sellers Only</option>
+                <option value="all">All</option>
+                <option value="Buyer">🔵 Buyers</option>
+                <option value="Seller">⭐ Sellers</option>
               </select>
             </div>
 
             {/* Brokerage Filter */}
             <div>
-              <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2">
+              <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-1">
                 🏢 Brokerage
               </label>
               <select
                 value={filterBrokerage}
                 onChange={(e) => setFilterBrokerage(e.target.value)}
-                className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors font-medium"
+                className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
               >
-                <option value="all">All Brokerages</option>
-                <option value="KW">Keller Williams</option>
-                <option value="BDH">Bennion Deville Homes</option>
+                <option value="all">All</option>
+                <option value="KW">KW</option>
+                <option value="BDH">BDH</option>
               </select>
             </div>
-          </div>
 
-          {/* Secondary Filters Row */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {/* Property Type Filter */}
             <div>
-              <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2">
-                🏠 Property Type
+              <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-1">
+                🏠 Property
               </label>
               <select
                 value={filterPropertyType}
                 onChange={(e) => setFilterPropertyType(e.target.value)}
-                className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors font-medium"
+                className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
               >
-                <option value="all">All Property Types</option>
+                <option value="all">All</option>
                 <option value="Residential">Residential</option>
                 <option value="Commercial">Commercial</option>
                 <option value="Land">Land</option>
               </select>
             </div>
 
-            {/* Price Range Filter */}
-            <div>
-              <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2">
-                💰 Price Range
-              </label>
-              <select
-                value={filterPriceRange}
-                onChange={(e) => setFilterPriceRange(e.target.value)}
-                className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors font-medium"
-              >
-                <option value="all">All Prices</option>
-                <option value="under500k">Under $500K</option>
-                <option value="500k-1m">$500K - $1M</option>
-                <option value="1m-2m">$1M - $2M</option>
-                <option value="over2m">Over $2M</option>
-              </select>
-            </div>
-
             {/* Referral Type Filter */}
             <div>
-              <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2">
-                🤝 Referral Type
+              <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-1">
+                🤝 Referral
               </label>
               <select
                 value={filterReferralType}
                 onChange={(e) => setFilterReferralType(e.target.value)}
-                className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors font-medium"
+                className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
               >
-                <option value="all">All Transactions</option>
-                <option value="regularOnly">Regular Sales Only</option>
-                <option value="referralOnly">Referral Transactions Only</option>
-                <option value="referralReceived">Referral $ Received</option>
-                <option value="referralPaid">Referral $ Paid</option>
+                <option value="all">All</option>
+                <option value="regularOnly">Regular</option>
+                <option value="referralOnly">Referral</option>
+                <option value="referralReceived">Received</option>
+                <option value="referralPaid">Paid</option>
               </select>
             </div>
           </div>
