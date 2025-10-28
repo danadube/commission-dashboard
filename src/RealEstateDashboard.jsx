@@ -1346,7 +1346,7 @@ const EnhancedRealEstateDashboard = () => {
                       <span className="text-white font-bold text-2xl">JG</span>
                     </div>
                   )}
-                  <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-success-500 rounded-full border-2 border-white shadow-md"></div>
+                  <div className="absolute bottom-1 right-1 w-3 h-3 bg-success-500 rounded-full border-2 border-white shadow-md"></div>
                 </div>
                 
                 {/* Brand Text */}
