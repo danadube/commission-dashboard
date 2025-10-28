@@ -1376,30 +1376,29 @@ const EnhancedRealEstateDashboard = () => {
           </div>
         </div>
 
-          {/* Sync Error Display */}
-          {syncError && (
-            <div className="mt-4 flex items-center justify-between gap-4 p-4 bg-danger-50 dark:bg-danger-900/20 border border-danger-200 dark:border-danger-800 rounded-lg">
-              <p className="text-xs text-danger-700 dark:text-danger-300 font-medium flex-1">{syncError}</p>
-              <div className="flex items-center gap-2">
-                {syncError.includes('Session expired') && (
-                  <button
-                    onClick={enableGoogleSheets}
-                    className="text-xs bg-info-600 hover:bg-info-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
-                  >
-                    Sign In Again
-                  </button>
-                )}
+        {/* Sync Error Display */}
+        {syncError && (
+          <div className="mt-4 flex items-center justify-between gap-4 p-4 bg-danger-50 dark:bg-danger-900/20 border border-danger-200 dark:border-danger-800 rounded-lg">
+            <p className="text-xs text-danger-700 dark:text-danger-300 font-medium flex-1">{syncError}</p>
+            <div className="flex items-center gap-2">
+              {syncError.includes('Session expired') && (
                 <button
-                  onClick={() => setSyncError(null)}
-                  className="text-xs text-danger-600 dark:text-danger-400 hover:text-danger-700 dark:hover:text-danger-300"
-                  title="Dismiss"
+                  onClick={enableGoogleSheets}
+                  className="text-xs bg-info-600 hover:bg-info-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
                 >
-                  <X className="w-4 h-4" />
+                  Sign In Again
                 </button>
-              </div>
+              )}
+              <button
+                onClick={() => setSyncError(null)}
+                className="text-xs text-danger-600 dark:text-danger-400 hover:text-danger-700 dark:hover:text-danger-300"
+                title="Dismiss"
+              >
+                <X className="w-4 h-4" />
+              </button>
             </div>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* Control Layer - Filter & Search Panel */}
         <div className="glass-morphism bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-2xl p-8 mb-8 transition-all duration-700 border border-white/30 dark:border-gray-700/30 backdrop-blur-3xl hover:shadow-3xl">
