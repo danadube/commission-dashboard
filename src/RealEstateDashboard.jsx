@@ -232,14 +232,14 @@ const EnhancedRealEstateDashboard = () => {
     if (!value || value === '') return '';
     const num = parseFloat(value);
     if (isNaN(num)) return '';
-    return num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    return `$${num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   };
 
   // Parse currency from formatted input
   const parseCurrencyFromInput = (value) => {
     if (!value || value === '') return '';
-    // Remove commas and parse as number
-    const cleaned = value.replace(/,/g, '');
+    // Remove $ sign and commas, then parse as number
+    const cleaned = value.replace(/[$,\s]/g, '');
     const num = parseFloat(cleaned);
     return isNaN(num) ? '' : num.toString();
   };
