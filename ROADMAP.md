@@ -262,25 +262,33 @@ None at this time! 🎉
 ## 🔧 Detailed Feature Breakdowns
 
 ### Multi-Brokerage Support
-**Goal**: Allow users to add new brokerages with custom commission structures
+**Goal**: Allow users to add new brokerages and agent-specific commission structures
 
 **Core Components**:
-1. **Settings Panel** - "Add New Brokerage" button
+1. **Settings Panel** - "Add New Brokerage" and "Add Agent Profile" buttons
 2. **Brokerage Configuration Form** - Custom deduction rules and percentages
-3. **Commission Sheet Scanner Integration** - Auto-detect new brokerage structure
-4. **Template System** - Save/load brokerage configurations
+3. **Agent-Specific Profiles** - Individual commission structures within same brokerage
+4. **Commission Sheet Scanner Integration** - Auto-detect brokerage and agent-specific structure
+5. **Template System** - Save/load brokerage and agent configurations
+
+**Key Features**:
+- **Multi-Level Configuration**: Brokerage → Agent → Transaction Type
+- **Agent-Specific Splits**: Different commission percentages per agent
+- **Custom Deduction Rules**: Agent-specific fees and deductions
+- **Profile Inheritance**: Default brokerage rules with agent overrides
 
 **Implementation Phases**:
-- **Phase 1**: Manual configuration form in settings
-- **Phase 2**: Commission sheet scanner integration
-- **Phase 3**: Template sharing and import/export
-- **Phase 4**: Community brokerage library
+- **Phase 1**: Manual configuration form in settings (brokerage + agent profiles)
+- **Phase 2**: Commission sheet scanner integration with agent detection
+- **Phase 3**: Template sharing and import/export (brokerage + agent templates)
+- **Phase 4**: Community brokerage and agent library
 
 **Technical Requirements**:
-- Dynamic form generation based on brokerage type
-- Flexible deduction calculation engine
-- Commission sheet OCR training for new formats
+- Dynamic form generation based on brokerage and agent type
+- Flexible deduction calculation engine with inheritance
+- Commission sheet OCR training for new formats and agent variations
 - Data migration tools for existing users
+- Profile management system (create, edit, delete agent profiles)
 
 ---
 
