@@ -1475,7 +1475,7 @@ const EnhancedRealEstateDashboard = () => {
           </div>
           
           {/* Multi-Line Filter Grid */}
-          <div className="space-y-4">
+          <div className="space-y-6">
             {/* Time-Based Filters Row */}
             <div className="flex items-center gap-4">
               <div className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide w-20 flex-shrink-0">
