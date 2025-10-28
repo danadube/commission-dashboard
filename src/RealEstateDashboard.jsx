@@ -2438,7 +2438,7 @@ const EnhancedRealEstateDashboard = () => {
                           <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                               Referral Fee You Receive *
-                              <span className="text-xs text-gray-500 dark:text-gray-400 ml-2">(Amount you get paid for referring the client)</span>
+                              <span className="text-xs text-gray-500 dark:text-gray-400 ml-2">(Amount you get paid)</span>
                             </label>
                             <input
                               type="text"
@@ -2471,7 +2471,7 @@ const EnhancedRealEstateDashboard = () => {
                       </select>
                     </div>
 
-                    <div className="md:col-span-2">
+                    <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Address *</label>
                       <input
                         type="text"
