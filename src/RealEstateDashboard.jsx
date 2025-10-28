@@ -2355,7 +2355,7 @@ const EnhancedRealEstateDashboard = () => {
                     <Home className="w-5 h-5 text-primary-500" />
                     Basic Information
                   </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Property Type *</label>
                       <select
