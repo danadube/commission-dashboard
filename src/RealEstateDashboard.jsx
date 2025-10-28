@@ -123,6 +123,7 @@ const EnhancedRealEstateDashboard = () => {
   const [isSyncing, setIsSyncing] = useState(false);
   const [syncError, setSyncError] = useState(null);
   const [lastSyncTime, setLastSyncTime] = useState(null);
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
   
   // Filters - All in one row at top
   const [filterYear, setFilterYear] = useState('all');
@@ -265,6 +266,13 @@ const EnhancedRealEstateDashboard = () => {
   useEffect(() => {
     initializeApp();
     
+    // Listen for online/offline status changes
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+    
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    
     // Listen for OAuth success event (after redirect)
     const handleOAuthSuccess = async () => {
       console.log('🎉 OAuth success event detected, updating UI...');
@@ -342,6 +350,8 @@ const EnhancedRealEstateDashboard = () => {
     return () => {
       window.removeEventListener('googleAuthSuccess', handleOAuthSuccess);
       window.removeEventListener('keydown', handleKeyboardShortcuts);
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
     };
   }, []);
 
