@@ -1311,7 +1311,7 @@ const EnhancedRealEstateDashboard = () => {
     <div className="min-h-screen mesh-gradient bg-gray-50/50 dark:bg-gray-900/80 p-6 transition-all duration-700">
       <div className="max-w-7xl mx-auto">
         {/* Brand Layer - Primary Header */}
-        <div className="relative overflow-hidden rounded-2xl mb-8 shadow-2xl">
+        <div className="relative overflow-visible rounded-2xl mb-8 shadow-2xl">
           {/* Rich Matte Gradient Background */}
           <div className="absolute inset-0 bg-gradient-to-br from-slate-800 via-slate-900 to-indigo-900"></div>
           <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
@@ -1330,11 +1330,22 @@ const EnhancedRealEstateDashboard = () => {
               <div className="flex items-center gap-6">
                 {/* Logo with Subtle Drop Shadow */}
                 <div className="relative">
-                  <div className="w-16 h-16 bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl flex items-center justify-center shadow-2xl" style={{
-                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1)'
-                  }}>
-                    <span className="text-white font-bold text-xl">JG</span>
-                  </div>
+                  {customLogo ? (
+                    <img 
+                      src={customLogo} 
+                      alt="Dashboard Logo" 
+                      className="w-16 h-16 rounded-2xl shadow-2xl object-cover border-2 border-white/20"
+                      style={{
+                        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1)'
+                      }}
+                    />
+                  ) : (
+                    <div className="w-16 h-16 bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl flex items-center justify-center shadow-2xl" style={{
+                      boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1)'
+                    }}>
+                      <span className="text-white font-bold text-xl">JG</span>
+                    </div>
+                  )}
                   <div className="absolute -top-2 -right-2 w-6 h-6 bg-success-500 rounded-full border-3 border-white shadow-lg"></div>
                 </div>
                 
@@ -1356,9 +1367,11 @@ const EnhancedRealEstateDashboard = () => {
                   <button className="p-3 bg-white/10 hover:bg-white/20 rounded-xl transition-all backdrop-blur-sm border border-white/20">
                     <div className="w-5 h-5 text-white">ⓘ</div>
                   </button>
-                  <div className="absolute right-0 top-full mt-2 w-64 p-4 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 opacity-0 group-hover:opacity-100 transition-opacity z-50">
+                  <div className="absolute right-0 top-full mt-2 w-80 p-4 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 opacity-0 group-hover:opacity-100 transition-opacity z-50">
                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                      Data syncs automatically with Google Sheets. Last sync: {lastSyncTime ? new Date(lastSyncTime).toLocaleTimeString() : 'Never'}
+                      <strong>Data Source:</strong> Google Sheets integration<br/>
+                      <strong>Last Sync:</strong> {lastSyncTime ? new Date(lastSyncTime).toLocaleTimeString() : 'Never'}<br/>
+                      <strong>Auto-sync:</strong> Every 5 minutes when active
                     </p>
                   </div>
                 </div>
