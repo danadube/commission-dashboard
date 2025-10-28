@@ -2995,6 +2995,77 @@ const EnhancedRealEstateDashboard = () => {
                   </div>
                 </div>
 
+                {/* Keyboard Shortcuts */}
+                <div className="glass-morphism bg-white/60 dark:bg-gray-700/60 rounded-2xl p-6 border border-white/30 dark:border-gray-600/30 backdrop-blur-xl">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="text-2xl">⌨️</div>
+                    <h3 className="text-lg font-bold text-gray-900 dark:text-white">Keyboard Shortcuts</h3>
+                  </div>
+                  
+                  <div className="space-y-3">
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                      Speed up your workflow with these keyboard shortcuts. Works on both Mac and PC.
+                    </p>
+                    
+                    {/* Shortcuts Grid */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {/* Add Transaction */}
+                      <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800/50 rounded-xl">
+                        <div className="flex items-center gap-3">
+                          <Plus className="w-4 h-4 text-primary-500" />
+                          <span className="text-sm font-medium text-gray-900 dark:text-white">Add Transaction</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <kbd className="px-2 py-1 text-xs font-mono bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded border border-gray-300 dark:border-gray-600">⌘</kbd>
+                          <kbd className="px-2 py-1 text-xs font-mono bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded border border-gray-300 dark:border-gray-600">K</kbd>
+                        </div>
+                      </div>
+
+                      {/* Sync */}
+                      <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800/50 rounded-xl">
+                        <div className="flex items-center gap-3">
+                          <RefreshCw className="w-4 h-4 text-success-500" />
+                          <span className="text-sm font-medium text-gray-900 dark:text-white">Sync Sheets</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <kbd className="px-2 py-1 text-xs font-mono bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded border border-gray-300 dark:border-gray-600">⌘</kbd>
+                          <kbd className="px-2 py-1 text-xs font-mono bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded border border-gray-300 dark:border-gray-600">S</kbd>
+                        </div>
+                      </div>
+
+                      {/* Settings */}
+                      <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800/50 rounded-xl">
+                        <div className="flex items-center gap-3">
+                          <Settings className="w-4 h-4 text-info-500" />
+                          <span className="text-sm font-medium text-gray-900 dark:text-white">Open Settings</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <kbd className="px-2 py-1 text-xs font-mono bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded border border-gray-300 dark:border-gray-600">⌘</kbd>
+                          <kbd className="px-2 py-1 text-xs font-mono bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded border border-gray-300 dark:border-gray-600">,</kbd>
+                        </div>
+                      </div>
+
+                      {/* Close Modal */}
+                      <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800/50 rounded-xl">
+                        <div className="flex items-center gap-3">
+                          <X className="w-4 h-4 text-danger-500" />
+                          <span className="text-sm font-medium text-gray-900 dark:text-white">Close Modal</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <kbd className="px-2 py-1 text-xs font-mono bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded border border-gray-300 dark:border-gray-600">Esc</kbd>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Platform Note */}
+                    <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl">
+                      <p className="text-xs text-blue-700 dark:text-blue-300">
+                        <strong>Note:</strong> On Windows/Linux, use <kbd className="px-1 py-0.5 text-xs font-mono bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 rounded">Ctrl</kbd> instead of <kbd className="px-1 py-0.5 text-xs font-mono bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 rounded">⌘</kbd>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
                 {/* Google Sheets Integration */}
                 <div className="glass-morphism bg-white/60 dark:bg-gray-700/60 rounded-2xl p-6 border border-white/30 dark:border-gray-600/30 backdrop-blur-xl">
                   <div className="flex items-center gap-3 mb-4">
