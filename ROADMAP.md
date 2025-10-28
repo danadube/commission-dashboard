@@ -1,11 +1,11 @@
 # Commission Dashboard - Product Roadmap
 
-**Current Version:** v3.15.0  
+**Current Version:** v3.14.0  
 **Last Updated:** October 27, 2025
 
 ---
 
-## ✅ Completed Features (v3.0 - v3.15.0)
+## ✅ Completed Features (v3.0 - v3.14.0)
 
 ### Core Functionality
 - [x] Full CRUD operations for transactions
@@ -35,10 +35,11 @@
 - [x] Loading states with skeleton loaders
 - [x] Color-coded transaction cards (Buyer/Seller/Referral)
 - [x] 8-point grid spacing system (v3.14.0)
-- [x] HSB color system with proper contrast (v3.15.0)
-- [x] Enhanced skeleton loaders with brand colors (v3.15.0)
-- [x] Interactive metric cards with scroll navigation (v3.15.0)
-- [x] Improved header visual hierarchy (v3.15.0)
+- [x] Keyboard shortcuts system (v3.14.0)
+- [x] HSB color system with proper contrast (v3.14.0)
+- [x] Enhanced skeleton loaders with brand colors (v3.14.0)
+- [x] Interactive metric cards with scroll navigation (v3.14.0)
+- [x] Improved header visual hierarchy (v3.14.0)
 
 ### Analytics & Insights
 - [x] Interactive charts (Line, Bar, Pie)
@@ -70,7 +71,7 @@
 - [x] Persistent preferences
 
 ### Access & Security
-- [x] Multi-user OAuth access configuration (v3.15.0)
+- [x] Multi-user OAuth access configuration (v3.14.0)
 - [x] External user type support (any Google account)
 - [x] Test user management via Google Cloud Console
 
@@ -82,50 +83,7 @@ None at this time! 🎉
 
 ---
 
-## 🎉 v3.15.0 - HSB Color System & UX Enhancements (COMPLETED - Oct 27, 2025)
-
-### Design System Overhaul
-- [x] **HSB Color System** ✅ COMPLETED
-  - ✅ 6 semantic colors (primary, success, info, warning, danger, referral)
-  - ✅ WCAG AA contrast compliance (5.2:1 - 9.5:1 ratios)
-  - ✅ Full HSB color scales (50-950) for light/dark mode
-  - ✅ Custom Tailwind config with HSB palette
-  - ✅ Documentation (COLOR_SYSTEM.md, COLOR_EXAMPLES.md)
-  - ✅ Interactive demos (color-demo-v2.html)
-
-### Visual & UX Improvements
-- [x] **Enhanced Skeleton Loaders** ✅ COMPLETED
-  - ✅ Branded color gradients using HSB system
-  - ✅ Hints at final card colors during load
-  - ✅ Improved perceived performance
-
-- [x] **Header Visual Hierarchy** ✅ COMPLETED
-  - ✅ Larger logo and title (more prominent)
-  - ✅ Smaller action buttons (less competing for attention)
-  - ✅ Better balance and focal point
-
-- [x] **Interactive Metric Cards** ✅ COMPLETED
-  - ✅ Click to scroll to transaction list
-  - ✅ Follows "Law of Locality" UX principle
-  - ✅ Subtle hover feedback
-
-### Bug Fixes
-- [x] **UI Refinements** ✅ COMPLETED
-  - ✅ Fixed modal button colors (semantic HSB colors)
-  - ✅ Fixed transaction detail modal layout
-  - ✅ Fixed client type badge positioning
-  - ✅ Fixed stray "0" in modal
-  - ✅ Fixed rounded corner rendering
-
-### Access & Configuration
-- [x] **Multi-User Support** ✅ COMPLETED
-  - ✅ Configured OAuth for external users
-  - ✅ Added test user management
-  - ✅ Enabled multiple team members to access app
-
----
-
-## 🎯 v3.14.0 - UX Polish (COMPLETED - Oct 2025)
+## 🎉 v3.14.0 - UX Polish (COMPLETED - Oct 27, 2025)
 
 ### High Priority
 - [x] **8-Point Grid System** ✅ COMPLETED
@@ -133,12 +91,12 @@ None at this time! 🎉
   - ✅ Replace non-compliant spacing with 8px multiples
   - ✅ Create spacing utility documentation (SPACING_GUIDE.md)
   
-- [ ] **Keyboard Shortcuts**
-  - `Cmd/Ctrl + K` - Add Transaction
-  - `Cmd/Ctrl + S` - Sync
-  - `Cmd/Ctrl + ,` - Settings
-  - `Esc` - Close modals
-  - `/` - Focus search/filter
+- [x] **Keyboard Shortcuts** ✅ COMPLETED
+  - ✅ `Cmd/Ctrl + K` - Add Transaction
+  - ✅ `Cmd/Ctrl + S` - Sync
+  - ✅ `Cmd/Ctrl + ,` - Settings
+  - ✅ `Esc` - Close modals
+  - ✅ `/` - Focus search/filter (placeholder)
   
 - [ ] **Search Functionality**
   - Search by address
@@ -166,7 +124,7 @@ None at this time! 🎉
 
 ---
 
-## 🔮 v3.16.0 - Advanced Analytics (Next Release)
+## 🔮 v3.15.0 - Advanced Analytics (Next Release)
 
 ### Data Visualization
 - [ ] **Custom Date Range Selector**
