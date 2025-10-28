@@ -2191,7 +2191,10 @@ const EnhancedRealEstateDashboard = () => {
 
                 {/* Basic Information */}
                 <div className="mb-6">
-                  <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Basic Information</h3>
+                  <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white flex items-center gap-2">
+                    <Home className="w-5 h-5 text-primary-500" />
+                    Basic Information
+                  </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Property Type *</label>
@@ -2423,7 +2426,10 @@ const EnhancedRealEstateDashboard = () => {
 
                 {/* Commission Fields */}
                 <div className="mb-6">
-                  <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Commission Details</h3>
+                  <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white flex items-center gap-2">
+                    <DollarSign className="w-5 h-5 text-green-500" />
+                    Commission Details
+                  </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Commission % *</label>
@@ -2769,7 +2775,10 @@ const EnhancedRealEstateDashboard = () => {
 
                 {/* Calculated Summary */}
                 <div className="mb-6 bg-gray-50 dark:bg-gray-700 p-6 rounded-lg border border-gray-200 dark:border-gray-600">
-                  <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Commission Summary</h3>
+                  <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white flex items-center gap-2">
+                    <Calendar className="w-5 h-5 text-primary-500" />
+                    Commission Summary
+                  </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
@@ -2833,7 +2842,7 @@ const EnhancedRealEstateDashboard = () => {
         {/* Transaction Detail View Modal */}
         {viewingTransaction && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-y-auto">
-            <div className="bg-gray-50 dark:bg-gray-800 rounded-3xl shadow-3xl max-w-4xl w-full my-8 transition-colors overflow-hidden">
+            <div className="bg-gray-50 dark:bg-gray-800 rounded-3xl shadow-3xl max-w-4xl backdrop-blur-3xl w-full my-8 transition-colors overflow-hidden">
               {/* Header */}
               <div className="p-6 border-b border-gray-200 dark:border-gray-700">
                 <div className="flex items-center justify-between">
