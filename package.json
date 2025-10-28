@@ -1,6 +1,6 @@
 {
   "name": "enhanced-real-estate-dashboard",
-  "version": "3.13.0",
+  "version": "3.14.1",
   "description": "Professional real estate commission tracking dashboard with Google Sheets integration and AI-powered features",
   "private": true,
   "dependencies": {
