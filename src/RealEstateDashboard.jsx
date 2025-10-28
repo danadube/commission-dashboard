@@ -717,8 +717,8 @@ const EnhancedRealEstateDashboard = () => {
       city: transaction.city || '',
       listPrice: transaction.listPrice || '',
       closedPrice: transaction.closedPrice || '',
-      listDate: transaction.listDate || '',
-      closingDate: transaction.closingDate || '',
+      listDate: transaction.listDate ? (transaction.listDate.includes('T') ? transaction.listDate.split('T')[0] : transaction.listDate) : '',
+      closingDate: transaction.closingDate ? (transaction.closingDate.includes('T') ? transaction.closingDate.split('T')[0] : transaction.closingDate) : '',
       status: transaction.status || 'Closed',
       
       // Referral Fields
