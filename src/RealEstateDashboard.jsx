@@ -55,10 +55,10 @@ import ThemeToggle from './ThemeToggle';
 const TahoeTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     return (
-      <div className="glass-morphism bg-white/90 dark:bg-gray-800/90 backdrop-blur-2xl rounded-2xl shadow-2xl p-4 border-2 border-white/30 dark:border-gray-600/30">
+      <div className="glass-morphism bg-white/95 dark:bg-gray-800/95 backdrop-blur-2xl rounded-2xl shadow-2xl p-4 border-2 border-white/50 dark:border-gray-600/50 z-50">
         <p className="font-bold text-gray-900 dark:text-white mb-2 text-sm">{label}</p>
         {payload.map((entry, index) => (
-          <p key={index} className="text-sm font-medium" style={{ color: entry.color }}>
+          <p key={index} className="text-sm font-semibold text-gray-800 dark:text-gray-200" style={{ color: entry.color }}>
             {entry.name}: {typeof entry.value === 'number' && entry.value > 1000 
               ? `$${entry.value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
               : entry.value}
