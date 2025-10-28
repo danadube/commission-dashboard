@@ -2603,7 +2603,6 @@ const EnhancedRealEstateDashboard = () => {
                     <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                         Gross Commission Income (GCI)
-                        <span className="text-xs text-blue-500 dark:text-blue-400 ml-2">✏️ Editable - auto-calculates Commission %</span>
                       </label>
                       <input
                         type="text"
@@ -2621,7 +2620,6 @@ const EnhancedRealEstateDashboard = () => {
                     <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                         Referral Fee Paid ($)
-                        <span className="text-xs text-blue-500 dark:text-blue-400 ml-2">✏️ Editable - auto-calculates Referral %</span>
                       </label>
                       <input
                         type="text"
@@ -2639,7 +2637,6 @@ const EnhancedRealEstateDashboard = () => {
                     <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                         Adjusted GCI
-                        <span className="text-xs text-info-500 dark:text-info-400 ml-2">✏️ Editable - auto-calculates from GCI minus Referral</span>
                       </label>
                       <input
                         type="text"
@@ -2679,7 +2676,6 @@ const EnhancedRealEstateDashboard = () => {
                       <div>
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                           Royalty (6%)
-                          <span className="text-xs text-info-500 dark:text-info-400 ml-2">✏️ Editable - auto-calculates from Adjusted GCI</span>
                         </label>
                         <input
                           type="text"
@@ -2697,7 +2693,6 @@ const EnhancedRealEstateDashboard = () => {
                       <div>
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                           Company Dollar (10%)
-                          <span className="text-xs text-info-500 dark:text-info-400 ml-2">✏️ Editable - auto-calculates from Adjusted GCI</span>
                         </label>
                         <input
                           type="text"
@@ -2840,7 +2835,6 @@ const EnhancedRealEstateDashboard = () => {
                       <div>
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                           Pre-Split Deduction (6%)
-                          <span className="text-xs text-info-500 dark:text-info-400 ml-2">✏️ Editable - auto-calculates from Adjusted GCI</span>
                         </label>
                         <input
                           type="text"
