@@ -1824,8 +1824,8 @@ const EnhancedRealEstateDashboard = () => {
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={chartData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.3)" />
-                <XAxis dataKey="month" tick={{ fontSize: 12, fill: '#E5E7EB' }} stroke="#E5E7EB" />
-                <YAxis tick={{ fontSize: 12, fill: '#E5E7EB' }} stroke="#E5E7EB" />
+                <XAxis dataKey="month" tick={{ fontSize: 12, fill: 'hsl(0, 0%, 30%)' }} stroke="hsl(0, 0%, 30%)" />
+                <YAxis tick={{ fontSize: 12, fill: 'hsl(0, 0%, 30%)' }} stroke="hsl(0, 0%, 30%)" />
                 <Tooltip content={<TahoeTooltip />} />
                 <Legend />
                 <Line type="monotone" dataKey="gci" stroke="hsl(45, 85%, 45%)" strokeWidth={3} name="Gross Commission" />
@@ -1839,8 +1839,8 @@ const EnhancedRealEstateDashboard = () => {
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={chartData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.3)" />
-                <XAxis dataKey="month" tick={{ fontSize: 12, fill: '#E5E7EB' }} stroke="#E5E7EB" />
-                <YAxis tick={{ fontSize: 12, fill: '#E5E7EB' }} stroke="#E5E7EB" />
+                <XAxis dataKey="month" tick={{ fontSize: 12, fill: 'hsl(0, 0%, 30%)' }} stroke="hsl(0, 0%, 30%)" />
+                <YAxis tick={{ fontSize: 12, fill: 'hsl(0, 0%, 30%)' }} stroke="hsl(0, 0%, 30%)" />
                 <Tooltip content={<TahoeTooltip />} />
                 <Legend />
                 <Bar dataKey="transactions" fill="hsl(210, 80%, 45%)" name="Transactions" radius={[8, 8, 0, 0]} />
@@ -1885,12 +1885,12 @@ const EnhancedRealEstateDashboard = () => {
                   <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
                   <XAxis 
                     dataKey="name" 
-                    tick={{ fontSize: 14, fill: '#9CA3AF' }} 
-                    stroke="#9CA3AF"
+                    tick={{ fontSize: 14, fill: 'hsl(0, 0%, 30%)' }} 
+                    stroke="hsl(0, 0%, 30%)"
                   />
                   <YAxis 
-                    tick={{ fontSize: 12, fill: '#9CA3AF' }} 
-                    stroke="#9CA3AF"
+                    tick={{ fontSize: 12, fill: 'hsl(0, 0%, 30%)' }} 
+                    stroke="hsl(0, 0%, 30%)"
                     tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`}
                   />
                   <Tooltip content={<TahoeTooltip />} />
@@ -1900,7 +1900,7 @@ const EnhancedRealEstateDashboard = () => {
                     fill="#10b981" 
                     name="Net Commission Income" 
                     radius={[8, 8, 0, 0]}
-                    label={{ position: 'top', fill: '#9CA3AF', fontSize: 12, formatter: (value) => `$${(value / 1000).toFixed(1)}k` }}
+                    label={{ position: 'top', fill: 'hsl(0, 0%, 30%)', fontSize: 12, formatter: (value) => `$${(value / 1000).toFixed(1)}k` }}
                     minPointSize={5}
                   />
                 </BarChart>
