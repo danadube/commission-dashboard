@@ -2356,7 +2356,7 @@ const EnhancedRealEstateDashboard = () => {
                     Basic Information
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
+                    <div className="md:col-span-2">
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Brokerage *</label>
                       <select
                         name="brokerage"
