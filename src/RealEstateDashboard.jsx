@@ -2360,7 +2360,7 @@ const EnhancedRealEstateDashboard = () => {
                         name="propertyType"
                         value={formData.propertyType}
                         onChange={handleInputChange}
-                        required
+                        required={!editingId}
                         className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       >
                         <option value="Residential">Residential</option>
@@ -2375,7 +2375,7 @@ const EnhancedRealEstateDashboard = () => {
                         name="clientType"
                         value={formData.clientType}
                         onChange={handleInputChange}
-                        required
+                        required={!editingId}
                         className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       >
                         <option value="Buyer">Buyer</option>
@@ -2389,7 +2389,7 @@ const EnhancedRealEstateDashboard = () => {
                         name="transactionType"
                         value={formData.transactionType}
                         onChange={handleInputChange}
-                        required
+                        required={!editingId}
                         className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       >
                         <option value="Sale">💼 Regular Sale</option>
@@ -2447,7 +2447,7 @@ const EnhancedRealEstateDashboard = () => {
                                 handleInputChange({ target: { name: 'referralFeeReceived', value: parsed } });
                               }}
                               placeholder="$0.00"
-                              required={formData.transactionType === 'Referral $ Received'}
+                              required={!editingId && formData.transactionType === 'Referral $ Received'}
                               className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                             />
                           </div>
@@ -2461,7 +2461,7 @@ const EnhancedRealEstateDashboard = () => {
                         name="brokerage"
                         value={formData.brokerage}
                         onChange={handleInputChange}
-                        required
+                        required={!editingId}
                         className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       >
                         <option value="Keller Williams">Keller Williams (KW)</option>
@@ -2476,7 +2476,7 @@ const EnhancedRealEstateDashboard = () => {
                         name="address"
                         value={formData.address}
                         onChange={handleInputChange}
-                        required
+                        required={!editingId}
                         placeholder="123 Main St"
                         className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       />
@@ -2489,7 +2489,7 @@ const EnhancedRealEstateDashboard = () => {
                         name="city"
                         value={formData.city}
                         onChange={handleInputChange}
-                        required
+                        required={!editingId}
                         placeholder="Palm Desert"
                         className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       />
@@ -2523,7 +2523,7 @@ const EnhancedRealEstateDashboard = () => {
                               const parsed = parseCurrencyFromInput(e.target.value);
                               handleInputChange({ target: { name: 'closedPrice', value: parsed } });
                             }}
-                            required
+                            required={!editingId}
                             placeholder="$0.00"
                             className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                           />
@@ -2559,7 +2559,7 @@ const EnhancedRealEstateDashboard = () => {
                               const parsed = parseCurrencyFromInput(e.target.value);
                               handleInputChange({ target: { name: 'closedPrice', value: parsed } });
                             }}
-                            required
+                            required={!editingId}
                             placeholder="$0.00"
                             className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                           />
@@ -2585,7 +2585,7 @@ const EnhancedRealEstateDashboard = () => {
                         name="closingDate"
                         value={formData.closingDate}
                         onChange={handleInputChange}
-                        required
+                        required={!editingId}
                         className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       />
                     </div>
@@ -2609,7 +2609,7 @@ const EnhancedRealEstateDashboard = () => {
                           const parsed = parsePercentageFromInput(e.target.value);
                           handleInputChange({ target: { name: 'commissionPct', value: parsed } });
                         }}
-                        required
+                        required={!editingId}
                         placeholder="3.00%"
                         className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       />
