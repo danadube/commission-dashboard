@@ -1684,8 +1684,8 @@ const EnhancedRealEstateDashboard = () => {
                 onClick={() => handleMetricCardClick('referralPaid')}
                 className="relative overflow-hidden rounded-3xl shadow-2xl hover:shadow-3xl p-8 text-white transform hover:-translate-y-2 hover:scale-105 transition-all duration-700 backdrop-blur-sm group animate-[fadeIn_0.6s_ease-out] w-full text-left cursor-pointer active:scale-100"
                 style={{
-                  background: 'linear-gradient(135deg, hsl(5, 70%, 40%) 0%, hsl(5, 65%, 50%) 100%)',
-                  border: '2px solid hsl(5, 80%, 55%)',
+                  background: 'linear-gradient(135deg, hsl(25, 50%, 40%) 0%, hsl(25, 45%, 50%) 100%)',
+                  border: '2px solid hsl(25, 60%, 55%)',
                   boxShadow: '0 8px 32px hsla(0, 0%, 25%, 0.3)'
                 }}
               >
