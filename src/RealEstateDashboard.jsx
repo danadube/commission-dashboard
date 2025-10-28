@@ -1594,12 +1594,17 @@ const EnhancedRealEstateDashboard = () => {
               {/* Gross Commission Income */}
               <button 
                 onClick={handleMetricCardClick}
-                className="relative overflow-hidden bg-gradient-primary rounded-3xl shadow-2xl hover:shadow-3xl p-8 text-white transform hover:-translate-y-2 hover:scale-105 transition-all duration-700 border-2 border-white/20 backdrop-blur-sm group animate-[fadeIn_0.6s_ease-out] w-full text-left cursor-pointer active:scale-100"
+                className="relative overflow-hidden rounded-3xl shadow-2xl hover:shadow-3xl p-8 text-white transform hover:-translate-y-2 hover:scale-105 transition-all duration-700 backdrop-blur-sm group animate-[fadeIn_0.6s_ease-out] w-full text-left cursor-pointer active:scale-100"
+                style={{
+                  background: 'linear-gradient(135deg, hsl(215, 65%, 70%) 0%, hsl(215, 60%, 80%) 100%)',
+                  border: '2px solid hsl(215, 75%, 85%)',
+                  boxShadow: '0 8px 32px hsla(0, 0%, 25%, 0.3)'
+                }}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex-1">
                     <p className="text-white/90 text-sm font-semibold uppercase tracking-wide">💰 Gross Commission</p>
-                    <p className="text-4xl font-bold mt-2 mb-2">${metrics.totalGCI.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                    <p className="text-4xl font-bold mt-2 mb-2" style={{ color: 'hsl(0, 0%, 95%)' }}>${metrics.totalGCI.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                     <p className="text-white/80 text-xs font-medium">Total earned before fees • Click to view transactions</p>
                   </div>
                   <div className="bg-white/20 p-4 rounded-full backdrop-blur-sm group-hover:bg-white/30 transition-colors">
@@ -1611,12 +1616,17 @@ const EnhancedRealEstateDashboard = () => {
               {/* Net Commission Income */}
               <button
                 onClick={handleMetricCardClick}
-                className="relative overflow-hidden bg-success-500 rounded-3xl shadow-2xl hover:shadow-3xl p-8 text-white transform hover:-translate-y-2 hover:scale-105 transition-all duration-700 border-2 border-white/20 backdrop-blur-sm group w-full text-left cursor-pointer active:scale-100"
+                className="relative overflow-hidden rounded-3xl shadow-2xl hover:shadow-3xl p-8 text-white transform hover:-translate-y-2 hover:scale-105 transition-all duration-700 backdrop-blur-sm group w-full text-left cursor-pointer active:scale-100"
+                style={{
+                  background: 'linear-gradient(135deg, hsl(150, 55%, 65%) 0%, hsl(150, 50%, 75%) 100%)',
+                  border: '2px solid hsl(150, 65%, 80%)',
+                  boxShadow: '0 8px 32px hsla(0, 0%, 25%, 0.3)'
+                }}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex-1">
                     <p className="text-white/90 text-sm font-semibold uppercase tracking-wide">✅ Net Commission</p>
-                    <p className="text-4xl font-bold mt-2 mb-2">${metrics.totalNCI.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                    <p className="text-4xl font-bold mt-2 mb-2" style={{ color: 'hsl(0, 0%, 95%)' }}>${metrics.totalNCI.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                     <p className="text-white/80 text-xs font-medium">Your take-home pay • Click to view transactions</p>
                   </div>
                   <div className="bg-white/20 p-4 rounded-full backdrop-blur-sm group-hover:bg-white/30 transition-colors">
@@ -1628,12 +1638,17 @@ const EnhancedRealEstateDashboard = () => {
               {/* Total Sales Volume */}
               <button
                 onClick={handleMetricCardClick}
-                className="relative overflow-hidden bg-gradient-info-depth rounded-3xl shadow-2xl hover:shadow-3xl p-8 text-white transform hover:-translate-y-2 hover:scale-105 transition-all duration-700 border-2 border-white/20 backdrop-blur-sm group w-full text-left cursor-pointer active:scale-100"
+                className="relative overflow-hidden rounded-3xl shadow-2xl hover:shadow-3xl p-8 text-white transform hover:-translate-y-2 hover:scale-105 transition-all duration-700 backdrop-blur-sm group w-full text-left cursor-pointer active:scale-100"
+                style={{
+                  background: 'linear-gradient(135deg, hsl(200, 55%, 75%) 0%, hsl(200, 50%, 85%) 100%)',
+                  border: '2px solid hsl(200, 65%, 90%)',
+                  boxShadow: '0 8px 32px hsla(0, 0%, 25%, 0.3)'
+                }}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex-1">
                     <p className="text-white/90 text-sm font-semibold uppercase tracking-wide">🏘️ Total Sales Volume</p>
-                    <p className="text-4xl font-bold mt-2 mb-2">${metrics.totalVolume.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                    <p className="text-4xl font-bold mt-2 mb-2" style={{ color: 'hsl(0, 0%, 95%)' }}>${metrics.totalVolume.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                     <p className="text-white/80 text-xs font-medium">Combined property value • Click to view transactions</p>
                   </div>
                   <div className="bg-white/20 p-4 rounded-full backdrop-blur-sm group-hover:bg-white/30 transition-colors">
@@ -1645,12 +1660,17 @@ const EnhancedRealEstateDashboard = () => {
               {/* Average Commission */}
               <button
                 onClick={handleMetricCardClick}
-                className="relative overflow-hidden bg-primary-500 rounded-3xl shadow-2xl hover:shadow-3xl p-8 text-white transform hover:-translate-y-2 hover:scale-105 transition-all duration-700 border-2 border-white/20 backdrop-blur-sm group w-full text-left cursor-pointer active:scale-100"
+                className="relative overflow-hidden rounded-3xl shadow-2xl hover:shadow-3xl p-8 text-white transform hover:-translate-y-2 hover:scale-105 transition-all duration-700 backdrop-blur-sm group w-full text-left cursor-pointer active:scale-100"
+                style={{
+                  background: 'linear-gradient(135deg, hsl(265, 50%, 65%) 0%, hsl(265, 45%, 75%) 100%)',
+                  border: '2px solid hsl(265, 60%, 80%)',
+                  boxShadow: '0 8px 32px hsla(0, 0%, 25%, 0.3)'
+                }}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex-1">
                     <p className="text-white/90 text-sm font-semibold uppercase tracking-wide">📊 Average Per Deal</p>
-                    <p className="text-4xl font-bold mt-2 mb-2">${metrics.avgCommission.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                    <p className="text-4xl font-bold mt-2 mb-2" style={{ color: 'hsl(0, 0%, 95%)' }}>${metrics.avgCommission.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                     <p className="text-white/80 text-xs font-medium">Average commission earned • Click to view transactions</p>
                   </div>
                   <div className="bg-white/20 p-4 rounded-full backdrop-blur-sm group-hover:bg-white/30 transition-colors">
@@ -1662,12 +1682,17 @@ const EnhancedRealEstateDashboard = () => {
               {/* Referral Fees Paid */}
               <button
                 onClick={() => handleMetricCardClick('referralPaid')}
-                className="relative overflow-hidden bg-danger-500 rounded-3xl shadow-2xl hover:shadow-3xl p-8 text-white transform hover:-translate-y-2 hover:scale-105 transition-all duration-700 border-2 border-white/20 backdrop-blur-sm group animate-[fadeIn_0.6s_ease-out] w-full text-left cursor-pointer active:scale-100"
+                className="relative overflow-hidden rounded-3xl shadow-2xl hover:shadow-3xl p-8 text-white transform hover:-translate-y-2 hover:scale-105 transition-all duration-700 backdrop-blur-sm group animate-[fadeIn_0.6s_ease-out] w-full text-left cursor-pointer active:scale-100"
+                style={{
+                  background: 'linear-gradient(135deg, hsl(5, 65%, 65%) 0%, hsl(5, 60%, 75%) 100%)',
+                  border: '2px solid hsl(5, 75%, 80%)',
+                  boxShadow: '0 8px 32px hsla(0, 0%, 25%, 0.3)'
+                }}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex-1">
                     <p className="text-white/90 text-sm font-semibold uppercase tracking-wide">💸 Referral Fees Paid</p>
-                    <p className="text-4xl font-bold mt-2 mb-2">${metrics.referralFeesPaid.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                    <p className="text-4xl font-bold mt-2 mb-2" style={{ color: 'hsl(0, 0%, 95%)' }}>${metrics.referralFeesPaid.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                     <p className="text-white/80 text-xs font-medium">Paid to referral partners • Click to view transactions</p>
                   </div>
                   <div className="bg-white/20 p-4 rounded-full backdrop-blur-sm group-hover:bg-white/30 transition-colors">
@@ -1679,12 +1704,17 @@ const EnhancedRealEstateDashboard = () => {
               {/* Referral Fees Received */}
               <button
                 onClick={() => handleMetricCardClick('referralReceived')}
-                className="relative overflow-hidden bg-success-500 rounded-3xl shadow-2xl hover:shadow-3xl p-8 text-white transform hover:-translate-y-2 hover:scale-105 transition-all duration-700 border-2 border-white/20 backdrop-blur-sm group animate-[fadeIn_0.6s_ease-out] w-full text-left cursor-pointer active:scale-100"
+                className="relative overflow-hidden rounded-3xl shadow-2xl hover:shadow-3xl p-8 text-white transform hover:-translate-y-2 hover:scale-105 transition-all duration-700 backdrop-blur-sm group animate-[fadeIn_0.6s_ease-out] w-full text-left cursor-pointer active:scale-100"
+                style={{
+                  background: 'linear-gradient(135deg, hsl(145, 60%, 70%) 0%, hsl(145, 55%, 80%) 100%)',
+                  border: '2px solid hsl(145, 70%, 85%)',
+                  boxShadow: '0 8px 32px hsla(0, 0%, 25%, 0.3)'
+                }}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex-1">
                     <p className="text-white/90 text-sm font-semibold uppercase tracking-wide">💰 Referral Fees Received</p>
-                    <p className="text-4xl font-bold mt-2 mb-2">${metrics.referralFeesReceived.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                    <p className="text-4xl font-bold mt-2 mb-2" style={{ color: 'hsl(0, 0%, 95%)' }}>${metrics.referralFeesReceived.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                     <p className="text-white/80 text-xs font-medium">Received from referral partners • Click to view transactions</p>
                   </div>
                   <div className="bg-white/20 p-4 rounded-full backdrop-blur-sm group-hover:bg-white/30 transition-colors">
