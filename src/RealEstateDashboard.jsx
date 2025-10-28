@@ -1034,7 +1034,11 @@ const EnhancedRealEstateDashboard = () => {
       ? filteredTransactions.reduce((sum, t) => sum + (parseFloat(t.nci) || 0), 0) / filteredTransactions.length 
       : 0,
     totalVolume: filteredTransactions.reduce((sum, t) => sum + (parseFloat(t.closedPrice) || 0), 0),
-    totalReferralFees: filteredTransactions.reduce((sum, t) => sum + (parseFloat(t.referralDollar) || 0), 0)
+    totalReferralFees: filteredTransactions.reduce((sum, t) => {
+      const referralPaid = parseFloat(t.referralDollar) || 0;
+      const referralReceived = parseFloat(t.referralFeeReceived) || 0;
+      return sum + referralPaid + referralReceived;
+    }, 0)
   };
 
   // ==================== SMART INSIGHTS ====================
