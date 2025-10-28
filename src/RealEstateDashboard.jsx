@@ -1416,37 +1416,30 @@ const EnhancedRealEstateDashboard = () => {
               <input
                 id="global-search"
                 type="text"
-                placeholder="Search by address, client, or transaction ID..."
+                placeholder="Search transactions..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onFocus={() => setIsSearchFocused(true)}
                 onBlur={() => setIsSearchFocused(false)}
-                className={`w-full px-6 py-4 pl-12 pr-4 rounded-2xl border-2 transition-all duration-300 text-lg ${
+                className={`w-full px-4 py-3 pl-10 pr-4 rounded-xl border-2 transition-all duration-200 ${
                   isSearchFocused 
-                    ? 'border-primary-500 bg-white dark:bg-gray-800 shadow-lg scale-[1.02]' 
+                    ? 'border-primary-500 bg-white dark:bg-gray-800 shadow-md' 
                     : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 hover:border-gray-400 dark:hover:border-gray-500'
-                } text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-primary-500/20`}
+                } text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20`}
                 autoFocus
               />
-              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <div className="w-6 h-6 text-gray-400 dark:text-gray-500">🔍</div>
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <div className="w-4 h-4 text-gray-400 dark:text-gray-500">🔍</div>
               </div>
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery('')}
-                  className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
                 >
-                  <X className="w-5 h-5" />
+                  <X className="w-4 h-4" />
                 </button>
               )}
             </div>
-            {isSearchFocused && (
-              <div className="mt-2 p-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg">
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  💡 <strong>Search by:</strong> Address, city, source, referring agent, property type, brokerage, or status
-                </p>
-              </div>
-            )}
           </div>
           
           {/* Multi-Line Filter Grid */}
