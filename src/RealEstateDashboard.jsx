@@ -1964,7 +1964,12 @@ const EnhancedRealEstateDashboard = () => {
               {/* Add Transaction Button - Near Transactions */}
               <button
                 onClick={() => setShowForm(true)}
-                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white rounded-xl transition-all shadow-lg hover:shadow-xl font-medium transform hover:scale-105"
+                className="flex items-center gap-2 px-4 py-2 text-white rounded-xl transition-all shadow-lg hover:shadow-xl font-medium transform hover:scale-105"
+                style={{
+                  background: 'linear-gradient(135deg, hsl(250, 60%, 50%) 0%, hsl(250, 55%, 60%) 100%)',
+                  border: '2px solid hsl(250, 70%, 65%)',
+                  boxShadow: '0 4px 16px hsla(0, 0%, 25%, 0.2)'
+                }}
                 title="Add Transaction (⌘N)"
               >
                 <Plus className="w-4 h-4" />
@@ -2803,7 +2808,12 @@ const EnhancedRealEstateDashboard = () => {
                 <div className="flex items-center gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
                   <button
                     type="submit"
-                    className="flex-1 px-6 py-3 bg-primary-500 hover:bg-primary-600 text-white rounded-lg transition-colors font-medium shadow-sm"
+                    className="flex-1 px-6 py-3 text-white rounded-lg transition-colors font-medium shadow-sm"
+                    style={{
+                      background: 'linear-gradient(135deg, hsl(250, 60%, 50%) 0%, hsl(250, 55%, 60%) 100%)',
+                      border: '2px solid hsl(250, 70%, 65%)',
+                      boxShadow: '0 2px 8px hsla(0, 0%, 25%, 0.2)'
+                    }}
                   >
                     {editingId ? 'Update Transaction' : 'Add Transaction'}
                   </button>
