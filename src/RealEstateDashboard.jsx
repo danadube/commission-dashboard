@@ -3008,7 +3008,7 @@ const EnhancedRealEstateDashboard = () => {
                     </p>
                     
                     {/* Shortcuts Grid */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                       {/* Add Transaction */}
                       <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800/50 rounded-xl">
                         <div className="flex items-center gap-3">
@@ -3053,6 +3053,17 @@ const EnhancedRealEstateDashboard = () => {
                         </div>
                         <div className="flex items-center gap-1">
                           <kbd className="px-2 py-1 text-xs font-mono bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded border border-gray-300 dark:border-gray-600">Esc</kbd>
+                        </div>
+                      </div>
+
+                      {/* Search */}
+                      <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800/50 rounded-xl">
+                        <div className="flex items-center gap-3">
+                          <div className="w-4 h-4 text-info-500 text-center font-bold">/</div>
+                          <span className="text-sm font-medium text-gray-900 dark:text-white">Search (Coming Soon)</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <kbd className="px-2 py-1 text-xs font-mono bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded border border-gray-300 dark:border-gray-600">/</kbd>
                         </div>
                       </div>
                     </div>
