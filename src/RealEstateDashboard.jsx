@@ -2639,12 +2639,14 @@ const EnhancedRealEstateDashboard = () => {
                       <div>
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Errors & Omissions (E&O)</label>
                         <input
-                          type="number"
+                          type="text"
                           name="eo"
-                          value={formData.eo}
-                          onChange={handleInputChange}
-                          step="0.01"
-                          placeholder="0.00"
+                          value={formatCurrencyForInput(formData.eo)}
+                          onChange={(e) => {
+                            const parsed = parseCurrencyFromInput(e.target.value);
+                            handleInputChange({ target: { name: 'eo', value: parsed } });
+                          }}
+                          placeholder="$0.00"
                           className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         />
                       </div>
@@ -2655,12 +2657,14 @@ const EnhancedRealEstateDashboard = () => {
                           <span className="text-xs text-info-500 dark:text-info-400 ml-2">✏️ Editable - auto-calculates from Adjusted GCI</span>
                         </label>
                         <input
-                          type="number"
+                          type="text"
                           name="royalty"
-                          value={formData.royalty}
-                          onChange={handleInputChange}
-                          step="0.01"
-                          placeholder="0.00"
+                          value={formatCurrencyForInput(formData.royalty)}
+                          onChange={(e) => {
+                            const parsed = parseCurrencyFromInput(e.target.value);
+                            handleInputChange({ target: { name: 'royalty', value: parsed } });
+                          }}
+                          placeholder="$0.00"
                           className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         />
                       </div>
@@ -2686,12 +2690,14 @@ const EnhancedRealEstateDashboard = () => {
                       <div>
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">HOA Transfer</label>
                         <input
-                          type="number"
+                          type="text"
                           name="hoaTransfer"
-                          value={formData.hoaTransfer}
-                          onChange={handleInputChange}
-                          step="0.01"
-                          placeholder="0.00"
+                          value={formatCurrencyForInput(formData.hoaTransfer)}
+                          onChange={(e) => {
+                            const parsed = parseCurrencyFromInput(e.target.value);
+                            handleInputChange({ target: { name: 'hoaTransfer', value: parsed } });
+                          }}
+                          placeholder="$0.00"
                           className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         />
                       </div>
@@ -2911,12 +2917,14 @@ const EnhancedRealEstateDashboard = () => {
                         <span className="text-xs text-info-500 dark:text-info-400 ml-2">✏️ Editable - auto-calculates from all deductions</span>
                       </label>
                       <input
-                        type="number"
+                        type="text"
                         name="totalBrokerageFees"
-                        value={formData.totalBrokerageFees}
-                        onChange={handleInputChange}
-                        step="0.01"
-                        placeholder="0.00"
+                        value={formatCurrencyForInput(formData.totalBrokerageFees)}
+                        onChange={(e) => {
+                          const parsed = parseCurrencyFromInput(e.target.value);
+                          handleInputChange({ target: { name: 'totalBrokerageFees', value: parsed } });
+                        }}
+                        placeholder="$0.00"
                         className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       />
                     </div>
@@ -2926,12 +2934,14 @@ const EnhancedRealEstateDashboard = () => {
                         <span className="text-xs text-info-500 dark:text-info-400 ml-2">✏️ Editable - auto-calculates from Adjusted GCI minus fees</span>
                       </label>
                       <input
-                        type="number"
+                        type="text"
                         name="nci"
-                        value={formData.nci}
-                        onChange={handleInputChange}
-                        step="0.01"
-                        placeholder="0.00"
+                        value={formatCurrencyForInput(formData.nci)}
+                        onChange={(e) => {
+                          const parsed = parseCurrencyFromInput(e.target.value);
+                          handleInputChange({ target: { name: 'nci', value: parsed } });
+                        }}
+                        placeholder="$0.00"
                         className="w-full px-4 py-3 border border-success-300 dark:border-success-600 rounded-lg focus:ring-2 focus:ring-success-500 focus:border-success-500 bg-white dark:bg-gray-700 text-success-700 dark:text-success-300 font-semibold"
                       />
                     </div>
