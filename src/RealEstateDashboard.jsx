@@ -865,8 +865,8 @@ const EnhancedRealEstateDashboard = () => {
     // Simply scroll to transactions list - don't change state
     // Following "Law of Locality" - guide user's attention, don't manipulate data
     
-    // Special case: Referral Fees card should filter to show only referral transactions
-    if (metricType === 'referralFees') {
+    // Special case: Referral Fees cards should filter to show only referral transactions
+    if (metricType === 'referralPaid' || metricType === 'referralReceived') {
       // Filter to show only referral transactions
       setFilterClientType('all');
       setFilterBrokerage('all');
@@ -964,18 +964,22 @@ const EnhancedRealEstateDashboard = () => {
       
       // Referral type filter
       if (filterReferralType !== 'all') {
+        const hasReferralPaid = parseFloat(transaction.referralDollar) > 0;
+        const hasReferralReceived = parseFloat(transaction.referralFeeReceived) > 0;
+        const hasAnyReferralActivity = hasReferralPaid || hasReferralReceived;
+        
         switch (filterReferralType) {
           case 'referralOnly':
-            if (transaction.transactionType === 'Sale') return false;
+            if (!hasAnyReferralActivity) return false;
             break;
           case 'referralReceived':
-            if (transaction.transactionType !== 'Referral $ Received') return false;
+            if (!hasReferralReceived) return false;
             break;
           case 'referralPaid':
-            if (transaction.transactionType !== 'Referral $ Paid') return false;
+            if (!hasReferralPaid) return false;
             break;
           case 'regularOnly':
-            if (transaction.transactionType !== 'Sale') return false;
+            if (hasAnyReferralActivity) return false;
             break;
         }
       }
@@ -1034,11 +1038,8 @@ const EnhancedRealEstateDashboard = () => {
       ? filteredTransactions.reduce((sum, t) => sum + (parseFloat(t.nci) || 0), 0) / filteredTransactions.length 
       : 0,
     totalVolume: filteredTransactions.reduce((sum, t) => sum + (parseFloat(t.closedPrice) || 0), 0),
-    totalReferralFees: filteredTransactions.reduce((sum, t) => {
-      const referralPaid = parseFloat(t.referralDollar) || 0;
-      const referralReceived = parseFloat(t.referralFeeReceived) || 0;
-      return sum + referralPaid + referralReceived;
-    }, 0)
+    referralFeesPaid: filteredTransactions.reduce((sum, t) => sum + (parseFloat(t.referralDollar) || 0), 0),
+    referralFeesReceived: filteredTransactions.reduce((sum, t) => sum + (parseFloat(t.referralFeeReceived) || 0), 0)
   };
 
   // ==================== SMART INSIGHTS ====================
@@ -1486,9 +1487,10 @@ const EnhancedRealEstateDashboard = () => {
         </div>
 
         {/* Metrics Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-6">
           {isInitialLoading ? (
             <>
+              <SkeletonMetricCard />
               <SkeletonMetricCard />
               <SkeletonMetricCard />
               <SkeletonMetricCard />
@@ -1583,16 +1585,33 @@ const EnhancedRealEstateDashboard = () => {
                 </div>
               </button>
 
-              {/* Referral Fees */}
+              {/* Referral Fees Paid */}
               <button
-                onClick={() => handleMetricCardClick('referralFees')}
-                className="relative overflow-hidden bg-referral-500 rounded-3xl shadow-2xl hover:shadow-3xl p-8 text-white transform hover:-translate-y-2 hover:scale-105 transition-all duration-700 border-2 border-white/20 backdrop-blur-sm group animate-[fadeIn_0.6s_ease-out] w-full text-left cursor-pointer active:scale-100"
+                onClick={() => handleMetricCardClick('referralPaid')}
+                className="relative overflow-hidden bg-danger-500 rounded-3xl shadow-2xl hover:shadow-3xl p-8 text-white transform hover:-translate-y-2 hover:scale-105 transition-all duration-700 border-2 border-white/20 backdrop-blur-sm group animate-[fadeIn_0.6s_ease-out] w-full text-left cursor-pointer active:scale-100"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex-1">
-                    <p className="text-white/90 text-sm font-semibold uppercase tracking-wide">🤝 Referral Fees</p>
-                    <p className="text-4xl font-bold mt-2 mb-2">${metrics.totalReferralFees.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                    <p className="text-white/80 text-xs font-medium">Referral fees paid & received • Click to view referral transactions</p>
+                    <p className="text-white/90 text-sm font-semibold uppercase tracking-wide">💸 Referral Fees Paid</p>
+                    <p className="text-4xl font-bold mt-2 mb-2">${metrics.referralFeesPaid.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                    <p className="text-white/80 text-xs font-medium">Paid to referral partners • Click to view transactions</p>
+                  </div>
+                  <div className="bg-white/20 p-4 rounded-full backdrop-blur-sm group-hover:bg-white/30 transition-colors">
+                    <DollarSign className="w-8 h-8 text-white" />
+                  </div>
+                </div>
+              </button>
+
+              {/* Referral Fees Received */}
+              <button
+                onClick={() => handleMetricCardClick('referralReceived')}
+                className="relative overflow-hidden bg-success-500 rounded-3xl shadow-2xl hover:shadow-3xl p-8 text-white transform hover:-translate-y-2 hover:scale-105 transition-all duration-700 border-2 border-white/20 backdrop-blur-sm group animate-[fadeIn_0.6s_ease-out] w-full text-left cursor-pointer active:scale-100"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <p className="text-white/90 text-sm font-semibold uppercase tracking-wide">💰 Referral Fees Received</p>
+                    <p className="text-4xl font-bold mt-2 mb-2">${metrics.referralFeesReceived.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                    <p className="text-white/80 text-xs font-medium">Received from referral partners • Click to view transactions</p>
                   </div>
                   <div className="bg-white/20 p-4 rounded-full backdrop-blur-sm group-hover:bg-white/30 transition-colors">
                     <DollarSign className="w-8 h-8 text-white" />
