@@ -1346,7 +1346,7 @@ const EnhancedRealEstateDashboard = () => {
                       <span className="text-white font-bold text-2xl">JG</span>
                     </div>
                   )}
-                  <div className="absolute bottom-1 right-1 w-3 h-3 bg-success-500 rounded-full border-2 border-white shadow-md"></div>
+                  <div className="absolute bottom-0 right-0 w-3 h-3 bg-success-500 rounded-full border-2 border-white shadow-md"></div>
                 </div>
                 
                 {/* Brand Text */}
@@ -1510,7 +1510,7 @@ const EnhancedRealEstateDashboard = () => {
             {/* Categories Group */}
             <div className="flex items-center gap-4">
               <div className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide w-20 flex-shrink-0 flex items-center gap-1">
-                <span className="text-base">🏷️</span> Type
+                <span className="text-base leading-none" style={{ transform: 'translateY(1px)' }}>🏷️</span> Type
               </div>
               <div className="flex gap-3 flex-wrap">
                 <select
