@@ -211,7 +211,8 @@ None at this time! 🎉
 3. **Client CRM** - Basic client management
 4. **Document Storage** - Attach contracts, sheets to transactions
 5. **Commission Sheet Image Storage** - Store scanned commission sheet images for audit trail and verification
-6. **Automated Reports** - Weekly/monthly email summaries
+6. **Multi-Brokerage Support** - Dynamic brokerage configuration with custom commission structures and deduction rules
+7. **Automated Reports** - Weekly/monthly email summaries
 
 ### Nice to Have
 1. **Dark Mode Enhancements** - More theme options, custom colors
@@ -255,6 +256,31 @@ None at this time! 🎉
 - User retention (30-day, 90-day)
 - Upgrade rate (Free → Pro)
 - Customer satisfaction (NPS)
+
+---
+
+## 🔧 Detailed Feature Breakdowns
+
+### Multi-Brokerage Support
+**Goal**: Allow users to add new brokerages with custom commission structures
+
+**Core Components**:
+1. **Settings Panel** - "Add New Brokerage" button
+2. **Brokerage Configuration Form** - Custom deduction rules and percentages
+3. **Commission Sheet Scanner Integration** - Auto-detect new brokerage structure
+4. **Template System** - Save/load brokerage configurations
+
+**Implementation Phases**:
+- **Phase 1**: Manual configuration form in settings
+- **Phase 2**: Commission sheet scanner integration
+- **Phase 3**: Template sharing and import/export
+- **Phase 4**: Community brokerage library
+
+**Technical Requirements**:
+- Dynamic form generation based on brokerage type
+- Flexible deduction calculation engine
+- Commission sheet OCR training for new formats
+- Data migration tools for existing users
 
 ---
 
