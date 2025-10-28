@@ -3552,7 +3552,7 @@ const EnhancedRealEstateDashboard = () => {
                   </div>
                   
                   <div className="space-y-2 text-sm text-gray-600 dark:text-gray-300">
-                    <p><strong>Version:</strong> v3.13.0</p>
+                    <p><strong>Version:</strong> v3.14.1</p>
                     <p><strong>Features:</strong> AI Scanner • Referral Tracking • Two-way Sync</p>
                     <p><strong>Total Transactions:</strong> {transactions.length}</p>
                     <p className="text-xs text-gray-500 dark:text-gray-400 mt-3">
