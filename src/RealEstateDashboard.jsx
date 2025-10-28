@@ -1033,7 +1033,6 @@ const EnhancedRealEstateDashboard = () => {
   const metrics = {
     totalGCI: filteredTransactions.reduce((sum, t) => sum + (parseFloat(t.gci) || 0), 0),
     totalNCI: filteredTransactions.reduce((sum, t) => sum + (parseFloat(t.nci) || 0), 0),
-    totalTransactions: filteredTransactions.length,
     avgCommission: filteredTransactions.length > 0 
       ? filteredTransactions.reduce((sum, t) => sum + (parseFloat(t.nci) || 0), 0) / filteredTransactions.length 
       : 0,
@@ -1487,10 +1486,9 @@ const EnhancedRealEstateDashboard = () => {
         </div>
 
         {/* Metrics Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
           {isInitialLoading ? (
             <>
-              <SkeletonMetricCard />
               <SkeletonMetricCard />
               <SkeletonMetricCard />
               <SkeletonMetricCard />
@@ -1564,23 +1562,6 @@ const EnhancedRealEstateDashboard = () => {
                   </div>
                   <div className="bg-white/20 p-4 rounded-full backdrop-blur-sm group-hover:bg-white/30 transition-colors">
                     <TrendingUp className="w-8 h-8 text-white" />
-                  </div>
-                </div>
-              </button>
-
-              {/* Total Transactions */}
-              <button
-                onClick={handleMetricCardClick}
-                className="relative overflow-hidden bg-warning-500 rounded-3xl shadow-2xl hover:shadow-3xl p-8 text-gray-900 transform hover:-translate-y-2 hover:scale-105 transition-all duration-700 border-2 border-white/20 backdrop-blur-sm group w-full text-left cursor-pointer active:scale-100"
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex-1">
-                    <p className="text-gray-900/90 text-sm font-semibold uppercase tracking-wide">🎯 Total Transactions</p>
-                    <p className="text-4xl font-bold mt-2 mb-2">{metrics.totalTransactions}</p>
-                    <p className="text-gray-900/80 text-xs font-medium">Deals closed successfully • Click to view transactions</p>
-                  </div>
-                  <div className="bg-gray-900/20 p-4 rounded-full backdrop-blur-sm group-hover:bg-gray-900/30 transition-colors">
-                    <Calendar className="w-8 h-8 text-gray-900" />
                   </div>
                 </div>
               </button>
