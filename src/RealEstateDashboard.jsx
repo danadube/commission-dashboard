@@ -1250,7 +1250,7 @@ const EnhancedRealEstateDashboard = () => {
     }
   ].filter(item => item.value > 0); // Only show brokerages with data
 
-  const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444'];
+  const COLORS = ['hsl(210, 80%, 45%)', 'hsl(150, 70%, 35%)', 'hsl(45, 85%, 45%)', 'hsl(5, 75%, 45%)'];
 
   // ==================== EXPORT ====================
   
@@ -1828,8 +1828,8 @@ const EnhancedRealEstateDashboard = () => {
                 <YAxis tick={{ fontSize: 12, fill: '#E5E7EB' }} stroke="#E5E7EB" />
                 <Tooltip content={<TahoeTooltip />} />
                 <Legend />
-                <Line type="monotone" dataKey="gci" stroke="#FBBF24" strokeWidth={3} name="Gross Commission" />
-                <Line type="monotone" dataKey="nci" stroke="#34D399" strokeWidth={3} name="Net Commission" />
+                <Line type="monotone" dataKey="gci" stroke="hsl(45, 85%, 45%)" strokeWidth={3} name="Gross Commission" />
+                <Line type="monotone" dataKey="nci" stroke="hsl(150, 70%, 35%)" strokeWidth={3} name="Net Commission" />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -1843,7 +1843,7 @@ const EnhancedRealEstateDashboard = () => {
                 <YAxis tick={{ fontSize: 12, fill: '#E5E7EB' }} stroke="#E5E7EB" />
                 <Tooltip content={<TahoeTooltip />} />
                 <Legend />
-                <Bar dataKey="transactions" fill="#60A5FA" name="Transactions" radius={[8, 8, 0, 0]} />
+                <Bar dataKey="transactions" fill="hsl(210, 80%, 45%)" name="Transactions" radius={[8, 8, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
