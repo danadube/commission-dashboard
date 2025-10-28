@@ -251,16 +251,16 @@ const EnhancedRealEstateDashboard = () => {
       const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
       const cmdKey = isMac ? e.metaKey : e.ctrlKey;
       
-      // Cmd/Ctrl + K: Add Transaction
-      if (cmdKey && e.key === 'k') {
+      // Cmd/Ctrl + N: Add Transaction (New)
+      if (cmdKey && e.key === 'n') {
         e.preventDefault();
         resetForm();
         setShowForm(true);
         return;
       }
       
-      // Cmd/Ctrl + Shift + S: Sync
-      if (cmdKey && e.shiftKey && e.key === 'S') {
+      // Cmd/Ctrl + R: Sync (Refresh)
+      if (cmdKey && e.key === 'r') {
         e.preventDefault();
         if (isGoogleSheetsEnabled) {
           syncNow();
@@ -1313,11 +1313,11 @@ const EnhancedRealEstateDashboard = () => {
                     onClick={syncNow}
                     disabled={isSyncing}
                     className="hidden sm:flex items-center gap-2 px-4 py-2 bg-success-600 hover:bg-success-700 text-white rounded-lg transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed shadow-sm"
-                    title="Sync with Google Sheets (⌘⇧S)"
+                    title="Sync with Google Sheets (⌘R)"
                   >
                     <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin' : ''}`} />
                     <span className="text-xs font-medium hidden lg:inline">Sync</span>
-                    <span className="hidden lg:inline text-xs opacity-75 ml-1">⌘⇧S</span>
+                    <span className="hidden lg:inline text-xs opacity-75 ml-1">⌘R</span>
                   </button>
                 </>
               )}
@@ -1333,12 +1333,12 @@ const EnhancedRealEstateDashboard = () => {
               <button
                 onClick={() => setShowForm(true)}
                 className="flex items-center gap-2 px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg transition-all shadow-sm hover:shadow-md font-medium text-sm"
-                title="Add Transaction (⌘K)"
+                title="Add Transaction (⌘N)"
               >
                 <Plus className="w-4 h-4" />
                 <span className="hidden sm:inline">Add Transaction</span>
                 <span className="sm:hidden">Add</span>
-                <span className="hidden lg:inline text-xs opacity-75 ml-1">⌘K</span>
+                <span className="hidden lg:inline text-xs opacity-75 ml-1">⌘N</span>
               </button>
 
               {/* Settings Button */}
@@ -3017,7 +3017,7 @@ const EnhancedRealEstateDashboard = () => {
                         </div>
                         <div className="flex items-center gap-1">
                           <kbd className="px-2 py-1 text-xs font-mono bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded border border-gray-300 dark:border-gray-600">⌘</kbd>
-                          <kbd className="px-2 py-1 text-xs font-mono bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded border border-gray-300 dark:border-gray-600">K</kbd>
+                          <kbd className="px-2 py-1 text-xs font-mono bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded border border-gray-300 dark:border-gray-600">N</kbd>
                         </div>
                       </div>
 
@@ -3029,8 +3029,7 @@ const EnhancedRealEstateDashboard = () => {
                         </div>
                         <div className="flex items-center gap-1">
                           <kbd className="px-2 py-1 text-xs font-mono bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded border border-gray-300 dark:border-gray-600">⌘</kbd>
-                          <kbd className="px-2 py-1 text-xs font-mono bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded border border-gray-300 dark:border-gray-600">⇧</kbd>
-                          <kbd className="px-2 py-1 text-xs font-mono bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded border border-gray-300 dark:border-gray-600">S</kbd>
+                          <kbd className="px-2 py-1 text-xs font-mono bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded border border-gray-300 dark:border-gray-600">R</kbd>
                         </div>
                       </div>
 
@@ -3061,7 +3060,7 @@ const EnhancedRealEstateDashboard = () => {
                     {/* Platform Note */}
                     <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl">
                       <p className="text-xs text-blue-700 dark:text-blue-300">
-                        <strong>Note:</strong> On Windows/Linux, use <kbd className="px-1 py-0.5 text-xs font-mono bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 rounded">Ctrl</kbd> instead of <kbd className="px-1 py-0.5 text-xs font-mono bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 rounded">⌘</kbd>. Sync shortcut avoids system conflicts.
+                        <strong>Note:</strong> On Windows/Linux, use <kbd className="px-1 py-0.5 text-xs font-mono bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 rounded">Ctrl</kbd> instead of <kbd className="px-1 py-0.5 text-xs font-mono bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 rounded">⌘</kbd>. All shortcuts follow Apple HIG guidelines and avoid system conflicts.
                       </p>
                     </div>
                   </div>
