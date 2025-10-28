@@ -2392,14 +2392,14 @@ const EnhancedRealEstateDashboard = () => {
                         required={!editingId}
                         className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       >
-                        <option value="Sale">💼 Regular Sale</option>
-                        <option value="Referral $ Received">💰 Referral $ Received (You refer TO another agent)</option>
-                        <option value="Referral $ Paid">💸 Referral $ Paid (You receive FROM another agent)</option>
+                        <option value="Sale">💼 Regular Sale Transaction</option>
+                        <option value="Referral $ Received">💰 You Refer Client TO Another Agent (You GET paid)</option>
+                        <option value="Referral $ Paid">💸 Another Agent Refers Client TO You (You PAY referral)</option>
                       </select>
                       <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                        {formData.transactionType === 'Sale' && '→ Standard buyer/seller transaction'}
-                        {formData.transactionType === 'Referral $ Received' && '→ You send client to another agent, receive referral fee'}
-                        {formData.transactionType === 'Referral $ Paid' && '→ Another agent sends you a client, you pay referral fee'}
+                        {formData.transactionType === 'Sale' && '→ Standard buyer/seller transaction with commission'}
+                        {formData.transactionType === 'Referral $ Received' && '→ You refer a client to another agent and receive a referral fee'}
+                        {formData.transactionType === 'Referral $ Paid' && '→ Another agent refers a client to you and you pay them a referral fee'}
                       </p>
                     </div>
 
@@ -2435,8 +2435,8 @@ const EnhancedRealEstateDashboard = () => {
                         {formData.transactionType === 'Referral $ Received' && (
                           <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
-                              Referral Fee Received *
-                              <span className="text-xs text-gray-500 dark:text-gray-400 ml-2">(Total fee you receive)</span>
+                              Referral Fee You Receive *
+                              <span className="text-xs text-gray-500 dark:text-gray-400 ml-2">(Amount you get paid for referring the client)</span>
                             </label>
                             <input
                               type="text"
