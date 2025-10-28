@@ -1828,8 +1828,8 @@ const EnhancedRealEstateDashboard = () => {
                 <YAxis tick={{ fontSize: 12, fill: '#E5E7EB' }} stroke="#E5E7EB" />
                 <Tooltip content={<TahoeTooltip />} />
                 <Legend />
-                <Line type="monotone" dataKey="gci" stroke="#FBBF24" strokeWidth={4} name="Gross Commission" />
-                <Line type="monotone" dataKey="nci" stroke="#34D399" strokeWidth={4} name="Net Commission" />
+                <Line type="monotone" dataKey="gci" stroke="#FBBF24" strokeWidth={3} name="Gross Commission" />
+                <Line type="monotone" dataKey="nci" stroke="#34D399" strokeWidth={3} name="Net Commission" />
               </LineChart>
             </ResponsiveContainer>
           </div>
