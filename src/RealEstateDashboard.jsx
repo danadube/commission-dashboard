@@ -2357,6 +2357,20 @@ const EnhancedRealEstateDashboard = () => {
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Brokerage *</label>
+                      <select
+                        name="brokerage"
+                        value={formData.brokerage}
+                        onChange={handleInputChange}
+                        required={!editingId}
+                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                      >
+                        <option value="Keller Williams">Keller Williams (KW)</option>
+                        <option value="Bennion Deville Homes">Bennion Deville Homes (BDH)</option>
+                      </select>
+                    </div>
+
+                    <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Property Type *</label>
                       <select
                         name="propertyType"
@@ -2456,20 +2470,6 @@ const EnhancedRealEstateDashboard = () => {
                         )}
                       </>
                     )}
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Brokerage *</label>
-                      <select
-                        name="brokerage"
-                        value={formData.brokerage}
-                        onChange={handleInputChange}
-                        required={!editingId}
-                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                      >
-                        <option value="Keller Williams">Keller Williams (KW)</option>
-                        <option value="Bennion Deville Homes">Bennion Deville Homes (BDH)</option>
-                      </select>
-                    </div>
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Address *</label>
