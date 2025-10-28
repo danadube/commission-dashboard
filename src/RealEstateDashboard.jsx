@@ -1351,10 +1351,10 @@ const EnhancedRealEstateDashboard = () => {
                 
                 {/* Brand Text */}
                 <div>
-                  <h1 className="text-3xl font-semibold text-white mb-1 tracking-tight">
+                  <h1 className="text-4xl font-semibold text-white mb-1 tracking-tight">
                     Commission Dashboard
                   </h1>
-                  <p className="text-slate-300 text-base font-medium tracking-wide">
+                  <p className="text-slate-300 text-lg font-medium tracking-wide">
                     {agentName && agentCompany ? `${agentName} • ${agentCompany}` : agentName ? agentName : agentCompany ? agentCompany : 'Manage your real estate commissions'}
                   </p>
                 </div>
@@ -1564,7 +1564,7 @@ const EnhancedRealEstateDashboard = () => {
                 <button
                   onClick={syncNow}
                   disabled={isSyncing}
-                  className="flex items-center gap-2 px-4 py-2 border-2 border-success-600 text-success-600 hover:bg-success-600 hover:text-white rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+                  className="flex items-center gap-2 px-6 py-2 border-2 border-success-600 text-success-600 hover:bg-success-600 hover:text-white rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed font-medium"
                   title="Sync with Google Sheets (⌘R)"
                 >
                   <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin' : ''}`} />
@@ -1572,7 +1572,7 @@ const EnhancedRealEstateDashboard = () => {
                   <span className="text-xs opacity-75">⌘R</span>
                 </button>
               ) : (
-                <div className="flex items-center gap-2 px-4 py-2 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700">
+                <div className="flex items-center gap-2 px-6 py-2 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700">
                   <CloudOff className="w-4 h-4 text-gray-500 dark:text-gray-400" />
                   <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Offline</span>
                 </div>
