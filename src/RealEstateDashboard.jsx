@@ -421,6 +421,8 @@ const EnhancedRealEstateDashboard = () => {
       
       // KW fields
       eo = 0,
+      royalty = '', // Manual override
+      companyDollar = '', // Manual override
       hoaTransfer = 0,
       homeWarranty = 0,
       kwCares = 0,
@@ -431,6 +433,7 @@ const EnhancedRealEstateDashboard = () => {
       
       // BDH fields
       bdhSplitPct = 0,
+      preSplitDeduction = '', // Manual override
       asf = 0,
       foundation10 = 0,
       adminFee = 0,
@@ -471,13 +474,18 @@ const EnhancedRealEstateDashboard = () => {
 
     if (brokerage === 'KW') {
       // KW Commission Calculation
-      const royalty = adjustedGci * 0.06; // 6% of Adjusted GCI
-      const companyDollar = adjustedGci * 0.10; // 10% of Adjusted GCI
+      // Use manual values if provided, otherwise calculate
+      const royaltyValue = royalty !== '' && royalty !== null && royalty !== undefined 
+        ? parseFloat(royalty) 
+        : adjustedGci * 0.06; // 6% of Adjusted GCI
+      const companyDollarValue = companyDollar !== '' && companyDollar !== null && companyDollar !== undefined 
+        ? parseFloat(companyDollar) 
+        : adjustedGci * 0.10; // 10% of Adjusted GCI
       
       totalBrokerageFees = 
-        parseFloat(eo) || 0 +
-        royalty +
-        companyDollar +
+        (parseFloat(eo) || 0) +
+        royaltyValue +
+        companyDollarValue +
         (parseFloat(hoaTransfer) || 0) +
         (parseFloat(homeWarranty) || 0) +
         (parseFloat(kwCares) || 0) +
@@ -494,8 +502,8 @@ const EnhancedRealEstateDashboard = () => {
         gci: gci.toFixed(2),
         referralDollar: referralDollar.toFixed(2),
         adjustedGci: adjustedGci.toFixed(2),
-        royalty: royalty.toFixed(2),
-        companyDollar: companyDollar.toFixed(2),
+        royalty: royaltyValue.toFixed(2),
+        companyDollar: companyDollarValue.toFixed(2),
         totalBrokerageFees: totalBrokerageFees.toFixed(2),
         nci: nci.toFixed(2),
         netVolume: price.toFixed(2)
@@ -503,12 +511,15 @@ const EnhancedRealEstateDashboard = () => {
     } else if (brokerage === 'BDH') {
       // BDH Commission Calculation
       const splitPct = parseFloat(bdhSplitPct) || 94; // Default 94%
-      const preSplitDeduction = adjustedGci * 0.06; // 6% pre-split deduction
-      const afterPreSplit = adjustedGci - preSplitDeduction;
+      // Use manual value if provided, otherwise calculate
+      const preSplitDeductionValue = preSplitDeduction !== '' && preSplitDeduction !== null && preSplitDeduction !== undefined 
+        ? parseFloat(preSplitDeduction) 
+        : adjustedGci * 0.06; // 6% pre-split deduction
+      const afterPreSplit = adjustedGci - preSplitDeductionValue;
       const agentSplit = afterPreSplit * (splitPct / 100);
       
       totalBrokerageFees = 
-        preSplitDeduction +
+        preSplitDeductionValue +
         (adjustedGci - agentSplit) + // Brokerage portion
         (parseFloat(asf) || 0) +
         (parseFloat(foundation10) || 0) +
@@ -522,7 +533,7 @@ const EnhancedRealEstateDashboard = () => {
         gci: gci.toFixed(2),
         referralDollar: referralDollar.toFixed(2),
         adjustedGci: adjustedGci.toFixed(2),
-        preSplitDeduction: preSplitDeduction.toFixed(2),
+        preSplitDeduction: preSplitDeductionValue.toFixed(2),
         totalBrokerageFees: totalBrokerageFees.toFixed(2),
         nci: nci.toFixed(2),
         netVolume: price.toFixed(2)
@@ -545,6 +556,12 @@ const EnhancedRealEstateDashboard = () => {
     const { name, value } = e.target;
     const newFormData = { ...formData, [name]: value };
     
+    // List of manually editable calculated fields
+    const manuallyEditedFields = ['gci', 'referralDollar', 'adjustedGci', 'royalty', 'companyDollar', 'preSplitDeduction', 'totalBrokerageFees', 'nci'];
+    
+    // If user is directly editing a calculated field, don't auto-calculate it
+    const isManualEdit = manuallyEditedFields.includes(name);
+    
     // Bidirectional GCI / Commission % calculation
     if (name === 'gci' && value && newFormData.closedPrice) {
       // If user enters GCI, calculate commission %
@@ -565,8 +582,8 @@ const EnhancedRealEstateDashboard = () => {
       }
     }
     
-    // Auto-calculate if relevant fields change
-    if (['closedPrice', 'commissionPct', 'referralPct', 'brokerage', 'referralFeeReceived', 'transactionType'].includes(name)) {
+    // Auto-calculate if relevant fields change (but NOT if user is manually editing a calculated field)
+    if (!isManualEdit && ['closedPrice', 'commissionPct', 'referralPct', 'brokerage', 'referralFeeReceived', 'transactionType'].includes(name)) {
       const calculated = calculateCommission(newFormData);
       newFormData.gci = calculated.gci;
       newFormData.referralDollar = calculated.referralDollar;
@@ -575,6 +592,23 @@ const EnhancedRealEstateDashboard = () => {
       newFormData.nci = calculated.nci;
       newFormData.netVolume = calculated.netVolume;
       
+      if (newFormData.brokerage === 'KW') {
+        newFormData.royalty = calculated.royalty;
+        newFormData.companyDollar = calculated.companyDollar;
+      } else if (newFormData.brokerage === 'BDH') {
+        newFormData.preSplitDeduction = calculated.preSplitDeduction;
+      }
+    }
+    
+    // If user manually edits deduction fields (E&O, HOA, etc.), recalculate only totalBrokerageFees and NCI
+    const deductionFields = ['eo', 'hoaTransfer', 'homeWarranty', 'kwCares', 'kwNextGen', 'boldScholarship', 'tcConcierge', 'jelmbergTeam', 'otherDeductions', 'buyersAgentSplit', 'asf', 'foundation10', 'adminFee', 'bdhSplitPct'];
+    if (deductionFields.includes(name)) {
+      const calculated = calculateCommission(newFormData);
+      // Only update totalBrokerageFees and NCI if they haven't been manually edited
+      newFormData.totalBrokerageFees = calculated.totalBrokerageFees;
+      newFormData.nci = calculated.nci;
+      
+      // Also update auto-calculated intermediate values
       if (newFormData.brokerage === 'KW') {
         newFormData.royalty = calculated.royalty;
         newFormData.companyDollar = calculated.companyDollar;
@@ -2115,12 +2149,18 @@ const EnhancedRealEstateDashboard = () => {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Adjusted GCI</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+                        Adjusted GCI
+                        <span className="text-xs text-info-500 dark:text-info-400 ml-2">✏️ Editable - auto-calculates from GCI minus Referral</span>
+                      </label>
                       <input
-                        type="text"
-                        value={`$${formData.adjustedGci}`}
-                        readOnly
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-300"
+                        type="number"
+                        name="adjustedGci"
+                        value={formData.adjustedGci}
+                        onChange={handleInputChange}
+                        step="0.01"
+                        placeholder="0.00"
+                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       />
                     </div>
                   </div>
@@ -2145,22 +2185,34 @@ const EnhancedRealEstateDashboard = () => {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Royalty (6% - Auto)</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+                          Royalty (6%)
+                          <span className="text-xs text-info-500 dark:text-info-400 ml-2">✏️ Editable - auto-calculates from Adjusted GCI</span>
+                        </label>
                         <input
-                          type="text"
-                          value={`$${formData.royalty}`}
-                          readOnly
-                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-300"
+                          type="number"
+                          name="royalty"
+                          value={formData.royalty}
+                          onChange={handleInputChange}
+                          step="0.01"
+                          placeholder="0.00"
+                          className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Company Dollar (10% - Auto)</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+                          Company Dollar (10%)
+                          <span className="text-xs text-info-500 dark:text-info-400 ml-2">✏️ Editable - auto-calculates from Adjusted GCI</span>
+                        </label>
                         <input
-                          type="text"
-                          value={`$${formData.companyDollar}`}
-                          readOnly
-                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-300"
+                          type="number"
+                          name="companyDollar"
+                          value={formData.companyDollar}
+                          onChange={handleInputChange}
+                          step="0.01"
+                          placeholder="0.00"
+                          className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         />
                       </div>
 
@@ -2276,12 +2328,18 @@ const EnhancedRealEstateDashboard = () => {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Pre-Split Deduction (6% - Auto)</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+                          Pre-Split Deduction (6%)
+                          <span className="text-xs text-info-500 dark:text-info-400 ml-2">✏️ Editable - auto-calculates from Adjusted GCI</span>
+                        </label>
                         <input
-                          type="text"
-                          value={`$${formData.preSplitDeduction}`}
-                          readOnly
-                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-300"
+                          type="number"
+                          name="preSplitDeduction"
+                          value={formData.preSplitDeduction}
+                          onChange={handleInputChange}
+                          step="0.01"
+                          placeholder="0.00"
+                          className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         />
                       </div>
 
@@ -2374,16 +2432,38 @@ const EnhancedRealEstateDashboard = () => {
                 </div>
 
                 {/* Calculated Summary */}
-                <div className="mb-6 bg-gray-50 p-4 rounded-lg">
-                  <h3 className="text-lg font-semibold mb-3 text-gray-900">Commission Summary</h3>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="mb-6 bg-gray-50 dark:bg-gray-700 p-6 rounded-lg border border-gray-200 dark:border-gray-600">
+                  <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Commission Summary</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <p className="text-sm text-gray-600">Total Brokerage Fees</p>
-                      <p className="text-xl font-bold text-gray-900">${formData.totalBrokerageFees}</p>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+                        Total Brokerage Fees
+                        <span className="text-xs text-info-500 dark:text-info-400 ml-2">✏️ Editable - auto-calculates from all deductions</span>
+                      </label>
+                      <input
+                        type="number"
+                        name="totalBrokerageFees"
+                        value={formData.totalBrokerageFees}
+                        onChange={handleInputChange}
+                        step="0.01"
+                        placeholder="0.00"
+                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                      />
                     </div>
                     <div>
-                      <p className="text-sm text-gray-600">Net Commission (NCI)</p>
-                      <p className="text-xl font-bold text-green-600">${formData.nci}</p>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+                        Net Commission Income (NCI)
+                        <span className="text-xs text-info-500 dark:text-info-400 ml-2">✏️ Editable - auto-calculates from Adjusted GCI minus fees</span>
+                      </label>
+                      <input
+                        type="number"
+                        name="nci"
+                        value={formData.nci}
+                        onChange={handleInputChange}
+                        step="0.01"
+                        placeholder="0.00"
+                        className="w-full px-4 py-3 border border-success-300 dark:border-success-600 rounded-lg focus:ring-2 focus:ring-success-500 focus:border-success-500 bg-white dark:bg-gray-700 text-success-700 dark:text-success-300 font-semibold"
+                      />
                     </div>
                   </div>
                 </div>
