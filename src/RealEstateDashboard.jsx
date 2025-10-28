@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { DollarSign, TrendingUp, Home, Calendar, Edit2, Trash2, X, Plus, Filter, Download, Upload, RefreshCw, LogOut, Cloud, CloudOff, Settings } from 'lucide-react';
+import { DollarSign, TrendingUp, Home, Calendar, Edit2, Trash2, X, Plus, Filter, Download, Upload, RefreshCw, LogOut, Cloud, CloudOff, Settings, BarChart3, ArrowUpRight, ArrowDownLeft, Building2, Target, Users } from 'lucide-react';
 import * as GoogleSheetsService from './googleSheetsService';
 import ThemeToggle from './ThemeToggle';
 
@@ -1734,7 +1734,7 @@ const EnhancedRealEstateDashboard = () => {
                     <p className="text-white/85 text-xs font-medium" style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.25)' }}>Combined property value</p>
                   </div>
                   <div className="bg-white/20 p-4 rounded-full backdrop-blur-sm group-hover:bg-white/30 transition-colors">
-                    <Home className="w-8 h-8 text-white" style={{ filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3))' }} />
+                    <Building2 className="w-8 h-8 text-white" style={{ filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3))' }} />
                   </div>
                 </div>
               </button>
@@ -1756,7 +1756,7 @@ const EnhancedRealEstateDashboard = () => {
                     <p className="text-white/85 text-xs font-medium" style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.25)' }}>Average commission earned</p>
                   </div>
                   <div className="bg-white/20 p-4 rounded-full backdrop-blur-sm group-hover:bg-white/30 transition-colors">
-                    <TrendingUp className="w-8 h-8 text-white" style={{ filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3))' }} />
+                    <Target className="w-8 h-8 text-white" style={{ filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3))' }} />
                   </div>
                 </div>
               </button>
@@ -1778,7 +1778,7 @@ const EnhancedRealEstateDashboard = () => {
                     <p className="text-white/85 text-xs font-medium" style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.25)' }}>Paid to referral partners</p>
                   </div>
                   <div className="bg-white/20 p-4 rounded-full backdrop-blur-sm group-hover:bg-white/30 transition-colors">
-                    <DollarSign className="w-8 h-8 text-white" style={{ filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3))' }} />
+                    <ArrowUpRight className="w-8 h-8 text-white" style={{ filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3))' }} />
                   </div>
                 </div>
               </button>
@@ -1800,7 +1800,7 @@ const EnhancedRealEstateDashboard = () => {
                     <p className="text-white/85 text-xs font-medium" style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.25)' }}>Received from referral partners</p>
                   </div>
                   <div className="bg-white/20 p-4 rounded-full backdrop-blur-sm group-hover:bg-white/30 transition-colors">
-                    <DollarSign className="w-8 h-8 text-white" style={{ filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3))' }} />
+                    <ArrowDownLeft className="w-8 h-8 text-white" style={{ filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3))' }} />
                   </div>
                 </div>
               </button>
