@@ -2394,9 +2394,9 @@ const EnhancedRealEstateDashboard = () => {
                         required={!editingId}
                         className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       >
-                        <option value="Sale">💼 Regular Sale Transaction</option>
-                        <option value="Referral $ Received">💰 You Refer Client TO Another Agent (You GET paid)</option>
-                        <option value="Referral $ Paid">💸 Another Agent Refers Client TO You (You PAY referral)</option>
+                        <option value="Sale">💼 Regular Sale</option>
+                        <option value="Referral $ Received">💰 You Refer Client (You GET paid)</option>
+                        <option value="Referral $ Paid">💸 Client Referred TO You (You PAY)</option>
                       </select>
                       <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                         {formData.transactionType === 'Sale' && '→ Standard buyer/seller transaction with commission'}
