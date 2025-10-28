@@ -1474,7 +1474,26 @@ const EnhancedRealEstateDashboard = () => {
                       <span className="text-white font-bold text-2xl">JG</span>
                     </div>
                   )}
-                  <div className="absolute bottom-0 right-0 w-3 h-3 bg-success-500 rounded-full border-2 border-white shadow-md"></div>
+                  {/* Dynamic Status Dot with Tooltip */}
+                  <div className="relative group">
+                    <div className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white shadow-md ${
+                      isOnline 
+                        ? (lastSyncTime && (Date.now() - lastSyncTime) < 300000) // 5 minutes
+                          ? 'bg-success-500' // Green: Recently synced
+                          : 'bg-warning-500' // Yellow: Online but stale data
+                        : 'bg-red-500' // Red: Offline
+                    }`}></div>
+                    
+                    {/* Tooltip */}
+                    <div className="absolute bottom-6 right-0 bg-gray-900 text-white text-xs px-2 py-1 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-50">
+                      {isOnline 
+                        ? (lastSyncTime && (Date.now() - lastSyncTime) < 300000)
+                          ? 'Recently synced with Google Sheets'
+                          : 'Online - Data may be stale'
+                        : 'Offline - No sync available'
+                      }
+                    </div>
+                  </div>
                 </div>
                 
                 {/* Brand Text */}
