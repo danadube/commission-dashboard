@@ -1596,8 +1596,8 @@ const EnhancedRealEstateDashboard = () => {
                 onClick={handleMetricCardClick}
                 className="relative overflow-hidden rounded-3xl shadow-2xl hover:shadow-3xl p-8 text-white transform hover:-translate-y-2 hover:scale-105 transition-all duration-700 backdrop-blur-sm group animate-[fadeIn_0.6s_ease-out] w-full text-left cursor-pointer active:scale-100"
                 style={{
-                  background: 'linear-gradient(135deg, hsl(215, 65%, 70%) 0%, hsl(215, 60%, 80%) 100%)',
-                  border: '2px solid hsl(215, 75%, 85%)',
+                  background: 'linear-gradient(135deg, hsl(215, 70%, 45%) 0%, hsl(215, 65%, 55%) 100%)',
+                  border: '2px solid hsl(215, 80%, 60%)',
                   boxShadow: '0 8px 32px hsla(0, 0%, 25%, 0.3)'
                 }}
               >
@@ -1618,8 +1618,8 @@ const EnhancedRealEstateDashboard = () => {
                 onClick={handleMetricCardClick}
                 className="relative overflow-hidden rounded-3xl shadow-2xl hover:shadow-3xl p-8 text-white transform hover:-translate-y-2 hover:scale-105 transition-all duration-700 backdrop-blur-sm group w-full text-left cursor-pointer active:scale-100"
                 style={{
-                  background: 'linear-gradient(135deg, hsl(150, 55%, 65%) 0%, hsl(150, 50%, 75%) 100%)',
-                  border: '2px solid hsl(150, 65%, 80%)',
+                  background: 'linear-gradient(135deg, hsl(150, 60%, 40%) 0%, hsl(150, 55%, 50%) 100%)',
+                  border: '2px solid hsl(150, 70%, 55%)',
                   boxShadow: '0 8px 32px hsla(0, 0%, 25%, 0.3)'
                 }}
               >
@@ -1640,8 +1640,8 @@ const EnhancedRealEstateDashboard = () => {
                 onClick={handleMetricCardClick}
                 className="relative overflow-hidden rounded-3xl shadow-2xl hover:shadow-3xl p-8 text-white transform hover:-translate-y-2 hover:scale-105 transition-all duration-700 backdrop-blur-sm group w-full text-left cursor-pointer active:scale-100"
                 style={{
-                  background: 'linear-gradient(135deg, hsl(200, 55%, 75%) 0%, hsl(200, 50%, 85%) 100%)',
-                  border: '2px solid hsl(200, 65%, 90%)',
+                  background: 'linear-gradient(135deg, hsl(200, 60%, 50%) 0%, hsl(200, 55%, 60%) 100%)',
+                  border: '2px solid hsl(200, 70%, 65%)',
                   boxShadow: '0 8px 32px hsla(0, 0%, 25%, 0.3)'
                 }}
               >
@@ -1662,8 +1662,8 @@ const EnhancedRealEstateDashboard = () => {
                 onClick={handleMetricCardClick}
                 className="relative overflow-hidden rounded-3xl shadow-2xl hover:shadow-3xl p-8 text-white transform hover:-translate-y-2 hover:scale-105 transition-all duration-700 backdrop-blur-sm group w-full text-left cursor-pointer active:scale-100"
                 style={{
-                  background: 'linear-gradient(135deg, hsl(265, 50%, 65%) 0%, hsl(265, 45%, 75%) 100%)',
-                  border: '2px solid hsl(265, 60%, 80%)',
+                  background: 'linear-gradient(135deg, hsl(265, 55%, 40%) 0%, hsl(265, 50%, 50%) 100%)',
+                  border: '2px solid hsl(265, 65%, 55%)',
                   boxShadow: '0 8px 32px hsla(0, 0%, 25%, 0.3)'
                 }}
               >
@@ -1684,8 +1684,8 @@ const EnhancedRealEstateDashboard = () => {
                 onClick={() => handleMetricCardClick('referralPaid')}
                 className="relative overflow-hidden rounded-3xl shadow-2xl hover:shadow-3xl p-8 text-white transform hover:-translate-y-2 hover:scale-105 transition-all duration-700 backdrop-blur-sm group animate-[fadeIn_0.6s_ease-out] w-full text-left cursor-pointer active:scale-100"
                 style={{
-                  background: 'linear-gradient(135deg, hsl(5, 65%, 65%) 0%, hsl(5, 60%, 75%) 100%)',
-                  border: '2px solid hsl(5, 75%, 80%)',
+                  background: 'linear-gradient(135deg, hsl(5, 70%, 40%) 0%, hsl(5, 65%, 50%) 100%)',
+                  border: '2px solid hsl(5, 80%, 55%)',
                   boxShadow: '0 8px 32px hsla(0, 0%, 25%, 0.3)'
                 }}
               >
@@ -1706,8 +1706,8 @@ const EnhancedRealEstateDashboard = () => {
                 onClick={() => handleMetricCardClick('referralReceived')}
                 className="relative overflow-hidden rounded-3xl shadow-2xl hover:shadow-3xl p-8 text-white transform hover:-translate-y-2 hover:scale-105 transition-all duration-700 backdrop-blur-sm group animate-[fadeIn_0.6s_ease-out] w-full text-left cursor-pointer active:scale-100"
                 style={{
-                  background: 'linear-gradient(135deg, hsl(145, 60%, 70%) 0%, hsl(145, 55%, 80%) 100%)',
-                  border: '2px solid hsl(145, 70%, 85%)',
+                  background: 'linear-gradient(135deg, hsl(145, 65%, 45%) 0%, hsl(145, 60%, 55%) 100%)',
+                  border: '2px solid hsl(145, 75%, 60%)',
                   boxShadow: '0 8px 32px hsla(0, 0%, 25%, 0.3)'
                 }}
               >
