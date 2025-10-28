@@ -2120,7 +2120,7 @@ const EnhancedRealEstateDashboard = () => {
         {/* Transaction Form Modal */}
         {showForm && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-y-auto">
-            <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-3xl max-w-4xl backdrop-blur-3xl w-full my-8 transition-colors">
+            <div className="bg-gray-50 dark:bg-gray-800 rounded-3xl shadow-3xl max-w-4xl backdrop-blur-3xl w-full my-8 transition-colors">
               <div className="p-6 border-b border-gray-200 dark:border-gray-700">
                 <div className="flex items-center justify-between">
                   <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
@@ -2833,7 +2833,7 @@ const EnhancedRealEstateDashboard = () => {
         {/* Transaction Detail View Modal */}
         {viewingTransaction && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-y-auto">
-            <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-3xl max-w-4xl w-full my-8 transition-colors overflow-hidden">
+            <div className="bg-gray-50 dark:bg-gray-800 rounded-3xl shadow-3xl max-w-4xl w-full my-8 transition-colors overflow-hidden">
               {/* Header */}
               <div className="p-6 border-b border-gray-200 dark:border-gray-700">
                 <div className="flex items-center justify-between">
@@ -2862,7 +2862,7 @@ const EnhancedRealEstateDashboard = () => {
                     <Home className="w-5 h-5 text-primary-500" />
                     Property Information
                   </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-100 dark:bg-gray-700/50 p-4 rounded-lg">
                     <div>
                       <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Address</label>
                       <p className="text-gray-900 dark:text-white font-medium">{viewingTransaction.address}</p>
@@ -2894,7 +2894,7 @@ const EnhancedRealEstateDashboard = () => {
                     <DollarSign className="w-5 h-5 text-green-500" />
                     Financial Information
                   </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-gray-100 dark:bg-gray-700/50 p-4 rounded-lg">
                     <div>
                       <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">List Price</label>
                       <p className="text-gray-900 dark:text-white font-bold text-lg">
@@ -2956,7 +2956,7 @@ const EnhancedRealEstateDashboard = () => {
                     <Calendar className="w-5 h-5 text-primary-500" />
                     Dates & Status
                   </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-gray-100 dark:bg-gray-700/50 p-4 rounded-lg">
                     <div>
                       <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">List Date</label>
                       <p className="text-gray-900 dark:text-white font-medium">
@@ -2982,7 +2982,7 @@ const EnhancedRealEstateDashboard = () => {
                 {(viewingTransaction.source || viewingTransaction.referralPct > 0 || viewingTransaction.assistantBonus > 0 || viewingTransaction.buyersAgentSplit > 0) && (
                   <div className="mb-4">
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Additional Information</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-100 dark:bg-gray-700/50 p-4 rounded-lg">
                       {viewingTransaction.source && (
                         <div>
                           <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Source</label>
