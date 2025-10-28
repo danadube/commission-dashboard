@@ -130,6 +130,7 @@ const EnhancedRealEstateDashboard = () => {
   const [filterBrokerage, setFilterBrokerage] = useState('all');
   const [filterPropertyType, setFilterPropertyType] = useState('all');
   const [filterPriceRange, setFilterPriceRange] = useState('all');
+  const [filterDateRange, setFilterDateRange] = useState('all');
   
   // Sort order - newest or oldest first
   // Sort State - combined into single object to avoid state sync issues
@@ -911,6 +912,42 @@ const EnhancedRealEstateDashboard = () => {
         }
       }
       
+      // Date range filter
+      if (filterDateRange !== 'all') {
+        const closingDate = transaction.closingDate ? new Date(transaction.closingDate) : null;
+        if (!closingDate) return false;
+        
+        const now = new Date();
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        
+        switch (filterDateRange) {
+          case '3months':
+            const threeMonthsAgo = new Date(today);
+            threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
+            if (closingDate < threeMonthsAgo) return false;
+            break;
+          case '6months':
+            const sixMonthsAgo = new Date(today);
+            sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+            if (closingDate < sixMonthsAgo) return false;
+            break;
+          case '12months':
+            const twelveMonthsAgo = new Date(today);
+            twelveMonthsAgo.setMonth(twelveMonthsAgo.getMonth() - 12);
+            if (closingDate < twelveMonthsAgo) return false;
+            break;
+          case 'ytd':
+            const yearStart = new Date(today.getFullYear(), 0, 1);
+            if (closingDate < yearStart) return false;
+            break;
+          case 'lastYear':
+            const lastYearStart = new Date(today.getFullYear() - 1, 0, 1);
+            const lastYearEnd = new Date(today.getFullYear() - 1, 11, 31);
+            if (closingDate < lastYearStart || closingDate > lastYearEnd) return false;
+            break;
+        }
+      }
+      
       return true;
     });
     
@@ -1268,7 +1305,26 @@ const EnhancedRealEstateDashboard = () => {
             </div>
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
+            {/* Date Range Filter */}
+            <div>
+              <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2">
+                📊 Date Range
+              </label>
+              <select
+                value={filterDateRange}
+                onChange={(e) => setFilterDateRange(e.target.value)}
+                className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors font-medium"
+              >
+                <option value="all">All Time</option>
+                <option value="3months">Last 3 Months</option>
+                <option value="6months">Last 6 Months</option>
+                <option value="12months">Last 12 Months</option>
+                <option value="ytd">Year to Date</option>
+                <option value="lastYear">Last Year</option>
+              </select>
+            </div>
+
             {/* Year Filter */}
             <div>
               <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2">
@@ -1355,7 +1411,7 @@ const EnhancedRealEstateDashboard = () => {
           </div>
 
           {/* Clear Filters Button */}
-          {(filterYear !== 'all' || filterClientType !== 'all' || filterBrokerage !== 'all' || filterPropertyType !== 'all' || filterPriceRange !== 'all') && (
+          {(filterYear !== 'all' || filterClientType !== 'all' || filterBrokerage !== 'all' || filterPropertyType !== 'all' || filterPriceRange !== 'all' || filterDateRange !== 'all') && (
             <div className="mt-4 flex items-center justify-center">
               <button
                 onClick={() => {
@@ -1364,6 +1420,7 @@ const EnhancedRealEstateDashboard = () => {
                   setFilterBrokerage('all');
                   setFilterPropertyType('all');
                   setFilterPriceRange('all');
+                  setFilterDateRange('all');
                 }}
                 className="px-6 py-2 text-sm font-semibold text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 bg-primary-50 dark:bg-primary-900/30 hover:bg-primary-100 dark:hover:bg-primary-900/50 rounded-lg transition-all border-2 border-primary-200 dark:border-primary-700"
               >
