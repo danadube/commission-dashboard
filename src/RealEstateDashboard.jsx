@@ -1341,7 +1341,8 @@ const EnhancedRealEstateDashboard = () => {
             </div>
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-4">
+          {/* Primary Filters Row */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
             {/* Date Range Filter */}
             <div>
               <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2">
@@ -1409,7 +1410,10 @@ const EnhancedRealEstateDashboard = () => {
                 <option value="BDH">Bennion Deville Homes</option>
               </select>
             </div>
+          </div>
 
+          {/* Secondary Filters Row */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {/* Property Type Filter */}
             <div>
               <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2">
