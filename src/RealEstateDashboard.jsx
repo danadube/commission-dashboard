@@ -706,7 +706,64 @@ const EnhancedRealEstateDashboard = () => {
   };
 
   const handleEdit = (transaction) => {
-    setFormData(transaction);
+    // Ensure all fields are properly mapped from transaction to form data
+    const editFormData = {
+      // Basic Info
+      propertyType: transaction.propertyType || 'Residential',
+      clientType: transaction.clientType || 'Seller',
+      transactionType: transaction.transactionType || 'Sale',
+      source: transaction.source || '',
+      address: transaction.address || '',
+      city: transaction.city || '',
+      listPrice: transaction.listPrice || '',
+      closedPrice: transaction.closedPrice || '',
+      listDate: transaction.listDate || '',
+      closingDate: transaction.closingDate || '',
+      status: transaction.status || 'Closed',
+      
+      // Referral Fields
+      referringAgent: transaction.referringAgent || '',
+      referralFeeReceived: transaction.referralFeeReceived || '',
+      
+      // Commission Fields
+      brokerage: transaction.brokerage || 'Keller Williams',
+      commissionPct: transaction.commissionPct || '',
+      referralPct: transaction.referralPct || '',
+      referralDollar: transaction.referralDollar || '',
+      netVolume: transaction.netVolume || '',
+      
+      // KW Specific
+      eo: transaction.eo || '',
+      royalty: transaction.royalty || '',
+      companyDollar: transaction.companyDollar || '',
+      hoaTransfer: transaction.hoaTransfer || '',
+      homeWarranty: transaction.homeWarranty || '',
+      kwCares: transaction.kwCares || '',
+      kwNextGen: transaction.kwNextGen || '',
+      boldScholarship: transaction.boldScholarship || '',
+      tcConcierge: transaction.tcConcierge || '',
+      jelmbergTeam: transaction.jelmbergTeam || '',
+      
+      // BDH Specific
+      bdhSplitPct: transaction.bdhSplitPct || '',
+      asf: transaction.asf || '',
+      foundation10: transaction.foundation10 || '',
+      adminFee: transaction.adminFee || '',
+      preSplitDeduction: transaction.preSplitDeduction || '',
+      
+      // Universal
+      otherDeductions: transaction.otherDeductions || '',
+      buyersAgentSplit: transaction.buyersAgentSplit || '',
+      assistantBonus: transaction.assistantBonus || '',
+      
+      // Calculated (preserve existing values)
+      gci: transaction.gci || '',
+      adjustedGci: transaction.adjustedGci || '',
+      totalBrokerageFees: transaction.totalBrokerageFees || '',
+      nci: transaction.nci || ''
+    };
+    
+    setFormData(editFormData);
     setEditingId(transaction.id);
     setShowForm(true);
     setViewingTransaction(null); // Close view modal if open
