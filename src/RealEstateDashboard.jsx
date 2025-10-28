@@ -864,7 +864,7 @@ const EnhancedRealEstateDashboard = () => {
     // Simply scroll to transactions list - don't change state
     // Following "Law of Locality" - guide user's attention, don't manipulate data
     setTimeout(() => {
-      const transactionsList = document.querySelector('[class*="Filtered Transactions"]')?.parentElement;
+      const transactionsList = document.getElementById('transactions-list');
       if (transactionsList) {
         transactionsList.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
@@ -1689,7 +1689,7 @@ const EnhancedRealEstateDashboard = () => {
         )}
 
         {/* Transactions List */}
-        <div key={`transaction-list-${sortVersion}`} className="glass-morphism bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-2xl p-8 transition-all duration-700 border border-white/30 dark:border-gray-700/30 backdrop-blur-3xl">
+        <div id="transactions-list" key={`transaction-list-${sortVersion}`} className="glass-morphism bg-white/60 dark:bg-gray-800/60 rounded-2xl shadow-2xl p-8 transition-all duration-700 border border-white/30 dark:border-gray-700/30 backdrop-blur-3xl">
           <div className="flex items-center justify-between mb-4 flex-wrap gap-4">
             <h2 className="text-xl font-bold dark:text-white">
               Filtered Transactions
