@@ -1603,12 +1603,12 @@ const EnhancedRealEstateDashboard = () => {
               >
                 <div className="flex items-center justify-between">
                   <div className="flex-1">
-                    <p className="text-white/95 text-sm font-semibold uppercase tracking-wide">💰 Gross Commission</p>
-                    <p className="text-4xl font-bold mt-2 mb-2" style={{ color: 'hsl(0, 0%, 98%)' }}>${metrics.totalGCI.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                    <p className="text-white/85 text-xs font-medium">Total earned before fees • Click to view transactions</p>
+                    <p className="text-white/95 text-sm font-semibold uppercase tracking-wide" style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)' }}>💰 Gross Commission</p>
+                    <p className="text-4xl font-bold mt-2 mb-2" style={{ color: 'hsl(0, 0%, 98%)', textShadow: '0 2px 4px rgba(0, 0, 0, 0.4)' }}>${metrics.totalGCI.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                    <p className="text-white/85 text-xs font-medium" style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.25)' }}>Total earned before fees • Click to view transactions</p>
                   </div>
                   <div className="bg-white/20 p-4 rounded-full backdrop-blur-sm group-hover:bg-white/30 transition-colors">
-                    <DollarSign className="w-8 h-8 text-white" />
+                    <DollarSign className="w-8 h-8 text-white" style={{ filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3))' }} />
                   </div>
                 </div>
               </button>
@@ -1625,12 +1625,12 @@ const EnhancedRealEstateDashboard = () => {
               >
                 <div className="flex items-center justify-between">
                   <div className="flex-1">
-                    <p className="text-white/95 text-sm font-semibold uppercase tracking-wide">✅ Net Commission</p>
-                    <p className="text-4xl font-bold mt-2 mb-2" style={{ color: 'hsl(0, 0%, 98%)' }}>${metrics.totalNCI.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                    <p className="text-white/85 text-xs font-medium">Your take-home pay • Click to view transactions</p>
+                    <p className="text-white/95 text-sm font-semibold uppercase tracking-wide" style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)' }}>✅ Net Commission</p>
+                    <p className="text-4xl font-bold mt-2 mb-2" style={{ color: 'hsl(0, 0%, 98%)', textShadow: '0 2px 4px rgba(0, 0, 0, 0.4)' }}>${metrics.totalNCI.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                    <p className="text-white/85 text-xs font-medium" style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.25)' }}>Your take-home pay • Click to view transactions</p>
                   </div>
                   <div className="bg-white/20 p-4 rounded-full backdrop-blur-sm group-hover:bg-white/30 transition-colors">
-                    <TrendingUp className="w-8 h-8 text-white" />
+                    <TrendingUp className="w-8 h-8 text-white" style={{ filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3))' }} />
                   </div>
                 </div>
               </button>
@@ -1647,12 +1647,12 @@ const EnhancedRealEstateDashboard = () => {
               >
                 <div className="flex items-center justify-between">
                   <div className="flex-1">
-                    <p className="text-white/95 text-sm font-semibold uppercase tracking-wide">🏘️ Total Sales Volume</p>
-                    <p className="text-4xl font-bold mt-2 mb-2" style={{ color: 'hsl(0, 0%, 98%)' }}>${metrics.totalVolume.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                    <p className="text-white/85 text-xs font-medium">Combined property value • Click to view transactions</p>
+                    <p className="text-white/95 text-sm font-semibold uppercase tracking-wide" style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)' }}>🏘️ Total Sales Volume</p>
+                    <p className="text-4xl font-bold mt-2 mb-2" style={{ color: 'hsl(0, 0%, 98%)', textShadow: '0 2px 4px rgba(0, 0, 0, 0.4)' }}>${metrics.totalVolume.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                    <p className="text-white/85 text-xs font-medium" style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.25)' }}>Combined property value • Click to view transactions</p>
                   </div>
                   <div className="bg-white/20 p-4 rounded-full backdrop-blur-sm group-hover:bg-white/30 transition-colors">
-                    <Home className="w-8 h-8 text-white" />
+                    <Home className="w-8 h-8 text-white" style={{ filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3))' }} />
                   </div>
                 </div>
               </button>
@@ -1669,12 +1669,12 @@ const EnhancedRealEstateDashboard = () => {
               >
                 <div className="flex items-center justify-between">
                   <div className="flex-1">
-                    <p className="text-white/95 text-sm font-semibold uppercase tracking-wide">📊 Average Per Deal</p>
-                    <p className="text-4xl font-bold mt-2 mb-2" style={{ color: 'hsl(0, 0%, 98%)' }}>${metrics.avgCommission.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                    <p className="text-white/85 text-xs font-medium">Average commission earned • Click to view transactions</p>
+                    <p className="text-white/95 text-sm font-semibold uppercase tracking-wide" style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)' }}>📊 Average Per Deal</p>
+                    <p className="text-4xl font-bold mt-2 mb-2" style={{ color: 'hsl(0, 0%, 98%)', textShadow: '0 2px 4px rgba(0, 0, 0, 0.4)' }}>${metrics.avgCommission.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                    <p className="text-white/85 text-xs font-medium" style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.25)' }}>Average commission earned • Click to view transactions</p>
                   </div>
                   <div className="bg-white/20 p-4 rounded-full backdrop-blur-sm group-hover:bg-white/30 transition-colors">
-                    <TrendingUp className="w-8 h-8 text-white" />
+                    <TrendingUp className="w-8 h-8 text-white" style={{ filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3))' }} />
                   </div>
                 </div>
               </button>
@@ -1691,12 +1691,12 @@ const EnhancedRealEstateDashboard = () => {
               >
                 <div className="flex items-center justify-between">
                   <div className="flex-1">
-                    <p className="text-white/95 text-sm font-semibold uppercase tracking-wide">💸 Referral Fees Paid</p>
-                    <p className="text-4xl font-bold mt-2 mb-2" style={{ color: 'hsl(0, 0%, 98%)' }}>${metrics.referralFeesPaid.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                    <p className="text-white/85 text-xs font-medium">Paid to referral partners • Click to view transactions</p>
+                    <p className="text-white/95 text-sm font-semibold uppercase tracking-wide" style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)' }}>💸 Referral Fees Paid</p>
+                    <p className="text-4xl font-bold mt-2 mb-2" style={{ color: 'hsl(0, 0%, 98%)', textShadow: '0 2px 4px rgba(0, 0, 0, 0.4)' }}>${metrics.referralFeesPaid.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                    <p className="text-white/85 text-xs font-medium" style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.25)' }}>Paid to referral partners • Click to view transactions</p>
                   </div>
                   <div className="bg-white/20 p-4 rounded-full backdrop-blur-sm group-hover:bg-white/30 transition-colors">
-                    <DollarSign className="w-8 h-8 text-white" />
+                    <DollarSign className="w-8 h-8 text-white" style={{ filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3))' }} />
                   </div>
                 </div>
               </button>
@@ -1713,12 +1713,12 @@ const EnhancedRealEstateDashboard = () => {
               >
                 <div className="flex items-center justify-between">
                   <div className="flex-1">
-                    <p className="text-white/95 text-sm font-semibold uppercase tracking-wide">💰 Referral Fees Received</p>
-                    <p className="text-4xl font-bold mt-2 mb-2" style={{ color: 'hsl(0, 0%, 98%)' }}>${metrics.referralFeesReceived.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                    <p className="text-white/85 text-xs font-medium">Received from referral partners • Click to view transactions</p>
+                    <p className="text-white/95 text-sm font-semibold uppercase tracking-wide" style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)' }}>💰 Referral Fees Received</p>
+                    <p className="text-4xl font-bold mt-2 mb-2" style={{ color: 'hsl(0, 0%, 98%)', textShadow: '0 2px 4px rgba(0, 0, 0, 0.4)' }}>${metrics.referralFeesReceived.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                    <p className="text-white/85 text-xs font-medium" style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.25)' }}>Received from referral partners • Click to view transactions</p>
                   </div>
                   <div className="bg-white/20 p-4 rounded-full backdrop-blur-sm group-hover:bg-white/30 transition-colors">
-                    <DollarSign className="w-8 h-8 text-white" />
+                    <DollarSign className="w-8 h-8 text-white" style={{ filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3))' }} />
                   </div>
                 </div>
               </button>
