@@ -2067,7 +2067,7 @@ const EnhancedRealEstateDashboard = () => {
                         <span className="text-gray-400 dark:text-gray-500">•</span>
                         <span className="flex items-center gap-2">
                           <span className="text-gray-400 dark:text-gray-500">💰</span>
-                          ${parseFloat(transaction.closedPrice || 0).toLocaleString()}
+                          ${parseFloat(transaction.closedPrice || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                         </span>
                         <span className="text-gray-400 dark:text-gray-500">•</span>
                         <span className="flex items-center gap-2">
@@ -2907,13 +2907,13 @@ const EnhancedRealEstateDashboard = () => {
                     <div>
                       <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">List Price</label>
                       <p className="text-gray-900 dark:text-white font-bold text-lg">
-                        ${parseFloat(viewingTransaction.listPrice || 0).toLocaleString()}
+                        ${parseFloat(viewingTransaction.listPrice || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </p>
                     </div>
                     <div>
                       <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Closed Price</label>
                       <p className="text-gray-900 dark:text-white font-bold text-lg">
-                        ${parseFloat(viewingTransaction.closedPrice || 0).toLocaleString()}
+                        ${parseFloat(viewingTransaction.closedPrice || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </p>
                     </div>
                     <div>
