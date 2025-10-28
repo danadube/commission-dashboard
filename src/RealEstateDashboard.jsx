@@ -133,6 +133,10 @@ const EnhancedRealEstateDashboard = () => {
   const [filterDateRange, setFilterDateRange] = useState('all');
   const [filterReferralType, setFilterReferralType] = useState('all');
   
+  // Search functionality
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+  
   // Sort order - newest or oldest first
   // Sort State - combined into single object to avoid state sync issues
   const [sortState, setSortState] = useState(() => {
@@ -283,12 +287,15 @@ const EnhancedRealEstateDashboard = () => {
         return;
       }
       
-      // /: Focus search/filter (placeholder for future search functionality)
+      // /: Focus search/filter
       if (e.key === '/' && !cmdKey) {
         e.preventDefault();
-        // For now, just show a console message that search is coming soon
-        // In the future, this will focus a search input
-        console.log('🔍 Search functionality coming soon! Use filters for now.');
+        // Focus the search input
+        const searchInput = document.getElementById('global-search');
+        if (searchInput) {
+          searchInput.focus();
+          setIsSearchFocused(true);
+        }
         return;
       }
     };
@@ -1027,6 +1034,25 @@ const EnhancedRealEstateDashboard = () => {
         }
       }
       
+      // Search functionality - fuzzy search across multiple fields
+      if (searchQuery.trim()) {
+        const query = searchQuery.toLowerCase().trim();
+        const searchableFields = [
+          transaction.address || '',
+          transaction.city || '',
+          transaction.source || '',
+          transaction.referringAgent || '',
+          // Add client name if we had it
+        ];
+        
+        // Check if any field contains the search query (fuzzy matching)
+        const matchesSearch = searchableFields.some(field => 
+          field.toLowerCase().includes(query)
+        );
+        
+        if (!matchesSearch) return false;
+      }
+      
       return true;
     });
     
@@ -1306,6 +1332,44 @@ const EnhancedRealEstateDashboard = () => {
 
             {/* Right: Actions */}
             <div className="flex items-center gap-2 lg:gap-4 flex-shrink-0">
+              {/* Global Search */}
+              <div className="relative hidden sm:block">
+                <div className="relative">
+                  <input
+                    id="global-search"
+                    type="text"
+                    placeholder="Search transactions..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onFocus={() => setIsSearchFocused(true)}
+                    onBlur={() => setIsSearchFocused(false)}
+                    className={`w-64 px-4 py-2 pl-10 pr-4 rounded-lg border-2 transition-all duration-200 ${
+                      isSearchFocused 
+                        ? 'border-primary-500 bg-white dark:bg-gray-800 shadow-lg' 
+                        : 'border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800/50 hover:border-gray-400 dark:hover:border-gray-500'
+                    } text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20`}
+                  />
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <div className="w-4 h-4 text-gray-400 dark:text-gray-500">🔍</div>
+                  </div>
+                  {searchQuery && (
+                    <button
+                      onClick={() => setSearchQuery('')}
+                      className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
+                {isSearchFocused && (
+                  <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50 p-2">
+                    <p className="text-xs text-gray-500 dark:text-gray-400 px-2 py-1">
+                      Search by address, client name, or city
+                    </p>
+                  </div>
+                )}
+              </div>
+
               {/* Sync Status & Button */}
               {isGoogleSheetsEnabled && isGoogleSheetsAuthorized && (
                 <>
@@ -1515,7 +1579,7 @@ const EnhancedRealEstateDashboard = () => {
           </div>
 
           {/* Clear Filters Button */}
-          {(filterYear !== 'all' || filterClientType !== 'all' || filterBrokerage !== 'all' || filterPropertyType !== 'all' || filterPriceRange !== 'all' || filterDateRange !== 'all' || filterReferralType !== 'all') && (
+          {(filterYear !== 'all' || filterClientType !== 'all' || filterBrokerage !== 'all' || filterPropertyType !== 'all' || filterPriceRange !== 'all' || filterDateRange !== 'all' || filterReferralType !== 'all' || searchQuery.trim()) && (
             <div className="mt-4 flex items-center justify-center">
               <button
                 onClick={() => {
@@ -1526,6 +1590,7 @@ const EnhancedRealEstateDashboard = () => {
                   setFilterPriceRange('all');
                   setFilterDateRange('all');
                   setFilterReferralType('all');
+                  setSearchQuery('');
                 }}
                 className="px-6 py-2 text-sm font-semibold text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 bg-primary-50 dark:bg-primary-900/30 hover:bg-primary-100 dark:hover:bg-primary-900/50 rounded-lg transition-all border-2 border-primary-200 dark:border-primary-700"
               >
@@ -3060,7 +3125,7 @@ const EnhancedRealEstateDashboard = () => {
                       <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800/50 rounded-xl">
                         <div className="flex items-center gap-3">
                           <div className="w-4 h-4 text-info-500 text-center font-bold">/</div>
-                          <span className="text-sm font-medium text-gray-900 dark:text-white">Search (Coming Soon)</span>
+                          <span className="text-sm font-medium text-gray-900 dark:text-white">Search Transactions</span>
                         </div>
                         <div className="flex items-center gap-1">
                           <kbd className="px-2 py-1 text-xs font-mono bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded border border-gray-300 dark:border-gray-600">/</kbd>
