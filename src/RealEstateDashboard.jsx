@@ -1042,7 +1042,9 @@ const EnhancedRealEstateDashboard = () => {
           transaction.city || '',
           transaction.source || '',
           transaction.referringAgent || '',
-          // Add client name if we had it
+          transaction.propertyType || '',
+          transaction.brokerage || '',
+          transaction.status || ''
         ];
         
         // Check if any field contains the search query (fuzzy matching)
@@ -1364,7 +1366,7 @@ const EnhancedRealEstateDashboard = () => {
                 {isSearchFocused && (
                   <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50 p-2">
                     <p className="text-xs text-gray-500 dark:text-gray-400 px-2 py-1">
-                      Search by address, client name, or city
+                      Search by address, city, source, referring agent, property type, brokerage, or status
                     </p>
                   </div>
                 )}
