@@ -3196,7 +3196,7 @@ const EnhancedRealEstateDashboard = () => {
               <div className="p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 flex items-center justify-end">
                 <button
                   onClick={() => setShowSettings(false)}
-                  className="px-6 py-3 bg-gradient-to-r from-black to-yellow-600 text-white rounded-xl hover:from-gray-900 hover:to-yellow-500 transition-all font-medium shadow-lg"
+                  className="px-6 py-3 bg-primary-500 hover:bg-primary-600 text-white rounded-xl transition-all font-medium shadow-lg hover:shadow-xl"
                 >
                   Done
                 </button>
