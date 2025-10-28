@@ -255,7 +255,7 @@ const EnhancedRealEstateDashboard = () => {
       if (cmdKey && e.key === 'k') {
         e.preventDefault();
         resetForm();
-        setShowAddTransaction(true);
+        setShowForm(true);
         return;
       }
       
@@ -263,7 +263,7 @@ const EnhancedRealEstateDashboard = () => {
       if (cmdKey && e.key === 's') {
         e.preventDefault();
         if (isGoogleSheetsEnabled) {
-          handleGoogleSheetsSync();
+          syncNow();
         }
         return;
       }
