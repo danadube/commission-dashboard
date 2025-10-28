@@ -1689,7 +1689,7 @@ const EnhancedRealEstateDashboard = () => {
                     <p className="text-4xl font-bold mt-2 mb-2" style={{ color: 'hsl(0, 0%, 98%)', textShadow: '0 2px 4px rgba(0, 0, 0, 0.4)' }}>${metrics.totalGCI.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                     <p className="text-white/85 text-xs font-medium" style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.25)' }}>Total earned before fees</p>
                   </div>
-                  <div className="bg-white/30 p-4 rounded-full backdrop-blur-sm group-hover:bg-white/40 transition-colors">
+                  <div className="bg-white/40 p-4 rounded-full backdrop-blur-sm group-hover:bg-white/50 transition-colors">
                     <DollarSign className="w-8 h-8 text-white" style={{ filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3))' }} />
                   </div>
                 </div>
@@ -1711,7 +1711,7 @@ const EnhancedRealEstateDashboard = () => {
                     <p className="text-4xl font-bold mt-2 mb-2" style={{ color: 'hsl(0, 0%, 98%)', textShadow: '0 2px 4px rgba(0, 0, 0, 0.4)' }}>${metrics.totalNCI.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                     <p className="text-white/85 text-xs font-medium" style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.25)' }}>Your take-home pay</p>
                   </div>
-                  <div className="bg-white/30 p-4 rounded-full backdrop-blur-sm group-hover:bg-white/40 transition-colors">
+                  <div className="bg-white/40 p-4 rounded-full backdrop-blur-sm group-hover:bg-white/50 transition-colors">
                     <TrendingUp className="w-8 h-8 text-white" style={{ filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3))' }} />
                   </div>
                 </div>
@@ -1733,7 +1733,7 @@ const EnhancedRealEstateDashboard = () => {
                     <p className="text-4xl font-bold mt-2 mb-2" style={{ color: 'hsl(0, 0%, 98%)', textShadow: '0 2px 4px rgba(0, 0, 0, 0.4)' }}>${metrics.totalVolume.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                     <p className="text-white/85 text-xs font-medium" style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.25)' }}>Combined property value</p>
                   </div>
-                  <div className="bg-white/30 p-4 rounded-full backdrop-blur-sm group-hover:bg-white/40 transition-colors">
+                  <div className="bg-white/40 p-4 rounded-full backdrop-blur-sm group-hover:bg-white/50 transition-colors">
                     <Building2 className="w-8 h-8 text-white" style={{ filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3))' }} />
                   </div>
                 </div>
@@ -1755,7 +1755,7 @@ const EnhancedRealEstateDashboard = () => {
                     <p className="text-4xl font-bold mt-2 mb-2" style={{ color: 'hsl(0, 0%, 98%)', textShadow: '0 2px 4px rgba(0, 0, 0, 0.4)' }}>${metrics.avgCommission.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                     <p className="text-white/85 text-xs font-medium" style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.25)' }}>Average commission earned</p>
                   </div>
-                  <div className="bg-white/30 p-4 rounded-full backdrop-blur-sm group-hover:bg-white/40 transition-colors">
+                  <div className="bg-white/40 p-4 rounded-full backdrop-blur-sm group-hover:bg-white/50 transition-colors">
                     <Target className="w-8 h-8 text-white" style={{ filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3))' }} />
                   </div>
                 </div>
@@ -1777,7 +1777,7 @@ const EnhancedRealEstateDashboard = () => {
                     <p className="text-4xl font-bold mt-2 mb-2" style={{ color: 'hsl(0, 0%, 98%)', textShadow: '0 2px 4px rgba(0, 0, 0, 0.4)' }}>${metrics.referralFeesPaid.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                     <p className="text-white/85 text-xs font-medium" style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.25)' }}>Paid to referral partners</p>
                   </div>
-                  <div className="bg-white/30 p-4 rounded-full backdrop-blur-sm group-hover:bg-white/40 transition-colors">
+                  <div className="bg-white/40 p-4 rounded-full backdrop-blur-sm group-hover:bg-white/50 transition-colors">
                     <ArrowUpRight className="w-8 h-8 text-white" style={{ filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3))' }} />
                   </div>
                 </div>
@@ -1799,7 +1799,7 @@ const EnhancedRealEstateDashboard = () => {
                     <p className="text-4xl font-bold mt-2 mb-2" style={{ color: 'hsl(0, 0%, 98%)', textShadow: '0 2px 4px rgba(0, 0, 0, 0.4)' }}>${metrics.referralFeesReceived.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                     <p className="text-white/85 text-xs font-medium" style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.25)' }}>Received from referral partners</p>
                   </div>
-                  <div className="bg-white/30 p-4 rounded-full backdrop-blur-sm group-hover:bg-white/40 transition-colors">
+                  <div className="bg-white/40 p-4 rounded-full backdrop-blur-sm group-hover:bg-white/50 transition-colors">
                     <ArrowDownLeft className="w-8 h-8 text-white" style={{ filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3))' }} />
                   </div>
                 </div>
