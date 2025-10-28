@@ -1557,7 +1557,7 @@ const EnhancedRealEstateDashboard = () => {
           </div>
 
           {/* Action Buttons Row */}
-          <div className="flex items-center justify-between mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+          <div className="flex items-center justify-between mt-6">
             {/* Left: Clear Filters */}
             {(filterYear !== 'all' || filterClientType !== 'all' || filterBrokerage !== 'all' || filterPropertyType !== 'all' || filterReferralType !== 'all' || filterDateRange !== 'all' || searchQuery.trim()) && (
               <button
@@ -1575,27 +1575,6 @@ const EnhancedRealEstateDashboard = () => {
                 Clear All Filters
               </button>
             )}
-
-            {/* Right: Action Buttons */}
-            <div className="flex items-center gap-3 ml-auto">
-              {/* Clear Filters Button */}
-              {(filterYear !== 'all' || filterClientType !== 'all' || filterBrokerage !== 'all' || filterPropertyType !== 'all' || filterReferralType !== 'all' || filterDateRange !== 'all' || searchQuery.trim()) && (
-                <button
-                  onClick={() => {
-                    setFilterYear('all');
-                    setFilterClientType('all');
-                    setFilterBrokerage('all');
-                    setFilterPropertyType('all');
-                    setFilterReferralType('all');
-                    setFilterDateRange('all');
-                    setSearchQuery('');
-                  }}
-                  className="px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700"
-                >
-                  Clear All Filters
-                </button>
-              )}
-            </div>
           </div>
         </div>
 
