@@ -224,6 +224,25 @@ const EnhancedRealEstateDashboard = () => {
     nci: ''
   });
 
+  // ==================== HELPER FUNCTIONS ====================
+  
+  // Format currency for display in inputs
+  const formatCurrencyForInput = (value) => {
+    if (!value || value === '') return '';
+    const num = parseFloat(value);
+    if (isNaN(num)) return '';
+    return num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  };
+
+  // Parse currency from formatted input
+  const parseCurrencyFromInput = (value) => {
+    if (!value || value === '') return '';
+    // Remove commas and parse as number
+    const cleaned = value.replace(/,/g, '');
+    const num = parseFloat(cleaned);
+    return isNaN(num) ? '' : num.toString();
+  };
+
   // ==================== INITIALIZATION ====================
   
   useEffect(() => {
@@ -2433,12 +2452,14 @@ const EnhancedRealEstateDashboard = () => {
                         <div>
                           <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">List Price</label>
                           <input
-                            type="number"
+                            type="text"
                             name="listPrice"
-                            value={formData.listPrice}
-                            onChange={handleInputChange}
-                            step="0.01"
-                            placeholder="0.00"
+                            value={formatCurrencyForInput(formData.listPrice)}
+                            onChange={(e) => {
+                              const parsed = parseCurrencyFromInput(e.target.value);
+                              handleInputChange({ target: { name: 'listPrice', value: parsed } });
+                            }}
+                            placeholder="$0.00"
                             className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                           />
                         </div>
@@ -2446,13 +2467,15 @@ const EnhancedRealEstateDashboard = () => {
                         <div>
                           <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Closed Price *</label>
                           <input
-                            type="number"
+                            type="text"
                             name="closedPrice"
-                            value={formData.closedPrice}
-                            onChange={handleInputChange}
+                            value={formatCurrencyForInput(formData.closedPrice)}
+                            onChange={(e) => {
+                              const parsed = parseCurrencyFromInput(e.target.value);
+                              handleInputChange({ target: { name: 'closedPrice', value: parsed } });
+                            }}
                             required
-                            step="0.01"
-                            placeholder="0.00"
+                            placeholder="$0.00"
                             className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                           />
                         </div>
@@ -2465,12 +2488,14 @@ const EnhancedRealEstateDashboard = () => {
                         <div>
                           <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">List Price</label>
                           <input
-                            type="number"
+                            type="text"
                             name="listPrice"
-                            value={formData.listPrice}
-                            onChange={handleInputChange}
-                            step="0.01"
-                            placeholder="0.00"
+                            value={formatCurrencyForInput(formData.listPrice)}
+                            onChange={(e) => {
+                              const parsed = parseCurrencyFromInput(e.target.value);
+                              handleInputChange({ target: { name: 'listPrice', value: parsed } });
+                            }}
+                            placeholder="$0.00"
                             className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                           />
                         </div>
@@ -2478,13 +2503,15 @@ const EnhancedRealEstateDashboard = () => {
                         <div>
                           <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Closed Price *</label>
                           <input
-                            type="number"
+                            type="text"
                             name="closedPrice"
-                            value={formData.closedPrice}
-                            onChange={handleInputChange}
+                            value={formatCurrencyForInput(formData.closedPrice)}
+                            onChange={(e) => {
+                              const parsed = parseCurrencyFromInput(e.target.value);
+                              handleInputChange({ target: { name: 'closedPrice', value: parsed } });
+                            }}
                             required
-                            step="0.01"
-                            placeholder="0.00"
+                            placeholder="$0.00"
                             className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                           />
                         </div>
@@ -2556,12 +2583,14 @@ const EnhancedRealEstateDashboard = () => {
                         <span className="text-xs text-blue-500 dark:text-blue-400 ml-2">✏️ Editable - auto-calculates Commission %</span>
                       </label>
                       <input
-                        type="number"
+                        type="text"
                         name="gci"
-                        value={formData.gci}
-                        onChange={handleInputChange}
-                        step="0.01"
-                        placeholder="0.00"
+                        value={formatCurrencyForInput(formData.gci)}
+                        onChange={(e) => {
+                          const parsed = parseCurrencyFromInput(e.target.value);
+                          handleInputChange({ target: { name: 'gci', value: parsed } });
+                        }}
+                        placeholder="$0.00"
                         className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       />
                     </div>
@@ -2588,12 +2617,14 @@ const EnhancedRealEstateDashboard = () => {
                         <span className="text-xs text-info-500 dark:text-info-400 ml-2">✏️ Editable - auto-calculates from GCI minus Referral</span>
                       </label>
                       <input
-                        type="number"
+                        type="text"
                         name="adjustedGci"
-                        value={formData.adjustedGci}
-                        onChange={handleInputChange}
-                        step="0.01"
-                        placeholder="0.00"
+                        value={formatCurrencyForInput(formData.adjustedGci)}
+                        onChange={(e) => {
+                          const parsed = parseCurrencyFromInput(e.target.value);
+                          handleInputChange({ target: { name: 'adjustedGci', value: parsed } });
+                        }}
+                        placeholder="$0.00"
                         className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       />
                     </div>
@@ -2640,12 +2671,14 @@ const EnhancedRealEstateDashboard = () => {
                           <span className="text-xs text-info-500 dark:text-info-400 ml-2">✏️ Editable - auto-calculates from Adjusted GCI</span>
                         </label>
                         <input
-                          type="number"
+                          type="text"
                           name="companyDollar"
-                          value={formData.companyDollar}
-                          onChange={handleInputChange}
-                          step="0.01"
-                          placeholder="0.00"
+                          value={formatCurrencyForInput(formData.companyDollar)}
+                          onChange={(e) => {
+                            const parsed = parseCurrencyFromInput(e.target.value);
+                            handleInputChange({ target: { name: 'companyDollar', value: parsed } });
+                          }}
+                          placeholder="$0.00"
                           className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         />
                       </div>
