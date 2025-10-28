@@ -1362,6 +1362,25 @@ const EnhancedRealEstateDashboard = () => {
 
               {/* Right: Brand Utilities */}
               <div className="flex items-center gap-3">
+                {/* Sync Button */}
+                {isGoogleSheetsEnabled && isGoogleSheetsAuthorized ? (
+                  <button
+                    onClick={syncNow}
+                    disabled={isSyncing}
+                    className="flex items-center gap-2 px-4 py-2 bg-success-600 hover:border-2 hover:border-success-700 text-white rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+                    title="Sync with Google Sheets (⌘R)"
+                  >
+                    <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin' : ''}`} />
+                    <span className="hidden sm:inline">Sync</span>
+                    <span className="text-xs opacity-75">⌘R</span>
+                  </button>
+                ) : (
+                  <div className="flex items-center gap-2 px-4 py-2 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700">
+                    <CloudOff className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Offline</span>
+                  </div>
+                )}
+
                 {/* Info Tooltip */}
                 <div className="group relative">
                   <button className="p-3 bg-white/10 hover:bg-white/20 rounded-xl transition-all backdrop-blur-sm border border-white/20">
@@ -1559,35 +1578,23 @@ const EnhancedRealEstateDashboard = () => {
 
             {/* Right: Action Buttons */}
             <div className="flex items-center gap-3 ml-auto">
-              {/* Sync Button */}
-              {isGoogleSheetsEnabled && isGoogleSheetsAuthorized ? (
+              {/* Clear Filters Button */}
+              {(filterYear !== 'all' || filterClientType !== 'all' || filterBrokerage !== 'all' || filterPropertyType !== 'all' || filterReferralType !== 'all' || filterDateRange !== 'all' || searchQuery.trim()) && (
                 <button
-                  onClick={syncNow}
-                  disabled={isSyncing}
-                  className="flex items-center gap-2 px-6 py-2 bg-success-600 hover:border-2 hover:border-success-700 text-white rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed font-medium"
-                  title="Sync with Google Sheets (⌘R)"
+                  onClick={() => {
+                    setFilterYear('all');
+                    setFilterClientType('all');
+                    setFilterBrokerage('all');
+                    setFilterPropertyType('all');
+                    setFilterReferralType('all');
+                    setFilterDateRange('all');
+                    setSearchQuery('');
+                  }}
+                  className="px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700"
                 >
-                  <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin' : ''}`} />
-                  <span>Sync</span>
-                  <span className="text-xs opacity-75">⌘R</span>
+                  Clear All Filters
                 </button>
-              ) : (
-                <div className="flex items-center gap-2 px-6 py-2 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700">
-                  <CloudOff className="w-4 h-4 text-gray-500 dark:text-gray-400" />
-                  <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Offline</span>
-                </div>
               )}
-
-              {/* Add Transaction Button - Primary Emphasis */}
-              <button
-                onClick={() => setShowForm(true)}
-                className="flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white rounded-xl transition-all shadow-lg hover:shadow-xl font-medium transform hover:scale-105"
-                title="Add Transaction (⌘N)"
-              >
-                <Plus className="w-4 h-4" />
-                <span>Add Transaction</span>
-                <span className="text-xs opacity-75">⌘N</span>
-              </button>
             </div>
           </div>
         </div>
@@ -1862,15 +1869,29 @@ const EnhancedRealEstateDashboard = () => {
               )}
             </h2>
             
-            {filteredTransactions.length > 0 && (
+            <div className="flex items-center gap-3">
+              {/* Add Transaction Button - Near Transactions */}
               <button
-                onClick={toggleSortOrder}
-                className="flex items-center gap-2 px-4 py-2 bg-info-50 dark:bg-info-900/30 text-info-700 dark:text-info-300 rounded-lg hover:bg-info-100 dark:hover:bg-info-900/50 transition-all font-medium border border-info-200 dark:border-info-800 shadow-sm"
+                onClick={() => setShowForm(true)}
+                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white rounded-xl transition-all shadow-lg hover:shadow-xl font-medium transform hover:scale-105"
+                title="Add Transaction (⌘N)"
               >
-                <Calendar className="w-4 h-4" />
-                <span>{sortOrder === 'newest' ? 'Newest First ↓' : 'Oldest First ↑'}</span>
+                <Plus className="w-4 h-4" />
+                <span className="hidden sm:inline">Add Transaction</span>
+                <span className="sm:hidden">Add</span>
+                <span className="hidden lg:inline text-xs opacity-75 ml-1">⌘N</span>
               </button>
-            )}
+
+              {filteredTransactions.length > 0 && (
+                <button
+                  onClick={toggleSortOrder}
+                  className="flex items-center gap-2 px-4 py-2 bg-info-50 dark:bg-info-900/30 text-info-700 dark:text-info-300 rounded-lg hover:bg-info-100 dark:hover:bg-info-900/50 transition-all font-medium border border-info-200 dark:border-info-800 shadow-sm"
+                >
+                  <Calendar className="w-4 h-4" />
+                  <span>{sortOrder === 'newest' ? 'Newest First ↓' : 'Oldest First ↑'}</span>
+                </button>
+              )}
+            </div>
           </div>
 
           {isInitialLoading ? (
