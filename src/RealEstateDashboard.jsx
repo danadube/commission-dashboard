@@ -1474,12 +1474,12 @@ const EnhancedRealEstateDashboard = () => {
             </div>
           </div>
           
-          {/* Multi-Line Filter Grid */}
+          {/* Organized Filter Groups */}
           <div className="space-y-6">
-            {/* Time-Based Filters Row */}
+            {/* Time Range Group */}
             <div className="flex items-center gap-4">
-              <div className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide w-20 flex-shrink-0">
-                📅 Time
+              <div className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide w-24 flex-shrink-0">
+                📅 Time Range
               </div>
               <div className="flex gap-3 flex-wrap">
                 <select
@@ -1507,10 +1507,10 @@ const EnhancedRealEstateDashboard = () => {
               </div>
             </div>
 
-            {/* Categorical Filters Row */}
+            {/* Categories Group */}
             <div className="flex items-center gap-4">
-              <div className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide w-20 flex-shrink-0">
-                🏷️ Category
+              <div className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide w-24 flex-shrink-0">
+                🏷️ Categories
               </div>
               <div className="flex gap-3 flex-wrap">
                 <select
@@ -1555,6 +1555,108 @@ const EnhancedRealEstateDashboard = () => {
               </div>
             </div>
           </div>
+
+          {/* Active Filter Chips */}
+          {(filterYear !== 'all' || filterClientType !== 'all' || filterBrokerage !== 'all' || filterPropertyType !== 'all' || filterReferralType !== 'all' || filterDateRange !== 'all' || searchQuery.trim()) && (
+            <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Active Filters:</span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {filterDateRange !== 'all' && (
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200">
+                    Time: {filterDateRange === '3months' ? '3 Months' : filterDateRange === '6months' ? '6 Months' : filterDateRange === '12months' ? '12 Months' : filterDateRange === 'ytd' ? 'YTD' : filterDateRange === 'lastYear' ? 'Last Year' : filterDateRange}
+                    <button
+                      onClick={() => setFilterDateRange('all')}
+                      className="ml-2 text-primary-600 hover:text-primary-800 dark:text-primary-300 dark:hover:text-primary-100"
+                    >
+                      ×
+                    </button>
+                  </span>
+                )}
+                {filterYear !== 'all' && (
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200">
+                    Year: {filterYear}
+                    <button
+                      onClick={() => setFilterYear('all')}
+                      className="ml-2 text-primary-600 hover:text-primary-800 dark:text-primary-300 dark:hover:text-primary-100"
+                    >
+                      ×
+                    </button>
+                  </span>
+                )}
+                {filterClientType !== 'all' && (
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                    Type: {filterClientType === 'Buyer' ? '🔵 Buyers' : '⭐ Sellers'}
+                    <button
+                      onClick={() => setFilterClientType('all')}
+                      className="ml-2 text-blue-600 hover:text-blue-800 dark:text-blue-300 dark:hover:text-blue-100"
+                    >
+                      ×
+                    </button>
+                  </span>
+                )}
+                {filterBrokerage !== 'all' && (
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                    Brokerage: {filterBrokerage}
+                    <button
+                      onClick={() => setFilterBrokerage('all')}
+                      className="ml-2 text-green-600 hover:text-green-800 dark:text-green-300 dark:hover:text-green-100"
+                    >
+                      ×
+                    </button>
+                  </span>
+                )}
+                {filterPropertyType !== 'all' && (
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
+                    Property: {filterPropertyType}
+                    <button
+                      onClick={() => setFilterPropertyType('all')}
+                      className="ml-2 text-purple-600 hover:text-purple-800 dark:text-purple-300 dark:hover:text-purple-100"
+                    >
+                      ×
+                    </button>
+                  </span>
+                )}
+                {filterReferralType !== 'all' && (
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200">
+                    Referral: {filterReferralType === 'regularOnly' ? 'Regular' : filterReferralType === 'referralOnly' ? 'Referral' : filterReferralType === 'referralReceived' ? 'Received' : 'Paid'}
+                    <button
+                      onClick={() => setFilterReferralType('all')}
+                      className="ml-2 text-orange-600 hover:text-orange-800 dark:text-orange-300 dark:hover:text-orange-100"
+                    >
+                      ×
+                    </button>
+                  </span>
+                )}
+                {searchQuery.trim() && (
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200">
+                    Search: "{searchQuery}"
+                    <button
+                      onClick={() => setSearchQuery('')}
+                      className="ml-2 text-gray-600 hover:text-gray-800 dark:text-gray-300 dark:hover:text-gray-100"
+                    >
+                      ×
+                    </button>
+                  </span>
+                )}
+                <button
+                  onClick={() => {
+                    setFilterYear('all');
+                    setFilterClientType('all');
+                    setFilterBrokerage('all');
+                    setFilterPropertyType('all');
+                    setFilterReferralType('all');
+                    setFilterDateRange('all');
+                    setSearchQuery('');
+                  }}
+                  className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500 transition-colors"
+                >
+                  Clear All
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* Action Buttons Row */}
           <div className="flex items-center justify-between mt-6">
@@ -1605,7 +1707,7 @@ const EnhancedRealEstateDashboard = () => {
                   <div className="flex-1">
                     <p className="text-white/95 text-sm font-semibold uppercase tracking-wide" style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)' }}>💰 Gross Commission</p>
                     <p className="text-4xl font-bold mt-2 mb-2" style={{ color: 'hsl(0, 0%, 98%)', textShadow: '0 2px 4px rgba(0, 0, 0, 0.4)' }}>${metrics.totalGCI.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                    <p className="text-white/85 text-xs font-medium" style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.25)' }}>Total earned before fees • Click to view transactions</p>
+                    <p className="text-white/85 text-xs font-medium" style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.25)' }}>Total earned before fees</p>
                   </div>
                   <div className="bg-white/20 p-4 rounded-full backdrop-blur-sm group-hover:bg-white/30 transition-colors">
                     <DollarSign className="w-8 h-8 text-white" style={{ filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3))' }} />
@@ -1627,7 +1729,7 @@ const EnhancedRealEstateDashboard = () => {
                   <div className="flex-1">
                     <p className="text-white/95 text-sm font-semibold uppercase tracking-wide" style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)' }}>✅ Net Commission</p>
                     <p className="text-4xl font-bold mt-2 mb-2" style={{ color: 'hsl(0, 0%, 98%)', textShadow: '0 2px 4px rgba(0, 0, 0, 0.4)' }}>${metrics.totalNCI.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                    <p className="text-white/85 text-xs font-medium" style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.25)' }}>Your take-home pay • Click to view transactions</p>
+                    <p className="text-white/85 text-xs font-medium" style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.25)' }}>Your take-home pay</p>
                   </div>
                   <div className="bg-white/20 p-4 rounded-full backdrop-blur-sm group-hover:bg-white/30 transition-colors">
                     <TrendingUp className="w-8 h-8 text-white" style={{ filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3))' }} />
@@ -1649,7 +1751,7 @@ const EnhancedRealEstateDashboard = () => {
                   <div className="flex-1">
                     <p className="text-white/95 text-sm font-semibold uppercase tracking-wide" style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)' }}>🏘️ Total Sales Volume</p>
                     <p className="text-4xl font-bold mt-2 mb-2" style={{ color: 'hsl(0, 0%, 98%)', textShadow: '0 2px 4px rgba(0, 0, 0, 0.4)' }}>${metrics.totalVolume.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                    <p className="text-white/85 text-xs font-medium" style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.25)' }}>Combined property value • Click to view transactions</p>
+                    <p className="text-white/85 text-xs font-medium" style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.25)' }}>Combined property value</p>
                   </div>
                   <div className="bg-white/20 p-4 rounded-full backdrop-blur-sm group-hover:bg-white/30 transition-colors">
                     <Home className="w-8 h-8 text-white" style={{ filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3))' }} />
@@ -1671,7 +1773,7 @@ const EnhancedRealEstateDashboard = () => {
                   <div className="flex-1">
                     <p className="text-white/95 text-sm font-semibold uppercase tracking-wide" style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)' }}>📊 Average Per Deal</p>
                     <p className="text-4xl font-bold mt-2 mb-2" style={{ color: 'hsl(0, 0%, 98%)', textShadow: '0 2px 4px rgba(0, 0, 0, 0.4)' }}>${metrics.avgCommission.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                    <p className="text-white/85 text-xs font-medium" style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.25)' }}>Average commission earned • Click to view transactions</p>
+                    <p className="text-white/85 text-xs font-medium" style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.25)' }}>Average commission earned</p>
                   </div>
                   <div className="bg-white/20 p-4 rounded-full backdrop-blur-sm group-hover:bg-white/30 transition-colors">
                     <TrendingUp className="w-8 h-8 text-white" style={{ filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3))' }} />
@@ -1693,7 +1795,7 @@ const EnhancedRealEstateDashboard = () => {
                   <div className="flex-1">
                     <p className="text-white/95 text-sm font-semibold uppercase tracking-wide" style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)' }}>💸 Referral Fees Paid</p>
                     <p className="text-4xl font-bold mt-2 mb-2" style={{ color: 'hsl(0, 0%, 98%)', textShadow: '0 2px 4px rgba(0, 0, 0, 0.4)' }}>${metrics.referralFeesPaid.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                    <p className="text-white/85 text-xs font-medium" style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.25)' }}>Paid to referral partners • Click to view transactions</p>
+                    <p className="text-white/85 text-xs font-medium" style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.25)' }}>Paid to referral partners</p>
                   </div>
                   <div className="bg-white/20 p-4 rounded-full backdrop-blur-sm group-hover:bg-white/30 transition-colors">
                     <DollarSign className="w-8 h-8 text-white" style={{ filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3))' }} />
@@ -1715,7 +1817,7 @@ const EnhancedRealEstateDashboard = () => {
                   <div className="flex-1">
                     <p className="text-white/95 text-sm font-semibold uppercase tracking-wide" style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)' }}>💰 Referral Fees Received</p>
                     <p className="text-4xl font-bold mt-2 mb-2" style={{ color: 'hsl(0, 0%, 98%)', textShadow: '0 2px 4px rgba(0, 0, 0, 0.4)' }}>${metrics.referralFeesReceived.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                    <p className="text-white/85 text-xs font-medium" style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.25)' }}>Received from referral partners • Click to view transactions</p>
+                    <p className="text-white/85 text-xs font-medium" style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.25)' }}>Received from referral partners</p>
                   </div>
                   <div className="bg-white/20 p-4 rounded-full backdrop-blur-sm group-hover:bg-white/30 transition-colors">
                     <DollarSign className="w-8 h-8 text-white" style={{ filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3))' }} />
@@ -1741,13 +1843,13 @@ const EnhancedRealEstateDashboard = () => {
             <h3 className="text-lg font-semibold mb-4 dark:text-white">Monthly Income Trend</h3>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
-                <XAxis dataKey="month" tick={{ fontSize: 12, fill: '#9CA3AF' }} stroke="#9CA3AF" />
-                <YAxis tick={{ fontSize: 12, fill: '#9CA3AF' }} stroke="#9CA3AF" />
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.3)" />
+                <XAxis dataKey="month" tick={{ fontSize: 12, fill: '#E5E7EB' }} stroke="#E5E7EB" />
+                <YAxis tick={{ fontSize: 12, fill: '#E5E7EB' }} stroke="#E5E7EB" />
                 <Tooltip content={<TahoeTooltip />} />
                 <Legend />
-                <Line type="monotone" dataKey="gci" stroke="#f59e0b" strokeWidth={2} name="Gross Commission" />
-                <Line type="monotone" dataKey="nci" stroke="#10b981" strokeWidth={2} name="Net Commission" />
+                <Line type="monotone" dataKey="gci" stroke="#FBBF24" strokeWidth={4} name="Gross Commission" />
+                <Line type="monotone" dataKey="nci" stroke="#34D399" strokeWidth={4} name="Net Commission" />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -1756,12 +1858,12 @@ const EnhancedRealEstateDashboard = () => {
             <h3 className="text-lg font-semibold mb-4 dark:text-white">Transactions by Month</h3>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
-                <XAxis dataKey="month" tick={{ fontSize: 12, fill: '#9CA3AF' }} stroke="#9CA3AF" />
-                <YAxis tick={{ fontSize: 12, fill: '#9CA3AF' }} stroke="#9CA3AF" />
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.3)" />
+                <XAxis dataKey="month" tick={{ fontSize: 12, fill: '#E5E7EB' }} stroke="#E5E7EB" />
+                <YAxis tick={{ fontSize: 12, fill: '#E5E7EB' }} stroke="#E5E7EB" />
                 <Tooltip content={<TahoeTooltip />} />
                 <Legend />
-                <Bar dataKey="transactions" fill="#3b82f6" name="Transactions" radius={[8, 8, 0, 0]} />
+                <Bar dataKey="transactions" fill="#60A5FA" name="Transactions" radius={[8, 8, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
