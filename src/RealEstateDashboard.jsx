@@ -1479,7 +1479,7 @@ const EnhancedRealEstateDashboard = () => {
             {/* Time Range Group */}
             <div className="flex items-center gap-4">
               <div className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide w-20 flex-shrink-0 flex items-center gap-1">
-                📅 Time
+                <span className="text-base">📅</span> Time
               </div>
               <div className="flex gap-3 flex-wrap">
                 <select
@@ -1510,7 +1510,7 @@ const EnhancedRealEstateDashboard = () => {
             {/* Categories Group */}
             <div className="flex items-center gap-4">
               <div className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide w-20 flex-shrink-0 flex items-center gap-1">
-                🏷️ Type
+                <span className="text-base">🏷️</span> Type
               </div>
               <div className="flex gap-3 flex-wrap">
                 <select
