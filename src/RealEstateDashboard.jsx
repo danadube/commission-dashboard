@@ -2274,7 +2274,7 @@ const EnhancedRealEstateDashboard = () => {
 
         {/* Footer */}
         <div className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
-          Commission Dashboard v3.15.0 • Built with ❤️ by Dana Dube
+          Commission Dashboard v3.14.1 • Built with ❤️ by Dana Dube
         </div>
 
         {/* Transaction Form Modal */}
