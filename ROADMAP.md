@@ -1,7 +1,15 @@
 # Commission Dashboard - Product Roadmap
 
-**Current Version:** v3.14.0  
-**Last Updated:** October 27, 2025
+**Current Version:** v3.14.1  
+**Last Updated:** December 2024
+
+### Recent Major Accomplishments
+- ✅ **Complete UI/UX Redesign** - Apple Finance Dashboard meets KW luxury aesthetic
+- ✅ **HSB Color System** - Sophisticated, accessible color palette
+- ✅ **Form Optimization** - Logical field ordering and better user flow
+- ✅ **Currency Formatting** - Consistent $ and % display throughout
+- ✅ **Platform Strategy** - Comprehensive web and mobile expansion plan
+- ✅ **Monetization Strategy** - Complete pricing tiers and implementation roadmap
 
 ---
 
@@ -83,6 +91,71 @@ None at this time! 🎉
 
 ---
 
+## 🎉 v3.14.1 - UI/UX Redesign & Polish (COMPLETED - Dec 2024)
+
+### Major Redesign
+- [x] **Header & Filter Redesign** ✅ COMPLETED
+  - [x] Brand Layer header with logo, title, and utilities
+  - [x] Control Layer filter/search panel
+  - [x] Apple Finance Dashboard meets KW luxury aesthetic
+  - [x] Glassmorphism design with sophisticated gradients
+  - [x] Calm, premium control surface philosophy
+
+- [x] **HSB Color System Implementation** ✅ COMPLETED
+  - [x] Sophisticated metric card colors (HSB-balanced)
+  - [x] Reduced saturation (40-70%) and controlled brightness
+  - [x] Better contrast and readability
+  - [x] Consistent light/dark mode appearance
+  - [x] Chart visibility improvements
+
+- [x] **Form Layout Optimization** ✅ COMPLETED
+  - [x] Brokerage field moved to top (full-width)
+  - [x] Address and City grouped together
+  - [x] Logical field ordering (Law of Locality)
+  - [x] Better visual hierarchy and spacing
+  - [x] Improved form completion flow
+
+### Enhanced Features
+- [x] **Currency & Percentage Formatting** ✅ COMPLETED
+  - [x] All dollar amounts display with $ and decimals
+  - [x] Percentages show as whole numbers (3% not 0.03%)
+  - [x] Consistent formatting throughout app
+  - [x] Helper functions for input formatting
+
+- [x] **Dynamic Sync Status** ✅ COMPLETED
+  - [x] Logo status dot (Green/Yellow/Red)
+  - [x] Online/offline detection
+  - [x] Data freshness indicators
+  - [x] Hover tooltips for status explanation
+
+- [x] **Form Improvements** ✅ COMPLETED
+  - [x] Non-required fields when editing
+  - [x] Data persistence in edit forms
+  - [x] Date format handling (ISO, MM/DD/YYYY)
+  - [x] Referral transaction type clarity
+  - [x] Removed editable text clutter
+
+### Visual Enhancements
+- [x] **Icon System** ✅ COMPLETED
+  - [x] Unique icons for each metric card
+  - [x] Better icon circle contrast
+  - [x] Semantic icon choices
+  - [x] Consistent icon styling
+
+- [x] **Chart Improvements** ✅ COMPLETED
+  - [x] Better line visibility in light mode
+  - [x] Improved axis label contrast
+  - [x] Consistent chart styling
+  - [x] Responsive chart colors
+
+- [x] **Modal Consistency** ✅ COMPLETED
+  - [x] Consistent popup styling
+  - [x] Matching backdrop blur effects
+  - [x] Unified section headers with icons
+  - [x] Better form field alignment
+
+---
+
 ## 🎉 v3.14.0 - UX Polish (COMPLETED - Oct 27, 2025)
 
 ### High Priority
@@ -98,11 +171,11 @@ None at this time! 🎉
   - ✅ `Esc` - Close modals
   - ✅ `/` - Focus search/filter (placeholder)
   
-- [ ] **Search Functionality**
-  - Search by address
-  - Search by client name
-  - Search by city
-  - Fuzzy search support
+- [x] **Search Functionality** ✅ COMPLETED
+  - [x] Search by address, property type, brokerage, status
+  - [x] Real-time filtering with fuzzy search
+  - [x] Global search with keyboard shortcut (/)
+  - [x] Search tooltip and placeholder text
 
 ### Medium Priority
 - [ ] **Undo/Redo System**
