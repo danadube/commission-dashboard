@@ -1313,11 +1313,11 @@ const EnhancedRealEstateDashboard = () => {
         {/* Brand Layer - Primary Header */}
         <div className="relative overflow-visible rounded-2xl mb-8 shadow-2xl">
           {/* Rich Matte Gradient Background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-slate-800 via-slate-900 to-indigo-900"></div>
-          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-slate-800 via-slate-900 to-indigo-900 rounded-2xl"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl"></div>
           
           {/* Subtle Texture Overlay */}
-          <div className="absolute inset-0 opacity-10" style={{
+          <div className="absolute inset-0 opacity-10 rounded-2xl" style={{
             backgroundImage: `radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
                             radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
                             radial-gradient(circle at 40% 80%, rgba(120, 119, 198, 0.2) 0%, transparent 50%)`
@@ -1334,16 +1334,16 @@ const EnhancedRealEstateDashboard = () => {
                     <img 
                       src={customLogo} 
                       alt="Dashboard Logo" 
-                      className="w-16 h-16 rounded-2xl shadow-2xl object-cover border-2 border-white/20"
+                      className="w-20 h-20 rounded-2xl shadow-2xl object-cover border-2 border-white/20"
                       style={{
                         boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1)'
                       }}
                     />
                   ) : (
-                    <div className="w-16 h-16 bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl flex items-center justify-center shadow-2xl" style={{
+                    <div className="w-20 h-20 bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl flex items-center justify-center shadow-2xl" style={{
                       boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1)'
                     }}>
-                      <span className="text-white font-bold text-xl">JG</span>
+                      <span className="text-white font-bold text-2xl">JG</span>
                     </div>
                   )}
                   <div className="absolute -top-2 -right-2 w-6 h-6 bg-success-500 rounded-full border-3 border-white shadow-lg"></div>
