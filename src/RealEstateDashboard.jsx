@@ -1564,7 +1564,7 @@ const EnhancedRealEstateDashboard = () => {
                 <button
                   onClick={syncNow}
                   disabled={isSyncing}
-                  className="flex items-center gap-2 px-6 py-2 border-2 border-success-600 text-success-600 hover:bg-success-600 hover:text-white rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+                  className="flex items-center gap-2 px-6 py-2 bg-success-600 hover:border-2 hover:border-success-700 text-white rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed font-medium"
                   title="Sync with Google Sheets (⌘R)"
                 >
                   <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin' : ''}`} />
