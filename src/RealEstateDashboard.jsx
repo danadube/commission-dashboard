@@ -249,16 +249,17 @@ const EnhancedRealEstateDashboard = () => {
     if (!value || value === '') return '';
     const num = parseFloat(value);
     if (isNaN(num)) return '';
-    return `${num.toFixed(2)}%`;
+    // Convert decimal to percentage (0.03 -> 3%)
+    return `${(num * 100).toFixed(2)}%`;
   };
 
   // Parse percentage from formatted input
   const parsePercentageFromInput = (value) => {
     if (!value || value === '') return '';
-    // Remove % sign and parse as number
+    // Remove % sign and parse as number, then convert to decimal
     const cleaned = value.replace(/%/g, '');
     const num = parseFloat(cleaned);
-    return isNaN(num) ? '' : num.toString();
+    return isNaN(num) ? '' : (num / 100).toString();
   };
 
   // ==================== INITIALIZATION ====================
@@ -2851,12 +2852,14 @@ const EnhancedRealEstateDashboard = () => {
                       <div>
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">BDH Split % (Default: 94%)</label>
                         <input
-                          type="number"
+                          type="text"
                           name="bdhSplitPct"
-                          value={formData.bdhSplitPct}
-                          onChange={handleInputChange}
-                          step="0.01"
-                          placeholder="94.00"
+                          value={formatPercentageForInput(formData.bdhSplitPct)}
+                          onChange={(e) => {
+                            const parsed = parsePercentageFromInput(e.target.value);
+                            handleInputChange({ target: { name: 'bdhSplitPct', value: parsed } });
+                          }}
+                          placeholder="94.00%"
                           className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         />
                       </div>
